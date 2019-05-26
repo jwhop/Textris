@@ -215,7 +215,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			sent.then((new_message) => {new_message.edit(msg);});
+			sent_msg.then((new_message) => {new_message.edit(msg);});
 			}
 			}, 240000); 
 	  }
