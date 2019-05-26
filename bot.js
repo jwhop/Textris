@@ -252,7 +252,7 @@ client.on('message', message => {
 	}
 	
   }
-   message.delete(1000);
+   //message.delete(1000);
 });
 client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
 
