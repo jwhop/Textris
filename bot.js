@@ -215,9 +215,9 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			message.channel.send(msg);
+			sending_msg.then((new_message) => {new_message.edit(msg);});
 			}
-			}, 60000 * 10); 
+			}, 240000); 
 	  }
 	}
 	
@@ -245,14 +245,14 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			message.channel.send(msg);
+			sending_msg.then((new_message) => {new_message.edit(msg);});
 			tg.move = false;
 			}
 			}
 	}
-	 message.delete(1000);
+	
   }
-  
+   message.delete(1000);
 });
 client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
 
