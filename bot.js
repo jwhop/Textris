@@ -215,7 +215,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			sent_msg.then((new_message) => {new_message.edit(msg);});
+			message.channel.send(msg);
 			}
 			}, 60000 * 10); 
 	  }
@@ -245,7 +245,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			sending_msg.then((new_message) => {new_message.edit(msg);});
+			message.channel.send(msg);
 			tg.move = false;
 			}
 			}
