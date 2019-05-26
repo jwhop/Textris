@@ -217,7 +217,7 @@ client.on('message', message => {
 			}
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			}
-			}, 600 * 10); 
+			}, 60000 * 10); 
 	  }
 	}
 	
