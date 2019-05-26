@@ -175,11 +175,11 @@ client.on('message', message => {
 	 
   if (typeof game_collection.find(server => server.name === message.guild) === 'undefined')
 	{
-	  if (message.content !== '!start')
+	  if (message.content !== '!start' && message.channel.name === "textris")
 	  {
 		  message.reply("currently no game found on server. type '!start' to start a game.");
 	  }
-	  else
+	  else if (message.channel.name === "textris")
 	  {
 		new_game = new TetrisGame(10,15,1);
 		var sent_msg = message.channel.send("Starting");
