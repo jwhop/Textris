@@ -254,7 +254,7 @@ client.on('message', message => {
   }
   
 });
-client.login("NTc4ODMxMTQ2NzU4OTYzMjIw.XN5Ukg.HlAR6KQOKqO2azYj8ZFhes7s0to"); // Replace XXXXX with your bot token
+client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
 
 
 TetrisGame.prototype.clear_board = function(){
