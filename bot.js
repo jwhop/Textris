@@ -186,7 +186,7 @@ client.on('message', message => {
 		var moving = false;
 		var running = true;
 		
-		game_collection.push({name: message.guild, game: new_game, msg: sent_msg, move: moving, run: running});
+		game_collection.push({name: message.guild, game: new_game, msg: sent_msg, move: moving, run: running, channel: message.channel.id});
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild)];
 		var interval = setInterval (function(){
 			
@@ -252,7 +252,15 @@ client.on('message', message => {
 	}
 	
   }
-   //message.delete(1000);
+   if(message.author.bot || (message.channel.name !== "textris"))
+   {
+	   return;
+   }
+	else
+	{
+		
+   message.delete(1000);
+	}
 });
 client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
 
