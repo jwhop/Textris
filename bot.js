@@ -215,13 +215,14 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			sending_msg.then((new_message) => {new_message.edit(msg);});
+			sent.then((new_message) => {new_message.edit(msg);});
 			}
 			}, 240000); 
 	  }
 	}
 	
-	else{
+	else if (message.channel.name === "textris")
+	{
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild)].game;
 		var sending_msg = game_collection[game_collection.findIndex(find_game, message.guild)].msg
 		if (message.content === '!start')
