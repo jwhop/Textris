@@ -214,7 +214,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			msg += ('\n' + tg.getnextPiece());
+			msg += ('\n' + tg.game.getnextPiece());
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			}
 			}, 10000); 
