@@ -228,7 +228,13 @@ client.on('message', message => {
 			}
 			for(i = 0; i < 4; i++){
 				for(j = 0; j < 4; j++){
-					next_char = colormap[pieceStructures[tg.game.hold_piece][0][i][j]];
+					held_piece = tg.game.get_hold_piece();
+					if(held_piece == ' ')
+					{
+						msg_2 += ":black_circle:";
+						continue;
+					}
+					next_char = colormap[pieceStructures[held_piece][0][i][j]];
 					
 					if (next_char == ":egg:")
 						msg_2 += ":black_circle:"
@@ -294,6 +300,11 @@ client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
 TetrisGame.prototype.getnextPiece = function(){
 	return this.nextpieceType;
 }
+
+TetrisGame.prototype.get_hold_piece = function(){
+	return this.hold_piece;
+}
+
 TetrisGame.prototype.clear_board = function(){
 	this.board = [ 
 [0,0,0,0,0,0,0,0,0,0],
@@ -354,6 +365,7 @@ TetrisGame.prototype.reset = function()
 
   this.newSeq();
   this.nextpieceType = this.sequence.pop();
+  this.hold_piece = ' ';
   this.newPiece();
 } // reset()
 
