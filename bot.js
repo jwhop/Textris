@@ -254,7 +254,7 @@ client.on('message', message => {
 	else if (message.channel.name === "textris")
 	{
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild)].game;
-		var sending_msg = game_collection[game_collection.findIndex(find_game, message.guild)].msg;
+		var sending_msg = game_collection[game_collection.findIndex(find_game, message.guild)].msg1;
 		var sending_msg_2 = game_collection[game_collection.findIndex(find_game, message.guild)].msg2;
 		
 		if (message.content === '!start')
