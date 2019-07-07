@@ -281,7 +281,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			
+			msg_2 += "next piece:";
 			for(i = 0; i < 4; i++){
 				for(j = 0; j < 4; j++){
 					next_char = colormap[pieceStructures[tg.getnextPiece()][0][i][j]];
@@ -291,17 +291,15 @@ client.on('message', message => {
 					else 
 						msg_2 +=next_char; 
 				}
-				msg_2 += '\n'
-			}
-			for(i = 0; i < 4; i++){
-				for(j = 0; j < 4; j++){
+				msg_2 += ('\t' + hold piece:);
+				for(l = 0; l < 4; l++){
 					held_piece = tg.get_hold_piece();
 					if(held_piece == ' ')
 					{
 						msg_2 += ":black_circle:";
 						continue;
 					}
-					next_char = colormap[pieceStructures[held_piece][0][i][j]];
+					next_char = colormap[pieceStructures[held_piece][0][i][l]];
 					
 					if (next_char == ":egg:")
 						msg_2 += ":black_circle:"
@@ -309,7 +307,10 @@ client.on('message', message => {
 						msg_2 +=next_char; 
 				}
 				msg_2 += '\n'
+				
 			}
+			
+			
 			
 			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
 			sending_msg.then((new_message) => {new_message.edit(msg);});
