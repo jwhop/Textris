@@ -228,7 +228,7 @@ client.on('message', message => {
 			}
 			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
 			sent_msg.then((new_message) => {new_message.edit(msg);});
-			sent_msg_2.then((new_message) =>{new_messaeg.edit(msg_2);});
+			sent_msg_2.then((new_message) =>{new_message.edit(msg_2);});
 			}
 			}, 10000); 
 	  }
