@@ -360,13 +360,14 @@ TetrisGame.prototype.newSeq = function()
 
 TetrisGame.prototype.update = function()
 {
+  this.nextpieceType = 4;
   let scoreChange = 0;
 
   let testY = this.pieceY + 1;
   if(this.canPieceMove(this.pieceX, testY, this.pieceRot))
   {
     this.pieceY = testY;
-	this.nextpieceType = this.nextpieceType;
+	
 	
   } // piece can fall
   else
