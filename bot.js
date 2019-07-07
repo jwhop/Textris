@@ -284,6 +284,7 @@ client.on('message', message => {
 			msg_2 += "next piece:";
 			for(i = 0; i < 4; i++){
 				for(j = 0; j < 4; j++){
+					msg_2 += "           ";
 					next_char = colormap[pieceStructures[tg.getnextPiece()][0][i][j]];
 					
 					if (next_char == ":egg:")
@@ -291,7 +292,10 @@ client.on('message', message => {
 					else 
 						msg_2 +=next_char; 
 				}
-				msg_2 += ('\t' + "hold piece:");
+				if(i == 1)
+					msg_2 += ('\t' + "hold piece:");
+				else
+					msg_2 += ('\t' + "           ");
 				for(l = 0; l < 4; l++){
 					held_piece = tg.get_hold_piece();
 					if(held_piece == ' ')
