@@ -214,7 +214,13 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
+			for(i = 0l i < 4; i++){
+				for(j = 0; j < 4; j++){
+					msg += pieceStructures[tg.game.getnextPiece()][0][i][j];
+				}
+				msg += '\n'
+			}
+			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			}
 			}, 10000); 
@@ -246,12 +252,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			for(i = 0; i < 4; i++){
-				for(j = 0; j < 4; j++){
-					msg += pieceStructures[tg.game.getnextPiece()][0][i][j];
-				}
-				msg += '\n'
-			}
+			
 			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
 			sending_msg.then((new_message) => {new_message.edit(msg);});
 			tg.move = false;
