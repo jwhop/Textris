@@ -325,7 +325,7 @@ function TetrisGame(gW, gH, tS)
   this.pieceRot = 0;
   this.pieceX = 3;
   this.pieceY = 0;
-
+  this.hold_piece = "";
   this.newSeq();
   this.nextpieceType = this.sequence.pop();
   this.newPiece();
@@ -505,7 +505,7 @@ TetrisGame.prototype.drawBlock = function(block, x, y)
 
 TetrisGame.prototype.handleInput = function (evt)
 {
-	if (evt == "left")
+	if (evt == "left" || evt == "l")
 	{
 		let testX = this.pieceX - 1;
 		if(this.canPieceMove(testX, this.pieceY, this.pieceRot))
@@ -514,7 +514,7 @@ TetrisGame.prototype.handleInput = function (evt)
 		}
 	}
 	
-	else if (evt == "right")
+	else if (evt == "right" || evt == "r")
 	{
 		let testX = this.pieceX + 1;
 		if(this.canPieceMove(testX, this.pieceY, this.pieceRot))
@@ -523,7 +523,7 @@ TetrisGame.prototype.handleInput = function (evt)
 		}
 	}
 	
-	else if (evt == "rot")
+	else if (evt == "rotc" || evt == "rot" || evt == "c")
 	{
 		 let testRot = (this.pieceRot-1) % pieceStructures[this.pieceType].length;
 		if(testRot < 0)
@@ -533,5 +533,33 @@ TetrisGame.prototype.handleInput = function (evt)
 		{
 			this.pieceRot = testRot;
 		}
+	}
+	else if (evt == "rotcc" || evt == "cc")
+	{
+		 let testRot = (this.pieceRot+1) % pieceStructures[this.pieceType].length;
+		
+		if(this.canPieceMove(this.pieceX, this.pieceY, testRot))
+		{
+			this.pieceRot = testRot;
+		}
+	}
+	else if (evt == "hold")
+	{
+		if(this.hold_piece == "")
+		{
+			this.hold_piece = this.pieceType;
+			this.pieceType = this.nextpieceType;
+			if(this.sequence.length === 0)
+			{
+				this.newSeq();
+			}
+		}
+		else
+		{
+			temp = this.hold_piece;
+			this.hold_piece = this.pieceType;
+			this.pieceType = temp;
+		}
+		
 	}
 }
