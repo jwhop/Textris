@@ -226,6 +226,17 @@ client.on('message', message => {
 				}
 				msg_2 += '\n'
 			}
+			for(i = 0; i < 4; i++){
+				for(j = 0; j < 4; j++){
+					next_char = colormap[pieceStructures[tg.game.hold_piece][0][i][j]];
+					
+					if (next_char == ":egg:")
+						msg_2 += ":black_circle:"
+					else 
+						msg_2 +=next_char; 
+				}
+				msg_2 += '\n'
+			}
 			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			sent_msg_2.then((new_message) =>{new_message.edit(msg_2);});
@@ -325,7 +336,7 @@ function TetrisGame(gW, gH, tS)
   this.pieceRot = 0;
   this.pieceX = 3;
   this.pieceY = 0;
-  this.hold_piece = "";
+  this.hold_piece = ' ';
   this.newSeq();
   this.nextpieceType = this.sequence.pop();
   this.newPiece();
