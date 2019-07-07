@@ -197,18 +197,19 @@ client.on('message', message => {
 				message.channel.send('type !start to play again');
 				game_collection.splice(game_collection.findIndex(find_game, message.guild), 1);
 			}
-			
-			if (tg.game.update() < 0)
+			score_change = tg.game.update();
+			if (score_change < 0)
 			{
 				tg.run = false;
 				//break;
 				return;
 			}
 			else{
+			tg.game.score += score_change;
 			tg.game.clear_board();
 			tg.game.draw();
 			msg = "";
-			msg_2 = "";
+			msg_2 = '\n';
 			for(i = 0; i < 15; i++){
 				for (j = 0; j < 10; j++){
 					msg += tg.game.board[i][j];
@@ -217,7 +218,8 @@ client.on('message', message => {
 			}
 			msg_2 += "next piece:";
 			for(i = 0; i < 4; i++){
-				msg_2 += "           ";
+				if(i!=0)
+					msg_2 += "                     ";
 				for(j = 0; j < 4; j++){
 					
 					next_char = colormap[pieceStructures[tg.game.getnextPiece()][0][i][j]];
@@ -230,7 +232,7 @@ client.on('message', message => {
 				if(i == 0)
 					msg_2 += ('\t' + "hold piece:");
 				else
-					msg_2 += ('\t' + "           ");
+					msg_2 += ('\t' + "                     ");
 				for(l = 0; l < 4; l++){
 					held_piece = tg.game.get_hold_piece();
 					if(held_piece == ' ')
@@ -248,6 +250,7 @@ client.on('message', message => {
 				msg_2 += '\n'
 				
 			}
+			msg_2 += ('\n' + "Score:" + tg.game.score);
 			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			sent_msg_2.then((new_message) =>{new_message.edit(msg_2);});
@@ -378,6 +381,7 @@ function TetrisGame(gW, gH, tS)
   this.tileSz = tS;
   this.board = [];
   this.inert = [];
+  this.score = 0;
   for(var y=0; y<this.gridHgt; y++)
   {
     this.inert[y] = [];
