@@ -217,7 +217,7 @@ client.on('message', message => {
 			msg += tg.nextpieceType;
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			}
-			}, 240000); 
+			}, 1000); 
 	  }
 	}
 	
@@ -246,6 +246,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
+			msg += tg.nextpieceType;
 			sending_msg.then((new_message) => {new_message.edit(msg);});
 			tg.move = false;
 			}
