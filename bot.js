@@ -214,7 +214,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			msg += tg.nextpieceType;
+			msg += ('\n' + tg.nextpieceType);
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			}
 			}, 10000); 
@@ -366,6 +366,8 @@ TetrisGame.prototype.update = function()
   if(this.canPieceMove(this.pieceX, testY, this.pieceRot))
   {
     this.pieceY = testY;
+	this.nextpieceType = this.nextpieceType;
+	
   } // piece can fall
   else
   {
