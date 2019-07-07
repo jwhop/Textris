@@ -214,7 +214,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			msg += ('\n' + tg.game.getnextPiece());
+			msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			}
 			}, 10000); 
@@ -246,7 +246,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			msg += tg.nextpieceType;
+			msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
 			sending_msg.then((new_message) => {new_message.edit(msg);});
 			tg.move = false;
 			}
@@ -369,8 +369,6 @@ TetrisGame.prototype.update = function()
   if(this.canPieceMove(this.pieceX, testY, this.pieceRot))
   {
     this.pieceY = testY;
-	
-	
   } // piece can fall
   else
   {
