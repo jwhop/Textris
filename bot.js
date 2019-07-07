@@ -310,6 +310,7 @@ function TetrisGame(gW, gH, tS)
   this.pieceY = 0;
 
   this.newSeq();
+  this.nextpieceType = this.sequence.pop();
   this.newPiece();
 }
 
