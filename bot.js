@@ -183,7 +183,7 @@ client.on('message', message => {
 	  {
 		new_game = new TetrisGame(10,15,1);
 		var sent_msg = message.channel.send("Starting");
-		var sent_msg_2 = message.channel.send("");
+		var sent_msg_2 = message.channel.send("Good Luck!");
 		var moving = false;
 		var running = true;
 		
