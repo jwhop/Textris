@@ -216,7 +216,12 @@ client.on('message', message => {
 			}
 			for(i = 0; i < 4; i++){
 				for(j = 0; j < 4; j++){
-					msg += colormap[pieceStructures[tg.game.getnextPiece()][0][i][j]];
+					next_char = colormap[pieceStructures[tg.game.getnextPiece()][0][i][j]];
+					
+					if (next_char == ' ')
+						msg += ' ';
+					else 
+						msg +=next_char; 
 				}
 				msg += '\n'
 			}
