@@ -13,7 +13,7 @@ let colors = {
 
 let colormap = {
   i: ":blue_heart:",
-  j: ":droplet:",
+  j: ":snowflake:",
   l: ":tangerine:",
   o: ":yellow_heart:",
   s: ":green_heart:",
@@ -275,7 +275,7 @@ client.on('message', message => {
 	else
 	{
 		
-   message.delete(1000);
+   message.delete(500);
 	}
 });
 client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
