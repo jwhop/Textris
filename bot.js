@@ -214,7 +214,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			msg += ('\n' + tg.gridWdt);
+			msg += ('\n' + tg.getnextPiece());
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			}
 			}, 10000); 
@@ -266,7 +266,9 @@ client.on('message', message => {
 });
 client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
 
-
+TetrisGame.prototype.getnextPiece = function(){
+	return this.nextpieceType;
+}
 TetrisGame.prototype.clear_board = function(){
 	this.board = [ 
 [0,0,0,0,0,0,0,0,0,0],
