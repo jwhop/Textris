@@ -291,7 +291,7 @@ client.on('message', message => {
 					else 
 						msg_2 +=next_char; 
 				}
-				msg_2 += ('\t' + hold piece:);
+				msg_2 += ('\t' + "hold piece:");
 				for(l = 0; l < 4; l++){
 					held_piece = tg.get_hold_piece();
 					if(held_piece == ' ')
