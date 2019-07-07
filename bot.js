@@ -232,7 +232,7 @@ client.on('message', message => {
 				else
 					msg_2 += ('\t' + "           ");
 				for(l = 0; l < 4; l++){
-					held_piece = tg.game_hold_piece();
+					held_piece = tg.game.gethold_piece();
 					if(held_piece == ' ')
 					{
 						msg_2 += ":black_circle:";
