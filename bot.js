@@ -13,7 +13,7 @@ let colors = {
 
 let colormap = {
   i: ":blue_heart:",
-  j: ":rosette:",
+  j: ":droplet:",
   l: ":tangerine:",
   o: ":yellow_heart:",
   s: ":green_heart:",
