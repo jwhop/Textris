@@ -183,6 +183,7 @@ client.on('message', message => {
 	  {
 		new_game = new TetrisGame(10,15,1);
 		var sent_msg = message.channel.send("Starting");
+		var sent_msg_2 = message.channel.send("");
 		var moving = false;
 		var running = true;
 		
@@ -195,7 +196,6 @@ client.on('message', message => {
 				clearInterval(interval);
 				message.channel.send('type !start to play again');
 				game_collection.splice(game_collection.findIndex(find_game, message.guild), 1);
-				
 			}
 			
 			if (tg.game.update() < 0)
@@ -208,6 +208,7 @@ client.on('message', message => {
 			tg.game.clear_board();
 			tg.game.draw();
 			msg = "";
+			msg_2 = "";
 			for(i = 0; i < 15; i++){
 				for (j = 0; j < 10; j++){
 					msg += tg.game.board[i][j];
@@ -219,14 +220,15 @@ client.on('message', message => {
 					next_char = colormap[pieceStructures[tg.game.getnextPiece()][0][i][j]];
 					
 					if (next_char == ":egg:")
-						msg += ":bomb:"
+						msg2 += ":black_circle:"
 					else 
-						msg +=next_char; 
+						msg2 +=next_char; 
 				}
-				msg += '\n'
+				msg2 += '\n'
 			}
 			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
 			sent_msg.then((new_message) => {new_message.edit(msg);});
+			sent_msg_2.then((new_message) =>{new_messaeg.edit(msg_2);};
 			}
 			}, 10000); 
 	  }
