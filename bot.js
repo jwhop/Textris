@@ -572,6 +572,7 @@ TetrisGame.prototype.handleInput = function (evt)
 		{
 			this.hold_piece = this.pieceType;
 			this.pieceType = this.nextpieceType;
+			this.nextpieceType = this.sequence.pop();
 			if(this.sequence.length === 0)
 			{
 				this.newSeq();
