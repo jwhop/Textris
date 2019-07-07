@@ -220,11 +220,11 @@ client.on('message', message => {
 					next_char = colormap[pieceStructures[tg.game.getnextPiece()][0][i][j]];
 					
 					if (next_char == ":egg:")
-						msg2 += ":black_circle:"
+						msg_2 += ":black_circle:"
 					else 
-						msg2 +=next_char; 
+						msg_2 +=next_char; 
 				}
-				msg2 += '\n'
+				msg_2 += '\n'
 			}
 			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
 			sent_msg.then((new_message) => {new_message.edit(msg);});
