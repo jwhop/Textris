@@ -214,7 +214,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			msg += ('\n' + tg.nextpieceType);
+			msg += ('\n' + tg.gridWdt);
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			}
 			}, 10000); 
@@ -304,7 +304,7 @@ function TetrisGame(gW, gH, tS)
       this.inert[y][x] = ' ';
     }
   }
-
+  
   this.pieceType = 0;
   this.pieceRot = 0;
   this.pieceX = 3;
@@ -360,7 +360,7 @@ TetrisGame.prototype.newSeq = function()
 
 TetrisGame.prototype.update = function()
 {
-  this.nextpieceType = 4;
+  
   let scoreChange = 0;
 
   let testY = this.pieceY + 1;
