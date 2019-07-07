@@ -617,6 +617,8 @@ TetrisGame.prototype.handleInput = function (evt)
 			this.hold_piece = this.pieceType;
 			this.pieceType = temp;
 		}
-		
+		this.pieceX = 3;
+		this.pieceY = 0;
+		this.pieceRot = 0;
 	}
 }
