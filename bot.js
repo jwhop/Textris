@@ -568,7 +568,7 @@ TetrisGame.prototype.handleInput = function (evt)
 	}
 	else if (evt == "hold")
 	{
-		if(this.hold_piece == "")
+		if(this.hold_piece == ' ')
 		{
 			this.hold_piece = this.pieceType;
 			this.pieceType = this.nextpieceType;
