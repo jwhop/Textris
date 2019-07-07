@@ -246,7 +246,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
-			for(i = 0l i < 4; i++){
+			for(i = 0; i < 4; i++){
 				for(j = 0; j < 4; j++){
 					msg += pieceStructures[tg.game.getnextPiece()][0][i][j];
 				}
