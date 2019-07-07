@@ -218,10 +218,7 @@ client.on('message', message => {
 				for(j = 0; j < 4; j++){
 					next_char = colormap[pieceStructures[tg.game.getnextPiece()][0][i][j]];
 					
-					if (next_char == ":egg:")
-						msg += '\t'
-					else 
-						msg +=next_char; 
+					msg +=next_char; 
 				}
 				msg += '\n'
 			}
