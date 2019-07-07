@@ -187,7 +187,7 @@ client.on('message', message => {
 		var moving = false;
 		var running = true;
 		
-		game_collection.push({name: message.guild, game: new_game, msg: sent_msg, move: moving, run: running, channel: message.channel.id});
+		game_collection.push({name: message.guild, game: new_game, msg1: sent_msg, msg2: sent_msg_2, move: moving, run: running, channel: message.channel.id});
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild)];
 		var interval = setInterval (function(){
 			
@@ -254,7 +254,9 @@ client.on('message', message => {
 	else if (message.channel.name === "textris")
 	{
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild)].game;
-		var sending_msg = game_collection[game_collection.findIndex(find_game, message.guild)].msg
+		var sending_msg = game_collection[game_collection.findIndex(find_game, message.guild)].msg;
+		var sending_msg_2 = game_collection[game_collection.findIndex(find_game, message.guild)].msg2;
+		
 		if (message.content === '!start')
 		{
 			message.reply("you already have a game running");
@@ -270,6 +272,7 @@ client.on('message', message => {
 			tg.clear_board();
 			tg.draw();
 			msg = "";
+			msg_2 = "";
 			for(i = 0; i < 15; i++){
 				for (j = 0; j < 10; j++){
 					msg += tg.board[i][j];
@@ -277,8 +280,38 @@ client.on('message', message => {
 				msg += '\n'
 			}
 			
+			for(i = 0; i < 4; i++){
+				for(j = 0; j < 4; j++){
+					next_char = colormap[pieceStructures[tg.getnextPiece()][0][i][j]];
+					
+					if (next_char == ":egg:")
+						msg_2 += ":black_circle:"
+					else 
+						msg_2 +=next_char; 
+				}
+				msg_2 += '\n'
+			}
+			for(i = 0; i < 4; i++){
+				for(j = 0; j < 4; j++){
+					held_piece = tg.get_hold_piece();
+					if(held_piece == ' ')
+					{
+						msg_2 += ":black_circle:";
+						continue;
+					}
+					next_char = colormap[pieceStructures[held_piece][0][i][j]];
+					
+					if (next_char == ":egg:")
+						msg_2 += ":black_circle:"
+					else 
+						msg_2 +=next_char; 
+				}
+				msg_2 += '\n'
+			}
+			
 			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
 			sending_msg.then((new_message) => {new_message.edit(msg);});
+			sending_msg_2.then((new_message) => {new_message.edit(msg2);});
 			tg.move = false;
 			}
 			}
