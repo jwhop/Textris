@@ -217,7 +217,7 @@ client.on('message', message => {
 			msg += tg.nextpieceType;
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			}
-			}, 1000); 
+			}, 10000); 
 	  }
 	}
 	
