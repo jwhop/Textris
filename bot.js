@@ -261,7 +261,7 @@ client.on('message', message => {
 		}
 		
 		if (message.content === '!left' || message.content === '!right' ||
-			message.content === '!rot')
+			message.content === '!rot' || message.content === '!hold')
 			{
 			if (!tg.move)
 			{
