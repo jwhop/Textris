@@ -201,7 +201,6 @@ client.on('message', message => {
 			if (tg.game.update() < 0)
 			{
 				tg.run = false;
-				
 				//break;
 				return;
 			}
@@ -215,6 +214,7 @@ client.on('message', message => {
 				}
 				msg += '\n'
 			}
+			msg += tg.nextpieceType;
 			sent_msg.then((new_message) => {new_message.edit(msg);});
 			}
 			}, 240000); 
@@ -324,6 +324,7 @@ TetrisGame.prototype.reset = function()
   }
 
   this.newSeq();
+  this.nextpieceType = this.sequence.pop();
   this.newPiece();
 } // reset()
 
@@ -332,8 +333,8 @@ TetrisGame.prototype.newPiece = function()
   this.pieceX = 3;
   this.pieceY = 0;
   this.pieceRot = 0;
-
-  this.pieceType = this.sequence.pop();
+  this.pieceType = this.nextpieceType;
+  this.nextpieceType = this.sequence.pop();
   if(this.sequence.length === 0)
   {
     this.newSeq();
@@ -390,7 +391,8 @@ TetrisGame.prototype.update = function()
     }
 
     this.newPiece();
-    if(!this.canPieceMove(this.pieceX, this.pieceY, this.pieceRot))
+    
+	if(!this.canPieceMove(this.pieceX, this.pieceY, this.pieceRot))
       scoreChange = -1;
   } // piece hits ground
 
