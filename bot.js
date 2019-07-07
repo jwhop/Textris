@@ -216,7 +216,7 @@ client.on('message', message => {
 			}
 			for(i = 0; i < 4; i++){
 				for(j = 0; j < 4; j++){
-					msg += pieceStructures[tg.game.getnextPiece()][0][i][j];
+					msg += colormap[pieceStructures[tg.game.getnextPiece()][0][i][j]];
 				}
 				msg += '\n'
 			}
