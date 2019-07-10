@@ -214,8 +214,9 @@ client.on('message', message => {
 				for (j = 0; j < 10; j++){
 					msg += tg.game.board[i][j];
 				}
-				msg += '\n'
+				msg += '\n';
 			}
+			msg += '\n';
 			msg_2 += "next piece:";
 			for(i = 0; i < 4; i++){
 				if(i!=0)
@@ -289,7 +290,8 @@ client.on('message', message => {
 			}
 			msg_2 += "next piece:";
 			for(i = 0; i < 4; i++){
-				msg_2 += "           ";
+				if(i!=0)
+					msg_2 += "                     ";
 				for(j = 0; j < 4; j++){
 					
 					next_char = colormap[pieceStructures[tg.getnextPiece()][0][i][j]];
@@ -302,7 +304,7 @@ client.on('message', message => {
 				if(i == 0)
 					msg_2 += ('\t' + "hold piece:");
 				else
-					msg_2 += ('\t' + "           ");
+					msg_2 += ('\t' + "                     ");
 				for(l = 0; l < 4; l++){
 					held_piece = tg.get_hold_piece();
 					if(held_piece == ' ')
@@ -320,7 +322,7 @@ client.on('message', message => {
 				msg_2 += '\n'
 				
 			}
-			
+			msg_2 += ('\n' + "Score:" + tg.score);
 			
 			
 			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
