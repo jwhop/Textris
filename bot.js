@@ -1,3 +1,196 @@
+var game_collection = [];
+var score_collection = [];
+game_counter = 1;
+var possible_commands = ["!left", "!right", "!rot", "!l", "!r", "!rotc", "!rotcc", "!cc", "!c", "!hold", "!h"];
+const Discord = require('discord.js');
+const client = new Discord.Client();
+function compare_scores(a,b)
+{
+	return a.score - b.score;
+}
+function update_loop( tg,  game_board_msg,  game_details_msg, msg)
+{
+	const channel = msg.guild.channels.find(ch => ch.name === 'general');
+	if(!tg.run)
+	{
+		clearInterval(tg.interval);
+		message.channel.send('type !start to play again');
+		game_collection.splice(game_collection.findIndex(find_game, message.guild), 1);
+		return;
+	}
+	
+	score_change = tg.game.update();
+	if (score_change < 0)
+	{
+		tg.run = false;
+		//break;
+		return;
+	}
+	else
+	{
+		tg.game.score += score_change;
+		tg.game.clear_board();
+		tg.game.draw();
+		send_board_message(tg, game_board_msg, game_details_msg);
+		if(tg.game.single)
+		{
+			channel.send("SINGLE LINE CLEAR: Nice job!");
+		}
+		if(tg.game.doub)
+		{
+			channel.send("DOUBLE LINE CLEAR: Way to go!");
+		}
+		if(tg.game.triple)
+		{
+			channel.send("TRIPLE LINE CLEAR: Awwww Yeah!");
+		}
+		if(tg.game.quadruple)
+		{
+			channel.send("BOOM: Tetris for Discord!");
+		}
+	}
+	
+}
+
+function send_board_message( tg,  game_board_msg,  game_details_msg)
+{
+	msg = "--------------------------------------------------------------------";
+	msg_2 = '\n';
+	for(i = 0; i < 15; i++)
+	{
+		msg += ("[[" + '\t' + '\t');
+		for (j = 0; j < 10; j++)
+		{
+			msg += tg.game.board[i][j];
+		}
+		msg += ('\t' + '\t' + "]]" + '\n');
+	}
+			
+	msg += '\n';
+	msg += "--------------------------------------------------------------------";
+	msg_2 += "next piece:";
+	for(i = 0; i < 4; i++)
+	{
+		if(i!=0)
+			msg_2 += "                    ";
+		for(j = 0; j < 4; j++)
+		{
+			
+			next_char = colormap[pieceStructures[tg.game.getnextPiece()][0][i][j]];
+			
+			if (next_char == ":egg:")
+				msg_2 += ":black_circle:"
+			else 
+				msg_2 +=next_char; 
+		}
+		if(i == 0)
+			msg_2 += ('\t' + "hold piece:");
+		else
+			msg_2 += ('\t' + "                   ");
+		for(l = 0; l < 4; l++)
+		{
+			held_piece = tg.game.get_hold_piece();
+			if(held_piece == ' ')
+			{
+				msg_2 += ":black_circle:";
+				continue;
+			}
+			next_char = colormap[pieceStructures[held_piece][0][i][l]];
+			
+			if (next_char == ":egg:")
+				msg_2 += ":black_circle:"
+			else 
+				msg_2 +=next_char; 
+		}
+		msg_2 += '\n'
+				
+	}
+			
+	msg_2 += ('\n' + "Score:" + tg.game.score);
+	//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
+	game_board_msg.then((new_message) => {new_message.edit(msg);});
+	game_details_msg.then((new_message) =>{new_message.edit(msg_2);});
+			
+}
+
+function find_game(currentValue, index, array)
+{
+	return currentValue.name === this;
+}
+
+client.on('ready', () => {
+    // List servers the bot is connected to
+    console.log("Ready :D")
+});
+
+client.on('message', message => {
+  
+  if(message.author.bot || (message.channel.name !== "textris") || !message.content.startsWith('!'))
+	{
+	   return;
+	}
+  else
+  {
+	 
+	if (typeof game_collection.find(server => server.name === message.guild) === 'undefined')
+	{
+	  if (message.content !== '!start')
+	  {
+		  message.reply("currently no game found on server. type '!start' to start a game.");
+	  }
+	  else //start game
+	  {
+		new_game = new TetrisGame(10,15,1);
+		var game_msg = message.channel.send("Starting");
+		var game_details = message.channel.send("Good Luck!");
+		var interval;
+		game_collection.push({name: message.guild, game: new_game, msg1: game_msg, msg2: game_details, move: false, run: true, channel: message.channel.id, game_interval: interval});
+		
+		var tg = game_collection[game_collection.findIndex(find_game, message.guild)];
+		score_collection.push({name: message.guild, score: tg.game.score, id: game_counter});
+		game_counter++;
+		interval = setInterval (function () {update_loop(tg, game_msg, game_details, message);}, 10000); 
+	  }
+	}
+	
+	else
+	{
+		var tg = game_collection[game_collection.findIndex(find_game, message.guild)];
+		var sending_msg = game_collection[game_collection.findIndex(find_game, message.guild)].msg1;
+		var sending_msg_2 = game_collection[game_collection.findIndex(find_game, message.guild)].msg2;
+		
+		if (message.content === '!start')
+		{
+			message.reply("you already have a game running");
+		}
+		else if (message.content === '!leaderboard')
+		{
+			sorted_scores = score_collection.sort();
+			sorted_scores.forEach(function(element) {
+				const channel = message.guild.channels.find(ch => ch.name === 'general');
+				channel.send(element.name + " " + element.score);
+			});
+		}
+		else if (possible_commands.indexOf(message.content) > -1)
+		{
+			if (!tg.move)
+			{
+				tg.move = true;
+				tg.game.handleInput(message.content.substr(1));
+				tg.game.clear_board();
+				tg.game.draw();
+				send_board_message(tg, sending_msg, sending_msg_2);
+				tg.move = false;
+			}
+		}
+	}
+	
+	message.delete(500);
+  }
+});
+
+client.login("NTc4ODMxMTQ2NzU4OTYzMjIw.XOnaCg.Nv3xpqrswlqcqPcCIBtQMmuO8bs"); // Replace XXXXX with your bot token
+
 let colors = {
   lime: "#00FF7F",
   pink: "#f893c4",
@@ -154,198 +347,6 @@ let pieceStructures = [
   ],
 ]
 
-var game_collection = [];
-
-const Discord = require('discord.js');
-const client = new Discord.Client();
-client.on('ready', () => {
-    // List servers the bot is connected to
-    console.log("Ready :D")
-});
-
-function find_game(currentValue, index, array)
-{
-	return currentValue.name === this;
-}
-
-client.on('message', message => {
-  
-  if (message.content.startsWith('!'))
-  {
-	 
-  if (typeof game_collection.find(server => server.name === message.guild) === 'undefined')
-	{
-	  if (message.content !== '!start' && message.channel.name === "textris")
-	  {
-		  message.reply("currently no game found on server. type '!start' to start a game.");
-	  }
-	  else if (message.channel.name === "textris")
-	  {
-		new_game = new TetrisGame(10,15,1);
-		var sent_msg = message.channel.send("Starting");
-		var sent_msg_2 = message.channel.send("Good Luck!");
-		var moving = false;
-		var running = true;
-		
-		game_collection.push({name: message.guild, game: new_game, msg1: sent_msg, msg2: sent_msg_2, move: moving, run: running, channel: message.channel.id});
-		var tg = game_collection[game_collection.findIndex(find_game, message.guild)];
-		var interval = setInterval (function(){
-			
-			if(!tg.run)
-			{
-				clearInterval(interval);
-				message.channel.send('type !start to play again');
-				game_collection.splice(game_collection.findIndex(find_game, message.guild), 1);
-			}
-			score_change = tg.game.update();
-			if (score_change < 0)
-			{
-				tg.run = false;
-				//break;
-				return;
-			}
-			else{
-			tg.game.score += score_change;
-			tg.game.clear_board();
-			tg.game.draw();
-			msg = "";
-			msg_2 = '\n';
-			for(i = 0; i < 15; i++){
-				for (j = 0; j < 10; j++){
-					msg += tg.game.board[i][j];
-				}
-				msg += '\n';
-			}
-			msg += '\n';
-			msg_2 += "next piece:";
-			for(i = 0; i < 4; i++){
-				if(i!=0)
-					msg_2 += "                     ";
-				for(j = 0; j < 4; j++){
-					
-					next_char = colormap[pieceStructures[tg.game.getnextPiece()][0][i][j]];
-					
-					if (next_char == ":egg:")
-						msg_2 += ":black_circle:"
-					else 
-						msg_2 +=next_char; 
-				}
-				if(i == 0)
-					msg_2 += ('\t' + "hold piece:");
-				else
-					msg_2 += ('\t' + "                     ");
-				for(l = 0; l < 4; l++){
-					held_piece = tg.game.get_hold_piece();
-					if(held_piece == ' ')
-					{
-						msg_2 += ":black_circle:";
-						continue;
-					}
-					next_char = colormap[pieceStructures[held_piece][0][i][l]];
-					
-					if (next_char == ":egg:")
-						msg_2 += ":black_circle:"
-					else 
-						msg_2 +=next_char; 
-				}
-				msg_2 += '\n'
-				
-			}
-			msg_2 += ('\n' + "Score:" + tg.game.score);
-			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
-			sent_msg.then((new_message) => {new_message.edit(msg);});
-			sent_msg_2.then((new_message) =>{new_message.edit(msg_2);});
-			}
-			}, 10000); 
-	  }
-	}
-	
-	else if (message.channel.name === "textris")
-	{
-		var tg = game_collection[game_collection.findIndex(find_game, message.guild)].game;
-		var sending_msg = game_collection[game_collection.findIndex(find_game, message.guild)].msg1;
-		var sending_msg_2 = game_collection[game_collection.findIndex(find_game, message.guild)].msg2;
-		
-		if (message.content === '!start')
-		{
-			message.reply("you already have a game running");
-		}
-		
-		if (message.content === '!left' || message.content === '!right' ||
-			message.content === '!rot' || message.content === '!hold')
-			{
-			if (!tg.move)
-			{
-				tg.move = true;
-			tg.handleInput(message.content.substr(1));
-			tg.clear_board();
-			tg.draw();
-			msg = "";
-			msg_2 = "";
-			for(i = 0; i < 15; i++){
-				for (j = 0; j < 10; j++){
-					msg += tg.board[i][j];
-				}
-				msg += '\n'
-			}
-			msg_2 += "next piece:";
-			for(i = 0; i < 4; i++){
-				if(i!=0)
-					msg_2 += "                     ";
-				for(j = 0; j < 4; j++){
-					
-					next_char = colormap[pieceStructures[tg.getnextPiece()][0][i][j]];
-					
-					if (next_char == ":egg:")
-						msg_2 += ":black_circle:"
-					else 
-						msg_2 +=next_char; 
-				}
-				if(i == 0)
-					msg_2 += ('\t' + "hold piece:");
-				else
-					msg_2 += ('\t' + "                     ");
-				for(l = 0; l < 4; l++){
-					held_piece = tg.get_hold_piece();
-					if(held_piece == ' ')
-					{
-						msg_2 += ":black_circle:";
-						continue;
-					}
-					next_char = colormap[pieceStructures[held_piece][0][i][l]];
-					
-					if (next_char == ":egg:")
-						msg_2 += ":black_circle:"
-					else 
-						msg_2 +=next_char; 
-				}
-				msg_2 += '\n'
-				
-			}
-			msg_2 += ('\n' + "Score:" + tg.score);
-			
-			
-			//msg += ('\n' + pieceStructures[tg.game.getnextPiece()][0]);
-			sending_msg.then((new_message) => {new_message.edit(msg);});
-			sending_msg_2.then((new_message) => {new_message.edit(msg_2);});
-			tg.move = false;
-			}
-			}
-	}
-	
-  }
-   if(message.author.bot || (message.channel.name !== "textris"))
-   {
-	   return;
-   }
-	else
-	{
-		
-   message.delete(500);
-	}
-});
-client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
-
 TetrisGame.prototype.getnextPiece = function(){
 	return this.nextpieceType;
 }
@@ -384,6 +385,10 @@ function TetrisGame(gW, gH, tS)
   this.board = [];
   this.inert = [];
   this.score = 0;
+  this.single = false;
+  this.doub = false;
+  this.triple = false
+  this.quadruple = false;
   for(var y=0; y<this.gridHgt; y++)
   {
     this.inert[y] = [];
@@ -412,7 +417,10 @@ TetrisGame.prototype.reset = function()
       this.inert[y][x] = ' ';
     }
   }
-
+  this.single = false;
+  this.doub = false;
+  this.triple = false
+  this.quadruple = false;
   this.newSeq();
   this.nextpieceType = this.sequence.pop();
   this.hold_piece = ' ';
@@ -449,7 +457,10 @@ TetrisGame.prototype.newSeq = function()
 
 TetrisGame.prototype.update = function()
 {
-  
+  this.single = false;
+  this.doub = false;
+  this.triple = false
+  this.quadruple = false;
   let scoreChange = 0;
 
   let testY = this.pieceY + 1;
@@ -487,7 +498,14 @@ TetrisGame.prototype.update = function()
 	if(!this.canPieceMove(this.pieceX, this.pieceY, this.pieceRot))
       scoreChange = -1;
   } // piece hits ground
-
+	if(scoreChange == 10)
+		this.single = true;
+	else if (scoreChange == 20)
+		this.doub = true;
+	else if (scoreChange == 30)
+		this.triple = true;
+	else if (scoreChange == 40)
+		this.quadruple = true;
   return scoreChange;
 } // update()
 
