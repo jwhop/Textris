@@ -10,20 +10,19 @@ function compare_scores(a,b)
 }
 function update_loop( tg,  game_board_msg,  game_details_msg, msg)
 {
-	const channel = msg.guild.channels.find(ch => ch.name === 'general');
-	if(!tg.run)
-	{
-		clearInterval(tg.interval);
-		message.channel.send('type !start to play again');
-		game_collection.splice(game_collection.findIndex(find_game, message.guild), 1);
-		return;
-	}
+	const channel1 = tg.name.channels.find(ch => ch.name === 'general');
+	const channel2 = tg.name.channels.find(ch => ch.name === 'textris');
 	
 	score_change = tg.game.update();
 	if (score_change < 0)
 	{
 		tg.run = false;
 		//break;
+		
+		channel1.send('type !start to play again');
+		console.log('sent!');
+		channel2.send('type !start to play again');
+		game_collection.splice(game_collection.findIndex(find_game, tg.name), 1);
 		return;
 	}
 	else
@@ -34,27 +33,28 @@ function update_loop( tg,  game_board_msg,  game_details_msg, msg)
 		send_board_message(tg, game_board_msg, game_details_msg);
 		if(tg.game.single)
 		{
-			channel.send("SINGLE LINE CLEAR: Nice job!");
+			channel1.send("SINGLE LINE CLEAR: Nice job!");
 		}
 		if(tg.game.doub)
 		{
-			channel.send("DOUBLE LINE CLEAR: Way to go!");
+			channel1.send("DOUBLE LINE CLEAR: Way to go!");
 		}
 		if(tg.game.triple)
 		{
-			channel.send("TRIPLE LINE CLEAR: Awwww Yeah!");
+			channel1.send("TRIPLE LINE CLEAR: Awwww Yeah!");
 		}
 		if(tg.game.quadruple)
 		{
-			channel.send("BOOM: Tetris for Discord!");
+			channel1.send("BOOM: Tetris for Discord!");
 		}
+		tg.game_interval = setTimeout(function(){update_loop(tg,game_board_msg, game_details_msg, msg);},10000);
 	}
 	
 }
 
 function send_board_message( tg,  game_board_msg,  game_details_msg)
 {
-	msg = "--------------------------------------------------------------------";
+	msg = "-------------------------------------------------------------------\n";
 	msg_2 = '\n';
 	for(i = 0; i < 15; i++)
 	{
@@ -67,7 +67,7 @@ function send_board_message( tg,  game_board_msg,  game_details_msg)
 	}
 			
 	msg += '\n';
-	msg += "--------------------------------------------------------------------";
+	msg += "-------------------------------------------------------------------";
 	msg_2 += "next piece:";
 	for(i = 0; i < 4; i++)
 	{
@@ -90,12 +90,14 @@ function send_board_message( tg,  game_board_msg,  game_details_msg)
 		for(l = 0; l < 4; l++)
 		{
 			held_piece = tg.game.get_hold_piece();
+			console.log(held_piece);
 			if(held_piece == ' ')
 			{
 				msg_2 += ":black_circle:";
 				continue;
 			}
-			next_char = colormap[pieceStructures[held_piece][0][i][l]];
+			
+			next_char = colormap[pieceStructures[held_piece - 1][0][i][l]];
 			
 			if (next_char == ":egg:")
 				msg_2 += ":black_circle:"
@@ -144,12 +146,13 @@ client.on('message', message => {
 		var game_msg = message.channel.send("Starting");
 		var game_details = message.channel.send("Good Luck!");
 		var interval;
-		game_collection.push({name: message.guild, game: new_game, msg1: game_msg, msg2: game_details, move: false, run: true, channel: message.channel.id, game_interval: interval});
+		game_collection.push({name: message.guild, game: new_game, msg1: game_msg, msg2: game_details, move: false, run: true, channel: message.channel.id, game_interval: interval, is_holding: false});
 		
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild)];
 		score_collection.push({name: message.guild, score: tg.game.score, id: game_counter});
 		game_counter++;
-		interval = setInterval (function () {update_loop(tg, game_msg, game_details, message);}, 10000); 
+		tg.game_interval = setTimeout(function(){update_loop(tg,game_msg, game_details, message);},10000);
+		//interval = setInterval (function () {update_loop(tg, game_msg, game_details, message);}, 10000); 
 	  }
 	}
 	
@@ -189,7 +192,7 @@ client.on('message', message => {
   }
 });
 
-client.login("NTc4ODMxMTQ2NzU4OTYzMjIw.XOnaCg.Nv3xpqrswlqcqPcCIBtQMmuO8bs"); // Replace XXXXX with your bot token
+client.login('NTc4ODMxMTQ2NzU4OTYzMjIw.XaJk1g.Ply6jqo1A236APsAHU9wJ4ku1zY'); // Replace XXXXX with your bot token
 
 let colors = {
   lime: "#00FF7F",
@@ -389,6 +392,7 @@ function TetrisGame(gW, gH, tS)
   this.doub = false;
   this.triple = false
   this.quadruple = false;
+  this.holding = false;
   for(var y=0; y<this.gridHgt; y++)
   {
     this.inert[y] = [];
@@ -421,6 +425,8 @@ TetrisGame.prototype.reset = function()
   this.doub = false;
   this.triple = false
   this.quadruple = false;
+  this.holding = false;
+
   this.newSeq();
   this.nextpieceType = this.sequence.pop();
   this.hold_piece = ' ';
@@ -462,7 +468,7 @@ TetrisGame.prototype.update = function()
   this.triple = false
   this.quadruple = false;
   let scoreChange = 0;
-
+  let temp_score_change = 0;
   let testY = this.pieceY + 1;
   if(this.canPieceMove(this.pieceX, testY, this.pieceRot))
   {
@@ -489,23 +495,37 @@ TetrisGame.prototype.update = function()
       if(this.isRowFilled(y))
       {
         this.shiftBoardDownFrom(y);
-        scoreChange += 10;
+        temp_score_change += 10
+		//scoreChange += 10;
       }
     }
-
+	
     this.newPiece();
-    
+    this.holding = false;
+
 	if(!this.canPieceMove(this.pieceX, this.pieceY, this.pieceRot))
       scoreChange = -1;
   } // piece hits ground
-	if(scoreChange == 10)
+	if(temp_score_change == 10)
+	{
 		this.single = true;
-	else if (scoreChange == 20)
+		scoreChange = 100;
+	}
+	else if (temp_score_change == 20)
+	{
 		this.doub = true;
-	else if (scoreChange == 30)
+		scoreChange = 400;
+	}
+	else if (temp_score_change == 30)
+	{
 		this.triple = true;
-	else if (scoreChange == 40)
+		scoreChange = 900;
+	}
+	else if (temp_score_change == 40)
+	{
 		this.quadruple = true;
+		scoreChange = 1600;
+	}
   return scoreChange;
 } // update()
 
@@ -636,24 +656,29 @@ TetrisGame.prototype.handleInput = function (evt)
 	}
 	else if (evt == "hold")
 	{
-		if(this.hold_piece == ' ')
+		if(!this.holding)
 		{
-			this.hold_piece = this.pieceType;
-			this.pieceType = this.nextpieceType;
-			this.nextpieceType = this.sequence.pop();
-			if(this.sequence.length === 0)
+			this.holding = true;
+			if(this.hold_piece == ' ')
 			{
-				this.newSeq();
+				console.log(this.pieceType);
+				this.hold_piece = this.pieceType + 1;
+				this.pieceType = this.nextpieceType;
+				this.nextpieceType = this.sequence.pop();
+				if(this.sequence.length === 0)
+				{
+					this.newSeq();
+				}
 			}
+			else
+			{
+				temp = this.hold_piece - 1;
+				this.hold_piece = this.pieceType + 1;
+				this.pieceType = temp;
+			}
+			this.pieceX = 3;
+			this.pieceY = 0;
+			this.pieceRot = 0;
 		}
-		else
-		{
-			temp = this.hold_piece;
-			this.hold_piece = this.pieceType;
-			this.pieceType = temp;
-		}
-		this.pieceX = 3;
-		this.pieceY = 0;
-		this.pieceRot = 0;
 	}
 }
