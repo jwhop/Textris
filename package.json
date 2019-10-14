@@ -1,25 +1,14 @@
 {
-
   "name": "Textris",
-
-  "description": "Discord Tetris Bot",
-
-  "version": "0.0.1",
-
+  "description": "Discord_Tetris_Bot",
+  "version": "1.0.0",
   "main": "bot.js",
-
   "scripts": {
-
     "start": "node bot.js"
-
   },
-
   "dependencies": {
-
-    "discord.js": "11.1.0",
-
+    "discord.js": "^11.1.0",
+    "mongoose": "^5.7.5",
     "request": "2.81.0"
-
   }
-
 }

@@ -2,8 +2,16 @@ var game_collection = [];
 var score_collection = [];
 game_counter = 1;
 var possible_commands = ["!left", "!right", "!rot", "!l", "!r", "!rotc", "!rotcc", "!cc", "!c", "!hold", "!h"];
+
 const Discord = require('discord.js');
+//const mongoose = require('mongoose');
+//const gameSchema = require("./Models/report.js");
+
+
 const client = new Discord.Client();
+
+
+
 function compare_scores(a,b)
 {
 	return a.score - b.score;
@@ -31,6 +39,7 @@ function update_loop( tg,  game_board_msg,  game_details_msg, msg)
 		tg.game.clear_board();
 		tg.game.draw();
 		send_board_message(tg, game_board_msg, game_details_msg);
+		
 		if(tg.game.single)
 		{
 			channel1.send("SINGLE LINE CLEAR: Nice job!");
@@ -47,13 +56,74 @@ function update_loop( tg,  game_board_msg,  game_details_msg, msg)
 		{
 			channel1.send("BOOM: Tetris for Discord!");
 		}
-		tg.game_interval = setTimeout(function(){update_loop(tg,game_board_msg, game_details_msg, msg);},10000);
+		if(score_change> 0)
+		{
+		if(tg.game.score >= 20000)
+		{
+			console.log('3!');
+			channel1.send("Entering the final level. Interval speed now 5 minutes");
+			tg.game.time_length = 1000*60*5;
+			
+		}
+		else if(tg.game.score >= 10000)
+		{
+			console.log('2!');
+			channel1.send("Entering Level 3. Interval speed now 7 minutes");
+			tg.game.time_length = 1000*60*7;
+		}
+		else if(tg.game.score >= 5000)
+		{
+			console.log('1!');
+			channel1.send("Entering Level 2. Interval speed now 10 minutes");
+			tg.game.time_length = 1000*60*10;
+		}
+		}
+
+		//save_info(tg);
+		tg.game_interval = setTimeout(function(){update_loop(tg,game_board_msg, game_details_msg, msg);},tg.game.time_length);
+		
 	}
 	
 }
-
+function save_info(tg)
+{
+	board_string='';
+	
+	for(i = 0; i < 15; i++)
+	{
+		for (j = 0; j < 10; j++)
+		{
+			console.log(tg.game.board[i][j]);
+			board_string += colormap_reverse[tg.game.board[i][j]];
+		}
+	}
+	
+	if(tg.game_report == null)
+	{
+		
+	mongoose.connect('mongodb://localhost/TextrisGames');
+		 tg.game_report = new gameSchema({
+			_id: mongoose.Types.ObjectId(),
+			username: board_string
+		});
+		tg.game_report.save()
+		.then(result => console.log(result))
+		.catch(err=> console.log(err));
+	}
+	else
+	{
+		tg.game_report.username = board_string;
+		tg.game_report.save()
+		.then(result => console.log(result))
+		.catch(err=> console.log(err));
+	}
+	
+	
+	
+}
 function send_board_message( tg,  game_board_msg,  game_details_msg)
 {
+	//console.log('map is: ' + colormap[tg.game.board[0][0]]);
 	msg = "-------------------------------------------------------------------\n";
 	msg_2 = '\n';
 	for(i = 0; i < 15; i++)
@@ -146,12 +216,13 @@ client.on('message', message => {
 		var game_msg = message.channel.send("Starting");
 		var game_details = message.channel.send("Good Luck!");
 		var interval;
-		game_collection.push({name: message.guild, game: new_game, msg1: game_msg, msg2: game_details, move: false, run: true, channel: message.channel.id, game_interval: interval, is_holding: false});
+		game_collection.push({name: message.guild, game: new_game, msg1: game_msg, msg2: game_details, move: false, run: true, channel: message.channel.id, game_interval: interval, is_holding: false, game_report: null});
 		
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild)];
 		score_collection.push({name: message.guild, score: tg.game.score, id: game_counter});
 		game_counter++;
-		tg.game_interval = setTimeout(function(){update_loop(tg,game_msg, game_details, message);},10000);
+		update_loop(tg,game_msg, game_details, message);
+		//tg.game_interval = setTimeout(function(){update_loop(tg,game_msg, game_details, message);},10000);
 		//interval = setInterval (function () {update_loop(tg, game_msg, game_details, message);}, 10000); 
 	  }
 	}
@@ -192,7 +263,7 @@ client.on('message', message => {
   }
 });
 
-client.login('NTc4ODMxMTQ2NzU4OTYzMjIw.XaJk1g.Ply6jqo1A236APsAHU9wJ4ku1zY'); // Replace XXXXX with your bot token
+client.login('NTc4ODMxMTQ2NzU4OTYzMjIw.XaSOeA.6AWVmtLhdoB-DHU5YsN8ewY2-I4'); // Replace XXXXX with your bot token
 
 let colors = {
   lime: "#00FF7F",
@@ -217,6 +288,19 @@ let colormap = {
   z: ":heart:",
   b: ":egg:"
 }
+
+let colormap_reverse = {
+  ":blue_heart:": 'i',
+  ":snowflake:": 'j',
+  ":tangerine:": 'l',
+  ":yellow_heart:": 'o',
+  ":green_heart:": 's',
+  ":purple_heart:": 't',
+  ":heart:": 'z',
+  ":egg:": ' '
+  
+}
+
 colormap[' '] = ":egg:"
 
 let pieceStructures = [
@@ -393,6 +477,7 @@ function TetrisGame(gW, gH, tS)
   this.triple = false
   this.quadruple = false;
   this.holding = false;
+  this.time_length = 1000*60*15;
   for(var y=0; y<this.gridHgt; y++)
   {
     this.inert[y] = [];
@@ -426,7 +511,7 @@ TetrisGame.prototype.reset = function()
   this.triple = false
   this.quadruple = false;
   this.holding = false;
-
+  this.time_length = 1000*60*15;
   this.newSeq();
   this.nextpieceType = this.sequence.pop();
   this.hold_piece = ' ';
@@ -526,7 +611,23 @@ TetrisGame.prototype.update = function()
 		this.quadruple = true;
 		scoreChange = 1600;
 	}
-  return scoreChange;
+	if(this.time_length == 1000*60*5)
+	{
+		return scoreChange*2.0;
+	}
+	else if(this.time_length == 1000*60*7)
+	{
+		return scoreChange*1.75;
+	}
+	else if (this.time_length == 1000*60*10)
+	{
+		return scoreChange * 1.5;
+	}
+	else
+	{
+		 return scoreChange;
+	}
+ 
 } // update()
 
 TetrisGame.prototype.isRowFilled = function(row)
