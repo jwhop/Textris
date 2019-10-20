@@ -180,7 +180,7 @@ module.exports = class TetrisGame{
 			this.triple = false
 			this.quadruple = false;
 			this.holding = false;
-			this.time_length = 1000*60*15;
+			this.time_length = 1000*15;
 			
 			for(var y=0; y<this.gridHgt; y++){
 				

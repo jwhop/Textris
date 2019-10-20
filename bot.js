@@ -35,7 +35,7 @@ function load_info(){
 			new_game.pieceY = game[i].piece_y;
 			new_game.holding = game[i].is_holding;
 			
-			new_serverobj = new S(
+			var new_serverobj = new S(
 			game[i].name, 
 			new_game,
 			game[i].channel, 
