@@ -1,4 +1,3 @@
-
 let colors = {
   lime: "#00FF7F",
   pink: "#f893c4",
@@ -166,354 +165,325 @@ let pieceStructures = [
       [' ', ' ', ' ', ' '],
     ],
   ],
-]
+] 
 
-TetrisGame.prototype.getnextPiece = function(){
-	return this.nextpieceType;
-}
-
-TetrisGame.prototype.get_hold_piece = function(){
-	return this.hold_piece;
-}
-
-TetrisGame.prototype.clear_board = function(){
-	this.board = [ 
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0]
-];
-}
-function TetrisGame(gW, gH, tS)
-{
-  this.gridWdt = gW;  
-  this.gridHgt = gH;
-  this.tileSz = tS;
-  this.board = [];
-  this.inert = [];
-  this.score = 0;
-  this.single = false;
-  this.doub = false;
-  this.triple = false
-  this.quadruple = false;
-  this.holding = false;
-  this.time_length = 1000*30;
-  for(var y=0; y<this.gridHgt; y++)
-  {
-    this.inert[y] = [];
-    for(var x=0; x<this.gridWdt; x++)
-    {
-      this.inert[y][x] = ' ';
-    }
-  }
-  
-  this.pieceType = 0;
-  this.pieceRot = 0;
-  this.pieceX = 3;
-  this.pieceY = 0;
-  this.hold_piece = ' ';
-  this.newSeq();
-  this.nextpieceType = this.sequence.pop();
-  this.newPiece();
-}
-
-TetrisGame.prototype.reset = function()
-{
-  for(var y=0; y<this.gridHgt; y++)
-  {
-    for(var x=0; x<this.gridWdt; x++)
-    {
-      this.inert[y][x] = ' ';
-    }
-  }
-  this.single = false;
-  this.doub = false;
-  this.triple = false
-  this.quadruple = false;
-  this.holding = false;
-  this.time_length = 1000*60*15;
-  this.newSeq();
-  this.nextpieceType = this.sequence.pop();
-  this.hold_piece = ' ';
-  this.newPiece();
-} // reset()
-
-TetrisGame.prototype.newPiece = function()
-{
-  this.pieceX = 3;
-  this.pieceY = 0;
-  this.pieceRot = 0;
-  this.pieceType = this.nextpieceType;
-  this.nextpieceType = this.sequence.pop();
-  if(this.sequence.length === 0)
-  {
-    this.newSeq();
-  }
-} // newPiece()
-
-TetrisGame.prototype.newSeq = function()
-{
-  let seq = [0, 1, 2, 3, 4, 5, 6]; // n=7
-
-  for(var i=0; i<5; i++)
-  {
-    let j = Math.floor(Math.random() * (7-i)) + i;
-    let t = seq[j];
-    seq[j] = seq[i];
-    seq[i] = t;
-  } // bottom-up Fisher-Yates
-
-  this.sequence = seq;
-} // newSeq()
-
-TetrisGame.prototype.update = function()
-{
-  this.single = false;
-  this.doub = false;
-  this.triple = false
-  this.quadruple = false;
-  let scoreChange = 0;
-  let temp_score_change = 0;
-  let testY = this.pieceY + 1;
-  if(this.canPieceMove(this.pieceX, testY, this.pieceRot))
-  {
-    this.pieceY = testY;
-  } // piece can fall
-  else
-  {
-    // stamp block into inert grid
-    for(var y=0; y<4; y++)
-    {
-      for(var x=0; x<4; x++)
-      {
-        let block = pieceStructures[this.pieceType][this.pieceRot][y][x];
-        if(block !== ' ')
-        {
-          this.inert[this.pieceY + y][this.pieceX + x] = block; 
-        }
-      }
-    }
-
-    // scan top (0) to bottom (gridHgt) for filled rows
-    for(var y=0; y<this.gridHgt; y++)
-    {
-      if(this.isRowFilled(y))
-      {
-        this.shiftBoardDownFrom(y);
-        temp_score_change += 10
-		//scoreChange += 10;
-      }
-    }
-	
-    this.newPiece();
-    this.holding = false;
-
-	if(!this.canPieceMove(this.pieceX, this.pieceY, this.pieceRot))
-      scoreChange = -1;
-  } // piece hits ground
-	if(temp_score_change == 10)
-	{
-		this.single = true;
-		scoreChange = 100;
-	}
-	else if (temp_score_change == 20)
-	{
-		this.doub = true;
-		scoreChange = 400;
-	}
-	else if (temp_score_change == 30)
-	{
-		this.triple = true;
-		scoreChange = 900;
-	}
-	else if (temp_score_change == 40)
-	{
-		this.quadruple = true;
-		scoreChange = 1600;
-	}
-	if(this.time_length == 1000*60*5)
-	{
-		return scoreChange*2.0;
-	}
-	else if(this.time_length == 1000*60*7)
-	{
-		return scoreChange*1.75;
-	}
-	else if (this.time_length == 1000*60*10)
-	{
-		return scoreChange * 1.5;
-	}
-	else
-	{
-		 return scoreChange;
-	}
- 
-} // update()
-
-TetrisGame.prototype.isRowFilled = function(row)
-{
-  for(var x=0; x<this.gridWdt; x++)
-  {
-    if(this.inert[row][x] === ' ')
-      return false;
-  }
-  return true;
-} // isRowFilled()
-
-TetrisGame.prototype.shiftBoardDownFrom = function(row)
-{
-  // scans from bottom (row) to 2nd-to-top row (1)
-  for(var y=row; y>1; y--)
-  {
-    for(var x=0; x<this.gridWdt; x++)
-    {
-      this.inert[y][x] = this.inert[y-1][x];
-    } // row y-1 is copied down onto row y
-  }
-
-  for(var x=0; x<this.gridWdt; x++)
-  {
-    this.inert[0][x] = ' ';
-  } // when top row (0) is copied onto row 1, it should not be replaced
-} // shiftBoardDownFrom()
-
-TetrisGame.prototype.canPieceMove = function(testX, testY, testRot)
-{
-  let orientation = pieceStructures[this.pieceType][testRot];
-  for(var y=0; y<4; y++)
-  {
-    for(var x=0; x<4; x++)
-    {      
-      let testXLoc = testX + x;
-      let testYLoc = testY + y;
-
-      if((orientation[y][x] !== ' ') && (  (testXLoc < 0) || 
-                          (testXLoc >= this.gridWdt) || 
-                          (testYLoc >= this.gridHgt) || 
-                          (this.inert[testYLoc][testXLoc] !== ' ')  ))
-      {
-        return false;
-      }
-    }
-  }
-
-  return true;
-} // canPieceMove()
-
-TetrisGame.prototype.draw = function()
-{
-  // draw inert blocks
-  for(var y=0; y<this.gridHgt; y++)
-  {
-    for(var x=0; x<this.gridWdt; x++)
-    {
-      let block = this.inert[y][x]
-      this.drawBlock(block, x, y);
-    }
-  }
-
-  // draw current block
-  for(var y=0; y<4; y++)
-  {
-    for(var x=0; x<4; x++)
-    {
-      let block = pieceStructures[this.pieceType][this.pieceRot][y][x];
-      if(block !== ' ')
-      {
-        this.drawBlock(block, x + this.pieceX, y + this.pieceY);
-      }
-      
-    }
-  }
-} // draw()
-
-TetrisGame.prototype.drawBlock = function(block, x, y)
-{
-  //ctx.fillStyle = colormap[block];
-  //ctx.fillRect(x*this.tileSz, y*this.tileSz, 
-                //this.tileSz-2, this.tileSz-2);
-  this.board[y][x] = colormap[block];
-} // drawBlock()
-
-TetrisGame.prototype.handleInput = function (evt)
-{
-	if (evt == "left" || evt == "l")
-	{
-		let testX = this.pieceX - 1;
-		if(this.canPieceMove(testX, this.pieceY, this.pieceRot))
-		{
-			this.pieceX = testX;
-		}
-	}
-	
-	else if (evt == "right" || evt == "r")
-	{
-		let testX = this.pieceX + 1;
-		if(this.canPieceMove(testX, this.pieceY, this.pieceRot))
-		{
-		this.pieceX = testX;
-		}
-	}
-	
-	else if (evt == "rotc" || evt == "rot" || evt == "c")
-	{
-		 let testRot = (this.pieceRot-1) % pieceStructures[this.pieceType].length;
-		if(testRot < 0)
-			testRot += pieceStructures[this.pieceType].length;
-    
-		if(this.canPieceMove(this.pieceX, this.pieceY, testRot))
-		{
-			this.pieceRot = testRot;
-		}
-	}
-	else if (evt == "rotcc" || evt == "cc")
-	{
-		 let testRot = (this.pieceRot+1) % pieceStructures[this.pieceType].length;
-		
-		if(this.canPieceMove(this.pieceX, this.pieceY, testRot))
-		{
-			this.pieceRot = testRot;
-		}
-	}
-	else if (evt == "hold")
-	{
-		if(!this.holding)
-		{
-			this.holding = true;
-			if(this.hold_piece == ' ')
-			{
-				console.log(this.pieceType);
-				this.hold_piece = this.pieceType + 1;
-				this.pieceType = this.nextpieceType;
-				this.nextpieceType = this.sequence.pop();
-				if(this.sequence.length === 0)
-				{
-					this.newSeq();
+module.exports = class TetrisGame{
+	constructor(gW,gH,tS){
+			this.gridWdt = gW;  
+			this.gridHgt = gH;
+			this.tileSz = tS;
+			this.board = [];
+			this.inert = [];
+			this.score = 0;
+			this.single = false;
+			this.doub = false;
+			this.triple = false
+			this.quadruple = false;
+			this.holding = false;
+			this.time_length = 1000*60*15;
+			
+			for(var y=0; y<this.gridHgt; y++){
+				
+				this.inert[y] = [];
+				
+				for(var x=0; x<this.gridWdt; x++){
+					this.inert[y][x] = ' ';
 				}
 			}
-			else
-			{
-				temp = this.hold_piece - 1;
-				this.hold_piece = this.pieceType + 1;
-				this.pieceType = temp;
-			}
+			this.pieceType = 0;
+			this.pieceRot = 0;
 			this.pieceX = 3;
 			this.pieceY = 0;
-			this.pieceRot = 0;
+			this.hold_piece = ' ';
+			this.newSeq();
+			this.nextpieceType = this.sequence.pop();
+			this.newPiece();
+  
+	}
+	reset(){
+		for(var y=0; y<this.gridHgt; y++){
+			for(var x=0; x<this.gridWdt; x++){
+				this.inert[y][x] = ' ';
+			}
+		}
+		
+		this.single = false;
+		this.doub = false;
+		this.triple = false
+		this.quadruple = false;
+		this.holding = false;
+		this.time_length = 1000*60*15;
+		this.newSeq();
+		this.nextpieceType = this.sequence.pop();
+		this.hold_piece = ' ';
+		this.newPiece();
+		
+	}
+	
+	newPiece(){
+		this.pieceX = 3;
+		this.pieceY = 0;
+		this.pieceRot = 0;
+		this.pieceType = this.nextpieceType;
+		this.nextpieceType = this.sequence.pop();
+		
+		if(this.sequence.length === 0){
+			this.newSeq();
+		}
+	}
+	
+	getnextPiece(){
+		return this.nextpieceType;
+	}
+	
+	get_hold_piece(){
+		return this.hold_piece;
+	}
+	
+	clear_board(){
+		this.board = [ 
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0]
+		];
+	}
+	
+	newSeq(){
+		let seq = [0, 1, 2, 3, 4, 5, 6]; // n=7
+
+		for(var i=0; i<5; i++){
+			let j = Math.floor(Math.random() * (7-i)) + i;
+			let t = seq[j];
+			seq[j] = seq[i];
+			seq[i] = t;
+		} // bottom-up Fisher-Yates
+
+		this.sequence = seq;
+	}
+	
+	update(){
+		this.single = false;
+		this.doub = false;
+		this.triple = false
+		this.quadruple = false;
+		let scoreChange = 0;
+		let temp_score_change = 0;
+		let testY = this.pieceY + 1;
+
+		if(this.canPieceMove(this.pieceX, testY, this.pieceRot)){
+			this.pieceY = testY;
+		} // piece can fall
+		else{
+			// stamp block into inert grid
+			for(var y=0; y<4; y++){
+				for(var x=0; x<4; x++){
+					let block = pieceStructures[this.pieceType][this.pieceRot][y][x];
+				
+					if(block !== ' '){
+						this.inert[this.pieceY + y][this.pieceX + x] = block; 
+					}
+				}
+			}
+
+			// scan top (0) to bottom (gridHgt) for filled rows
+			for(var y=0; y<this.gridHgt; y++){
+      
+				if(this.isRowFilled(y)){
+					this.shiftBoardDownFrom(y);
+					temp_score_change += 10
+				//scoreChange += 10;
+				}
+			}
+	
+			this.newPiece();
+			this.holding = false;
+
+			if(!this.canPieceMove(this.pieceX, this.pieceY, this.pieceRot)){
+				scoreChange = -1;
+			}
+		} // piece hits ground
+	
+		if(temp_score_change == 10){
+			this.single = true;
+			scoreChange = 100;
+		}
+	
+		else if (temp_score_change == 20){
+			this.doub = true;
+			scoreChange = 400;
+		}
+	
+		else if (temp_score_change == 30){
+			this.triple = true;
+			scoreChange = 900;
+		}
+	
+		else if (temp_score_change == 40){
+			this.quadruple = true;
+			scoreChange = 1600;
+		}
+	
+		if(this.time_length == 1000*60*5){
+			return scoreChange*2.0;
+		}
+	
+		else if(this.time_length == 1000*60*7){
+		return scoreChange*1.75;
+		}
+	
+		else if (this.time_length == 1000*60*10){
+			return scoreChange * 1.5;
+		}
+	
+		else{
+		 return scoreChange;
+		}
+	}
+	
+	isRowFilled(row){
+		
+		for(var x=0; x<this.gridWdt; x++){
+			if(this.inert[row][x] === ' '){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	shiftBoardDownFrom(row){
+		
+		// scans from bottom (row) to 2nd-to-top row (1)
+		for(var y=row; y>1; y--){
+			for(var x=0; x<this.gridWdt; x++){
+				this.inert[y][x] = this.inert[y-1][x];
+			} // row y-1 is copied down onto row y
+		}
+
+		for(var x=0; x<this.gridWdt; x++){
+			this.inert[0][x] = ' ';
+		} // when top row (0) is copied onto row 1, it should not be replaced
+  
+	}
+	
+	canPieceMove(testX, testY, testRot){
+		let orientation = pieceStructures[this.pieceType][testRot];
+		for(var y=0; y<4; y++){
+			for(var x=0; x<4; x++){      
+				let testXLoc = testX + x;
+				let testYLoc = testY + y;
+				
+				if((orientation[y][x] !== ' ') && (  (testXLoc < 0) || 
+					(testXLoc >= this.gridWdt) || 
+					(testYLoc >= this.gridHgt) || 
+					(this.inert[testYLoc][testXLoc] !== ' ')  )
+				){
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+	
+	draw(){
+		// draw inert blocks
+		for(var y=0; y<this.gridHgt; y++){
+			for(var x=0; x<this.gridWdt; x++){
+				let block = this.inert[y][x]
+				this.drawBlock(block, x, y);
+			}
+		}
+
+		// draw current block
+		for(var y=0; y<4; y++){
+			for(var x=0; x<4; x++){
+				let block = pieceStructures[this.pieceType][this.pieceRot][y][x];
+				if(block !== ' '){
+					this.drawBlock(block, x + this.pieceX, y + this.pieceY);
+				}
+      
+			}
+		}
+	}
+	drawBlock(block, x, y){
+		this.board[y][x] = colormap[block];
+	}
+	
+	handleInput(evt){
+		if (evt == "left" || evt == "l"){
+			let testX = this.pieceX - 1;
+			if(this.canPieceMove(testX, this.pieceY, this.pieceRot)){
+				this.pieceX = testX;
+			}
+		}
+	
+		else if (evt == "right" || evt == "r"){
+			let testX = this.pieceX + 1;
+			if(this.canPieceMove(testX, this.pieceY, this.pieceRot)){
+				this.pieceX = testX;
+			}
+		}
+	
+		else if (evt == "rotc" || evt == "rot" || evt == "c"){
+			let testRot = (this.pieceRot-1) % pieceStructures[this.pieceType].length;
+			
+			if(testRot < 0){
+				testRot += pieceStructures[this.pieceType].length;
+			}
+    
+			if(this.canPieceMove(this.pieceX, this.pieceY, testRot)){
+				this.pieceRot = testRot;
+			}
+		}
+	
+		else if (evt == "rotcc" || evt == "cc"){
+			let testRot = (this.pieceRot+1) % pieceStructures[this.pieceType].length;
+		
+			if(this.canPieceMove(this.pieceX, this.pieceY, testRot)){
+				this.pieceRot = testRot;
+			}
+		}
+	
+		else if (evt == "hold"){
+			if(!this.holding){
+				this.holding = true;
+				if(this.hold_piece == ' '){
+					console.log(this.pieceType);
+					this.hold_piece = this.pieceType + 1;
+					this.pieceType = this.nextpieceType;
+					this.nextpieceType = this.sequence.pop();
+					
+					if(this.sequence.length === 0){
+					this.newSeq();
+					}
+				}
+				else{
+					var temp = this.hold_piece - 1;
+					this.hold_piece = this.pieceType + 1;
+					this.pieceType = temp;
+				}
+			
+				this.pieceX = 3;
+				this.pieceY = 0;
+				this.pieceRot = 0;
+			}
 		}
 	}
 }
+
