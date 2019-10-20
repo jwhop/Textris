@@ -10,6 +10,7 @@
     "@hapi/hawk": "^7.0.10",
     "discord.js": "^11.5.1",
     "mongoose": "^5.7.5",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "websocket": "^1.0.30"
   }
 }
