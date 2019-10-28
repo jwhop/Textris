@@ -188,7 +188,7 @@ function save_info(tg){
 				channel: tg.channel, 
 				is_holding: tg.game.holding, 
 				score: tg.game.score,
-				interval_length = tg.game.time_length
+				interval_length : tg.game.time_length
 		});
 		
 		tg.game_report.save()
