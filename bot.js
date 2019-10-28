@@ -34,6 +34,8 @@ function load_info(){
 			new_game.pieceX = game[i].piece_x;
 			new_game.pieceY = game[i].piece_y;
 			new_game.holding = game[i].is_holding;
+			new_game.score = game[i].score;
+			new_game.time_length = game[i].interval_length;
 			
 			var new_serverobj = new S(
 			game[i].name, 
@@ -184,7 +186,9 @@ function save_info(tg){
 				msg2: tg.msg2Id, 
 				move: tg.move, 
 				channel: tg.channel, 
-				is_holding: tg.game.holding
+				is_holding: tg.game.holding, 
+				score: tg.game.score,
+				interval_length = tg.game.time_length
 		});
 		
 		tg.game_report.save()
@@ -200,6 +204,8 @@ function save_info(tg){
 		tg.game_report.piece_x = tg.game.pieceX;
 		tg.game_report.piece_y = tg.game.pieceY;
 		tg.game_report.is_holding = tg.game.holding;
+		tg.game_report.score = tg.game.score;
+		tg.game_report.interval_length = tg.game.time_length;
 		
 		tg.game_report.save()
 		.then(result => console.log(result))

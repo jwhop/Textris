@@ -16,7 +16,9 @@ const gameSchema = mongoose.Schema({
 	move: Boolean, 
 	run: Boolean, 
 	channel: String, 
-	is_holding: Boolean
+	is_holding: Boolean, 
+	score: Number, 
+	interval_length: Number
 	
 });
 
