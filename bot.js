@@ -144,7 +144,7 @@ function update_loop( tg){
 				channel1.send("Entering Level 3. Interval speed now 7 minutes");
 				tg.game.time_length = 1000*60*7;
 			}
-			else if(tg.game.score >= 5000){
+			else if(tg.game.score >= 5000 && tg.game.time_length == 900000){
 				//console.log('1!');
 				channel1.send("Entering Level 2. Interval speed now 10 minutes");
 				tg.game.time_length = 1000*60*10;
