@@ -21,6 +21,7 @@ let colormap = {
   z: ":heart:",
   b: ":egg:", 
   x: ":eyes:",
+  w: ":boom:"
 }
 
 let colormap_reverse = {
@@ -182,6 +183,7 @@ module.exports = class TetrisGame{
 			this.quadruple = false;
 			this.holding = false;
 			this.time_length = 1000*60*15;
+			this.scoring = false;
 			
 			for(var y=0; y<this.gridHgt; y++){
 				
@@ -213,12 +215,13 @@ module.exports = class TetrisGame{
 		this.triple = false
 		this.quadruple = false;
 		this.holding = false;
+		this.scoring = false;
 		this.time_length = 1000*60*15;
 		this.newSeq();
 		this.nextpieceType = this.sequence.pop();
 		this.hold_piece = ' ';
 		this.newPiece();
-		
+
 	}
 	
 	newPiece(){
@@ -305,14 +308,24 @@ module.exports = class TetrisGame{
 			for(var y=0; y<this.gridHgt; y++){
       
 				if(this.isRowFilled(y)){
-					this.shiftBoardDownFrom(y);
-					temp_score_change += 10
-				//scoreChange += 10;
+					if(this.scoring){
+						this.shiftBoardDownFrom(y);
+					}
+					else{
+						temp_score_change += 10;
+						this.scoring_rows.push(y);
+					}
 				}
 			}
-	
-			this.newPiece();
-			this.holding = false;
+			
+			if(temp_score_change <= 0){
+				this.newPiece();
+				this.holding = false;
+				this.scoring = false;
+			}
+			else{
+				this.scoring = true;
+			}
 
 			if(!this.canPieceMove(this.pieceX, this.pieceY, this.pieceRot)){
 				scoreChange = -1;
@@ -407,7 +420,12 @@ module.exports = class TetrisGame{
 		for(var y=0; y<this.gridHgt; y++){
 			for(var x=0; x<this.gridWdt; x++){
 				let block = this.inert[y][x]
-				this.drawBlock(block, x, y);
+				if(this.scoring_rows.contains(y)){
+					this.drawBlock('w', x, y);
+				}
+				else{
+					this.drawBlock(block, x, y);
+				}
 			}
 		}
 
@@ -490,11 +508,7 @@ module.exports = class TetrisGame{
 				this.pieceRot = 0;
 			}
 		}
-		else if (evt == "highlight"){
-			this.highlight = true;
-			setTimeout(function(){this.highlight = false;},1000*30);
-			
-		}
+		
 	}
 }
 
