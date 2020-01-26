@@ -423,7 +423,7 @@ module.exports = class TetrisGame{
 		for(var y=0; y<this.gridHgt; y++){
 			for(var x=0; x<this.gridWdt; x++){
 				let block = this.inert[y][x]
-				if(this.scoring_rows.contains(y)){
+				if(this.scoring_rows.includes(y)){
 					this.drawBlock('w', x, y);
 				}
 				else{
