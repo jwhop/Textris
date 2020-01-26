@@ -19,7 +19,8 @@ let colormap = {
   s: ":green_heart:",
   t: ":purple_heart:",
   z: ":heart:",
-  b: ":egg:"
+  b: ":egg:", 
+  x: ":eyes:",
 }
 
 let colormap_reverse = {
@@ -415,7 +416,12 @@ module.exports = class TetrisGame{
 			for(var x=0; x<4; x++){
 				let block = pieceStructures[this.pieceType][this.pieceRot][y][x];
 				if(block !== ' '){
-					this.drawBlock(block, x + this.pieceX, y + this.pieceY);
+					if(this.highlight){
+						this.drawBlock('x', x + this.pieceX, y + this.pieceY);
+					}
+					else{
+						this.drawBlock(block, x + this.pieceX, y + this.pieceY);
+					}
 				}
       
 			}
@@ -483,6 +489,11 @@ module.exports = class TetrisGame{
 				this.pieceY = 0;
 				this.pieceRot = 0;
 			}
+		}
+		else if (evt == "highlight"){
+			this.highlight = true;
+			setTimeout(function(){this.highlight = false;},1000*30);
+			
 		}
 	}
 }
