@@ -367,7 +367,19 @@ client.on('message', message => {
 				const channel = message.guild.channels.find(ch => ch.name === 'general');
 				channel.send(element.name + " " + element.score);
 			});
-		} else if (possible_commands.indexOf(message.content) > -1){
+		}else if (message.content === '!highlight'){
+			tg.game.highlight = true;
+			tg.game.clear_board();
+			tg.game.draw();
+			send_board_message(tg);
+			setTimeout(function(){
+				tg.game.highlight = false;
+				tg.game.clear_board();
+				tg.game.draw();
+				send_board_message(tg);
+				},1000*10);
+
+		}else if (possible_commands.indexOf(message.content) > -1){
 			if (!tg.move){
 				tg.move = true;
 				tg.game.handleInput(message.content.substr(1));
