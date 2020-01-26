@@ -184,6 +184,7 @@ module.exports = class TetrisGame{
 			this.holding = false;
 			this.time_length = 1000*15;
 			this.scoring = false;
+			this.scoring_rows = [];
 			
 			for(var y=0; y<this.gridHgt; y++){
 				
@@ -216,6 +217,7 @@ module.exports = class TetrisGame{
 		this.quadruple = false;
 		this.holding = false;
 		this.scoring = false;
+		this.scoring_rows = [];
 		this.time_length = 1000*60*15;
 		this.newSeq();
 		this.nextpieceType = this.sequence.pop();
@@ -322,6 +324,7 @@ module.exports = class TetrisGame{
 				this.newPiece();
 				this.holding = false;
 				this.scoring = false;
+				this.scoring_rows = [];
 			}
 			else{
 				this.scoring = true;
