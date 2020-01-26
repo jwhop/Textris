@@ -1,7 +1,7 @@
 var game_collection = [];
 var score_collection = [];
 var game_counter = 1;
-var possible_commands = ["!left", "!right", "!rot", "!l", "!r", "!rotc", "!rotcc", "!cc", "!c", "!hold", "!h"];
+var possible_commands = ["!highlight", "!left", "!right", "!rot", "!l", "!r", "!rotc", "!rotcc", "!cc", "!c", "!hold", "!h"];
 const Discord = require('discord.js');
 const mongoose = require('mongoose');
 const gameSchema = require("./Models/report.js");
