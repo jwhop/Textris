@@ -182,7 +182,7 @@ module.exports = class TetrisGame{
 			this.triple = false
 			this.quadruple = false;
 			this.holding = false;
-			this.time_length = 1000*15;
+			this.time_length = 1000*10;
 			this.scoring = false;
 			this.scoring_rows = [];
 			
@@ -437,11 +437,16 @@ module.exports = class TetrisGame{
 			for(var x=0; x<4; x++){
 				let block = pieceStructures[this.pieceType][this.pieceRot][y][x];
 				if(block !== ' '){
-					if(this.highlight){
-						this.drawBlock('x', x + this.pieceX, y + this.pieceY);
+					if(this.scoring_rows.includes(y + this.pieceY)){
+						this.drawBlock('w', x + this.pieceX, y + this.pieceY);
 					}
 					else{
-						this.drawBlock(block, x + this.pieceX, y + this.pieceY);
+						if(this.highlight){
+							this.drawBlock('x', x + this.pieceX, y + this.pieceY);
+						}
+						else{
+							this.drawBlock(block, x + this.pieceX, y + this.pieceY);
+						}
 					}
 				}
       
