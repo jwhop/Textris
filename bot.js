@@ -124,16 +124,16 @@ function update_loop( tg){
 		send_board_message(tg);
 		
 		if(tg.game.single){
-			channel1.send("SINGLE LINE CLEAR: Nice job!");
+			//channel1.send("SINGLE LINE CLEAR: Nice job!");
 		}
 		if(tg.game.doub){
-			channel1.send("DOUBLE LINE CLEAR: Way to go!");
+			//channel1.send("DOUBLE LINE CLEAR: Way to go!");
 		}
 		if(tg.game.triple){
-			channel1.send("TRIPLE LINE CLEAR: Awwww Yeah!");
+			//channel1.send("TRIPLE LINE CLEAR: Awwww Yeah!");
 		}
 		if(tg.game.quadruple){
-			channel1.send("BOOM: Tetris for Discord!");
+			//channel1.send("BOOM: Tetris for Discord!");
 		}
 		
 		if(score_change> 0){
@@ -228,9 +228,8 @@ function save_info(tg){
 	
 }
 function send_board_message( tg) {
-	
 	console.log(tg);
-	msg = "-------------------------------------------------------------------\n";
+	msg = "-----------------------------------------------------\n";
 	msg_2 = '\n';
 	for(i = 0; i < 15; i++){
 		
@@ -244,13 +243,11 @@ function send_board_message( tg) {
 	}
 			
 	msg += '\n';
-	msg += "-------------------------------------------------------------------";
-	msg_2 += "next piece:";
+	msg += "-----------------------------------------------------";
+	msg_2 += "next piece";
+	msg_2 += "              ";
+	msg_2 += ('\t' + "hold piece\n");
 	for(i = 0; i < 4; i++){
-		
-		if(i!=0){
-			msg_2 += "                    ";
-		}
 		for(j = 0; j < 4; j++){
 			
 			next_char = colormap[pieceStructures[tg.game.getnextPiece()][0][i][j]];
@@ -261,15 +258,12 @@ function send_board_message( tg) {
 				msg_2 +=next_char;
 			}
 		}
-		if(i == 0){
-			msg_2 += ('\t' + "hold piece:");
-		} else{
-			msg_2 += ('\t' + "                   ");
-		}
+			
+		msg_2 += ('\t' + "        ");
+		
 		
 		for(l = 0; l < 4; l++){
 			held_piece = tg.game.get_hold_piece();
-			//console.log(held_piece);
 			if(held_piece == ' '){
 				msg_2 += ":black_circle:";
 				continue;
