@@ -185,6 +185,7 @@ module.exports = class TetrisGame{
 			this.time_length = 1000*10;
 			this.scoring = false;
 			this.scoring_rows = [];
+			this.last_moves = [];
 			
 			for(var y=0; y<this.gridHgt; y++){
 				
@@ -222,6 +223,7 @@ module.exports = class TetrisGame{
 		this.newSeq();
 		this.nextpieceType = this.sequence.pop();
 		this.hold_piece = ' ';
+		this.last_moves = [];
 		this.newPiece();
 
 	}

@@ -1,7 +1,7 @@
 var game_collection = [];
 var score_collection = [];
 var game_counter = 1;
-var possible_commands = ["!highlight", "!left", "!right", "!rot", "!l", "!r", "!rotc", "!rotcc", "!cc", "!c", "!hold", "!h"];
+var possible_commands = ["!recent", "!highlight", "!left", "!right", "!rot", "!l", "!r", "!rotc", "!rotcc", "!cc", "!c", "!hold", "!h"];
 const Discord = require('discord.js');
 const mongoose = require('mongoose');
 const gameSchema = require("./Models/report.js");
@@ -367,6 +367,14 @@ client.on('message', message => {
 				const channel = message.guild.channels.find(ch => ch.name === 'general');
 				channel.send(element.name + " " + element.score);
 			});
+		}else if (message.content === '!recent'){
+			if(message.channel.name != 'textris'){
+				tg.game.last_moves.forEach(function(element) {
+					message.channel.send(element);
+				});
+			}
+			
+			
 		}else if (message.content === '!highlight'){
 			tg.game.highlight = true;
 			tg.game.clear_board();
@@ -383,6 +391,7 @@ client.on('message', message => {
 			if (!tg.move){
 				tg.move = true;
 				tg.game.handleInput(message.content.substr(1));
+				tg.game.last_moves.push(String(message.author.username) + " typed in " + String(message.content));
 				tg.game.clear_board();
 				tg.game.draw();
 				send_board_message(tg);
