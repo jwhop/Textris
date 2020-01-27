@@ -396,7 +396,7 @@ client.on('message', message => {
 			if (!tg.move){
 				tg.move = true;
 				tg.game.handleInput(message.content.substr(1));
-				tg.game.last_moves.push(String(message.author.username) + " typed in " + String(message.content) + " for the " + String(colormap[tg.game.pieceType]) + " piece");
+				tg.game.last_moves.push(String(message.author.username) + " typed in " + String(message.content) + " for the " + String(piece_colormap[tg.game.pieceType]) + " piece");
 				if(tg.game.last_moves.length > 10){
 					tg.game.last_moves.shift();
 				}
