@@ -368,6 +368,8 @@ client.on('message', message => {
 				channel.send(element.name + " " + element.score);
 			});
 		}else if (message.content === '!recent'){
+			
+			console.log("reached less recent part");
 			if(message.channel.name != 'textris'){
 				console.log("reached recent part");
 				tg.game.last_moves.forEach(function(element) {
