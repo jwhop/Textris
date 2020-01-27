@@ -21,7 +21,7 @@ const gameSchema = mongoose.Schema({
 	interval_length: Number, 
 	is_scoring: Boolean, 
 	scoring_rows_holder: [Number], 
-	last_rows_holder: [String]
+	last_moves_holder: [String]
 	
 });
 

@@ -198,7 +198,7 @@ function save_info(tg){
 				last_moves_holder: tg.game.last_moves
 				
 				
-						
+					
 		});
 		
 		tg.game_report.save()
