@@ -36,6 +36,10 @@ function load_info(){
 			new_game.holding = game[i].is_holding;
 			new_game.score = game[i].score;
 			new_game.time_length = game[i].interval_length;
+			new_game.scoring = game[i].is_scoring;
+			new_game.scoring_rows = game[i].scoring_rows_holder;
+			new_game.last_moves = game[i].last_moves_holder;
+						
 			
 			var new_serverobj = new S(
 			game[i].name, 
@@ -188,7 +192,13 @@ function save_info(tg){
 				channel: tg.channel, 
 				is_holding: tg.game.holding, 
 				score: tg.game.score,
-				interval_length : tg.game.time_length
+				interval_length : tg.game.time_length, 
+				is_scoring: tg.game.scoring, 
+				scoring_rows_holder: tg.game.scoring_rows,
+				last_moves_holder: tg.game.last_moves
+				
+				
+						
 		});
 		
 		tg.game_report.save()
@@ -206,6 +216,9 @@ function save_info(tg){
 		tg.game_report.is_holding = tg.game.holding;
 		tg.game_report.score = tg.game.score;
 		tg.game_report.interval_length = tg.game.time_length;
+		tg.game_report.is_scoring = tg.game.scoring;
+		tg.game_report.scoring_rows_holder = tg.game.scoring_rows;
+		tg.game_report.last_moves_holder = tg.game.last_moves;
 		
 		tg.game_report.save()
 		.then(result => console.log(result))
