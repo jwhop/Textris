@@ -318,10 +318,15 @@ client.on('message', message => {
 			
 			console.log("reached less recent part");
 			if(message.channel.name != 'textris'){
-				console.log("reached recent part");
-				tg.game.last_moves.forEach(function(element) {
-				message.channel.send(element);
-				});
+				var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
+				if(typeof tg !== 'undefined'){
+					console.log("reached recent part");
+					
+					tg.game.last_moves.forEach(function(element) {
+						message.channel.send(element);
+					});
+				
+				}
 			}
 		}
 	   return;
