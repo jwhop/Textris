@@ -1,7 +1,7 @@
 var game_collection = [];
 var score_collection = [];
 var game_counter = 1;
-var possible_commands = ["!recent", "!highlight", "!left", "!right", "!rot", "!l", "!r", "!rotc", "!rotcc", "!cc", "!c", "!hold", "!h"];
+var possible_commands = ["channelhere","!recent", "!highlight", "!left", "!right", "!rot", "!l", "!r", "!rotc", "!rotcc", "!cc", "!c", "!hold", "!h"];
 const Discord = require('discord.js');
 const mongoose = require('mongoose');
 const gameSchema = require("./Models/report.js");
@@ -97,7 +97,7 @@ function compare_scores(a,b){
 function update_loop( tg){
 	//console.log(tg.name);
 	//console.log('trying to access: ' + client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris'));
-	const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'general');
+	const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
 	const channel2 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris');
 	//console.log(channel1);
 	//tg.name.channels.find(ch => ch.name === 'general');
@@ -383,7 +383,7 @@ client.on('message', message => {
 		}else if (message.content === '!leaderboard'){
 			sorted_scores = score_collection.sort();
 			sorted_scores.forEach(function(element) {
-				const channel = message.guild.channels.find(ch => ch.name === 'general');
+				const channel = message.guild.channels.find(ch => ch.name === 'textris info');
 				channel.send(element.name + " " + element.score);
 			});
 		}else if (message.content === '!highlight'){
