@@ -444,7 +444,7 @@ let piece_colormap = [
 	":snowflake:", 
 	":tangerine:", 
 	":purple_heart:",
-	":green_heart:". 
+	":green_heart:", 
 	":heart:", 
 	":egg:", 
 	":eyes:", 
