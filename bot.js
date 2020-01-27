@@ -369,6 +369,7 @@ client.on('message', message => {
 			});
 		}else if (message.content === '!recent'){
 			if(message.channel.name != 'textris'){
+				console.log("reached recent part");
 				tg.game.last_moves.forEach(function(element) {
 					message.channel.send(element);
 				});
