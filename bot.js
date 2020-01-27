@@ -224,8 +224,7 @@ function save_info(tg){
 		.then(result => console.log(result))
 		.catch(err=> console.log(err));
 	}
-	
-	
+	console.log(tg.game.last_moves);
 	
 }
 function send_board_message( tg) {
