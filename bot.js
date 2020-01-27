@@ -438,7 +438,7 @@ let colormap = {
   x: ":eyes:",
   w: ":boom:"
 }
-let piece_colormap = {
+let piece_colormap = [
 	":blue_heart:", 
 	":yellow_heart:", 
 	":snowflake:", 
@@ -450,7 +450,7 @@ let piece_colormap = {
 	":eyes:", 
 	":boom:"
 	
-}
+]
 let colormap_reverse = {
   ":blue_heart:": 'i',
   ":snowflake:": 'j',
