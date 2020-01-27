@@ -396,6 +396,8 @@ client.on('message', message => {
 				tg.game.draw();
 				send_board_message(tg);
 				tg.move = false;
+				console.log(String(message.author.username) + " typed in " + String(message.content));
+				console.log(tg.game.last_moves[tg.game.last_moves.length - 1]);
 			}
 		}
 	}
