@@ -428,15 +428,29 @@ let colors = {
 
 let colormap = {
   i: ":blue_heart:",
+  o: ":yellow_heart:",
   j: ":snowflake:",
   l: ":tangerine:",
-  o: ":yellow_heart:",
-  s: ":green_heart:",
   t: ":purple_heart:",
+  s: ":green_heart:",
   z: ":heart:",
-  b: ":egg:"
+  b: ":egg:", 
+  x: ":eyes:",
+  w: ":boom:"
 }
-
+let piece_colormap = {
+	":blue_heart:", 
+	":yellow_heart:", 
+	":snowflake:", 
+	":tangerine:", 
+	":purple_heart:",
+	":green_heart:". 
+	":heart:", 
+	":egg:", 
+	":eyes:", 
+	":boom:"
+	
+}
 let colormap_reverse = {
   ":blue_heart:": 'i',
   ":snowflake:": 'j',
