@@ -314,6 +314,16 @@ client.on('message', message => {
 	message.channel.name !== "textris" || 
 	!message.content.startsWith('!')
 	){
+		if (message.content === '!recent'){
+			
+			console.log("reached less recent part");
+			if(message.channel.name != 'textris'){
+				console.log("reached recent part");
+				tg.game.last_moves.forEach(function(element) {
+				message.channel.send(element);
+				});
+			}
+		}
 	   return;
 	} else{
 	 
@@ -367,17 +377,6 @@ client.on('message', message => {
 				const channel = message.guild.channels.find(ch => ch.name === 'general');
 				channel.send(element.name + " " + element.score);
 			});
-		}else if (message.content === '!recent'){
-			
-			console.log("reached less recent part");
-			if(message.channel.name != 'textris'){
-				console.log("reached recent part");
-				tg.game.last_moves.forEach(function(element) {
-					message.channel.send(element);
-				});
-			}
-			
-			
 		}else if (message.content === '!highlight'){
 			tg.game.highlight = true;
 			tg.game.clear_board();
