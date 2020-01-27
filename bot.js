@@ -316,11 +316,9 @@ client.on('message', message => {
 	){
 		if (message.content === '!recent'){
 			
-			console.log("reached less recent part");
 			if(message.channel.name != 'textris'){
 				var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
 				if(typeof tg !== 'undefined'){
-					console.log("reached recent part");
 					
 					tg.game.last_moves.forEach(function(element) {
 						message.channel.send(element);
@@ -398,13 +396,14 @@ client.on('message', message => {
 			if (!tg.move){
 				tg.move = true;
 				tg.game.handleInput(message.content.substr(1));
-				tg.game.last_moves.push(String(message.author.username) + " typed in " + String(message.content));
+				tg.game.last_moves.push(String(message.author.username) + " typed in " + String(message.content) + " for the " + String(colormap[tg.game.pieceType]) + " piece");
+				if(tg.game.last_moves.length > 10){
+					tg.game.last_moves.shift();
+				}
 				tg.game.clear_board();
 				tg.game.draw();
 				send_board_message(tg);
 				tg.move = false;
-				console.log(String(message.author.username) + " typed in " + String(message.content));
-				console.log(tg.game.last_moves[tg.game.last_moves.length - 1]);
 			}
 		}
 	}
