@@ -97,16 +97,16 @@ function compare_scores(a,b){
 function update_loop( tg){
 	//console.log(tg.name);
 	//console.log('trying to access: ' + client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris'));
-	const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
+	//const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
 	const channel2 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris');
 	//console.log(channel1);
 	//tg.name.channels.find(ch => ch.name === 'general');
 	//const channel2 = tg.name.channels.find(ch => ch.name === 'textris');
-	
+	tg.game.infomsg = "";
 	score_change = tg.game.update();
 	if (score_change < 0){
 
-		channel1.send('type !start to play again');
+		//channel1.send('type !start to play again');
 		//console.log('sent!');
 		channel2.send('type !start to play again');
 		
@@ -124,33 +124,37 @@ function update_loop( tg){
 		send_board_message(tg);
 		
 		if(tg.game.single){
+			tg.game.infomsg = "SINGLE LINE CLEAR";
 			//channel1.send("SINGLE LINE CLEAR: Nice job!");
 		}
 		if(tg.game.doub){
+			tg.game.infomsg = "DOUBLE LINE CLEAR";
 			//channel1.send("DOUBLE LINE CLEAR: Way to go!");
 		}
 		if(tg.game.triple){
+			tg.game.infomsg = "TRIPLE LINE CLEAR";
 			//channel1.send("TRIPLE LINE CLEAR: Awwww Yeah!");
 		}
 		if(tg.game.quadruple){
+			tg.game.infomsg = "TETRIS";
 			//channel1.send("BOOM: Tetris for Discord!");
 		}
 		
 		if(score_change> 0){
 			if(tg.game.score >= 20000){
 				//console.log('3!');
-				channel1.send("Entering the final level. Interval speed now 5 minutes");
+				//channel1.send("Entering the final level. Interval speed now 5 minutes");
 				tg.game.time_length = 1000*60*5;
 			
 			}
 			else if(tg.game.score >= 10000 && tg.game.time_length == 600000){
 				//console.log('2!');
-				channel1.send("Entering Level 3. Interval speed now 7 minutes");
+				//channel1.send("Entering Level 3. Interval speed now 7 minutes");
 				tg.game.time_length = 1000*60*7;
 			}
 			else if(tg.game.score >= 5000 && tg.game.time_length == 900000){
 				//console.log('1!');
-				channel1.send("Entering Level 2. Interval speed now 10 minutes");
+				//channel1.send("Entering Level 2. Interval speed now 10 minutes");
 				tg.game.time_length = 1000*60*10;
 			}
 		}
@@ -282,7 +286,19 @@ function send_board_message( tg) {
 	}
 	var channel2 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris');
 	
-	msg_2 += ('\n' + "Score:" + tg.game.score);
+	let level = "1 (15 minutes)";
+	
+	if(tg.game.score >= 20000){
+		level = "4 (5 minutes)";
+	}
+	else if(tg.game.score >= 10000){
+		level = "3 (7 minutes)";
+	}
+	else if(tg.game.score >= 5000){
+		level = "2 (10 minutes)";
+	}
+	
+	msg_2 += ('\n' + "Score: " + tg.game.score + '\n' + "Level: " + level + '\n' + "Message: " + tg.game.infomsg);
 	
 
 	channel2.fetchMessage(tg.msg1Id)
