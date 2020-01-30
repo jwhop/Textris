@@ -124,6 +124,7 @@ function update_loop( tg){
 		send_board_message(tg);
 		
 		if(tg.game.single){
+			console.log("SINGLE");
 			tg.game.infomsg = "SINGLE LINE CLEAR";
 			//channel1.send("SINGLE LINE CLEAR: Nice job!");
 		}
@@ -298,7 +299,7 @@ function send_board_message( tg) {
 		level = "2 (10 minutes)";
 	}
 	
-	msg_2 += ('\n' + "Score: " + tg.game.score + '\n' + "Level: " + level + '\n' + "Message: " + tg.game.infomsg);
+	msg_2 += ('\n' + "Score: " + tg.game.score + '\n' + "Level: " + level + '\n' + "Message: " + tg.game.infomsg + '\n');
 	
 
 	channel2.fetchMessage(tg.msg1Id)
