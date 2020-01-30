@@ -182,7 +182,7 @@ module.exports = class TetrisGame{
 			this.triple = false
 			this.quadruple = false;
 			this.holding = false;
-			this.time_length = 1000*60*15;
+			this.time_length = 1000*15;
 			this.scoring = false;
 			this.scoring_rows = [];
 			this.last_moves = [];
@@ -322,7 +322,7 @@ module.exports = class TetrisGame{
 				}
 			}
 			
-			if(temp_score_change <= 0){
+			if(temp_score_change == 0){
 				this.newPiece();
 				this.holding = false;
 				this.scoring = false;
@@ -333,6 +333,7 @@ module.exports = class TetrisGame{
 			}
 
 			if(!this.canPieceMove(this.pieceX, this.pieceY, this.pieceRot)){
+				console.log("should be losing!");
 				scoreChange = -1;
 			}
 		} // piece hits ground
