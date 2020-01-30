@@ -102,7 +102,7 @@ function update_loop( tg){
 	//console.log(channel1);
 	//tg.name.channels.find(ch => ch.name === 'general');
 	//const channel2 = tg.name.channels.find(ch => ch.name === 'textris');
-	tg.game.infomsg = "";
+
 	score_change = tg.game.update();
 	if (score_change < 0){
 
@@ -300,7 +300,7 @@ function send_board_message( tg) {
 	}
 	
 	msg_2 += ('\n' + "Score: " + tg.game.score + '\n' + "Level: " + level + '\n' + "Message: " + tg.game.infomsg + '\n');
-	
+	tg.game.infomsg = "";
 
 	channel2.fetchMessage(tg.msg1Id)
     .then(m => {
