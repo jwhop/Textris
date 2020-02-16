@@ -121,8 +121,6 @@ function update_loop( tg){
 		tg.game.score += score_change;
 		tg.game.clear_board();
 		tg.game.draw();
-		send_board_message(tg);
-		
 		if(tg.game.single){
 			console.log("SINGLE");
 			tg.game.infomsg = "SINGLE LINE CLEAR";
@@ -140,6 +138,9 @@ function update_loop( tg){
 			tg.game.infomsg = "TETRIS";
 			//channel1.send("BOOM: Tetris for Discord!");
 		}
+		send_board_message(tg);
+		
+		
 		
 		if(score_change> 0){
 			if(tg.game.score >= 20000){

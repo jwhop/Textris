@@ -333,41 +333,6 @@ module.exports = class TetrisGame{
 			}
 			else{
 				this.scoring = true;
-				if(temp_score_change == 10){
-					this.single = true;
-					scoreChange = 100;
-				}
-	
-				else if (temp_score_change == 20){
-					this.doub = true;
-					scoreChange = 400;
-				}
-	
-				else if (temp_score_change == 30){
-					this.triple = true;
-					scoreChange = 900;
-				}
-	
-				else if (temp_score_change == 40){
-					this.quadruple = true;
-					scoreChange = 1600;
-				}
-	
-				if(this.time_length == 1000*60*5){
-					return scoreChange*2.0;
-				}
-	
-				else if(this.time_length == 1000*60*7){
-					return scoreChange*1.75;
-				}
-	
-				else if (this.time_length == 1000*60*10){
-					return scoreChange * 1.5;
-				}
-	
-				else{
-					return scoreChange;
-				}
 			}
 
 			if(!this.canPieceMove(this.pieceX, this.pieceY, this.pieceRot)){
@@ -376,7 +341,41 @@ module.exports = class TetrisGame{
 			}
 		} // piece hits ground
 	
-		
+		if(temp_score_change == 10){
+			this.single = true;
+			scoreChange = 100;
+		}
+	
+		else if (temp_score_change == 20){
+			this.doub = true;
+			scoreChange = 400;
+		}
+	
+		else if (temp_score_change == 30){
+			this.triple = true;
+			scoreChange = 900;
+		}
+	
+		else if (temp_score_change == 40){
+			this.quadruple = true;
+			scoreChange = 1600;
+		}
+	
+		if(this.time_length == 1000*60*5){
+			return scoreChange*2.0;
+		}
+	
+		else if(this.time_length == 1000*60*7){
+		return scoreChange*1.75;
+		}
+	
+		else if (this.time_length == 1000*60*10){
+			return scoreChange * 1.5;
+		}
+	
+		else{
+		 return scoreChange;
+		}
 	}
 	
 	isRowFilled(row){
