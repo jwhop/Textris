@@ -464,65 +464,66 @@ module.exports = class TetrisGame{
 	}
 	
 	handleInput(evt){
-		if (evt == "left" || evt == "l"){
-			let testX = this.pieceX - 1;
-			if(this.canPieceMove(testX, this.pieceY, this.pieceRot)){
-				this.pieceX = testX;
+		if(!this.scoring){
+			if (evt == "left" || evt == "l"){
+				let testX = this.pieceX - 1;
+				if(this.canPieceMove(testX, this.pieceY, this.pieceRot)){
+					this.pieceX = testX;
+				}
 			}
-		}
 	
-		else if (evt == "right" || evt == "r"){
-			let testX = this.pieceX + 1;
-			if(this.canPieceMove(testX, this.pieceY, this.pieceRot)){
-				this.pieceX = testX;
+			else if (evt == "right" || evt == "r"){
+				let testX = this.pieceX + 1;
+				if(this.canPieceMove(testX, this.pieceY, this.pieceRot)){
+					this.pieceX = testX;
+				}
 			}
-		}
 	
-		else if (evt == "rotc" || evt == "rot" || evt == "c"){
-			let testRot = (this.pieceRot-1) % pieceStructures[this.pieceType].length;
+			else if (evt == "rotc" || evt == "rot" || evt == "c"){
+				let testRot = (this.pieceRot-1) % pieceStructures[this.pieceType].length;
 			
-			if(testRot < 0){
-				testRot += pieceStructures[this.pieceType].length;
-			}
+				if(testRot < 0){
+					testRot += pieceStructures[this.pieceType].length;
+				}
     
-			if(this.canPieceMove(this.pieceX, this.pieceY, testRot)){
-				this.pieceRot = testRot;
+				if(this.canPieceMove(this.pieceX, this.pieceY, testRot)){
+					this.pieceRot = testRot;
+				}
 			}
-		}
 	
-		else if (evt == "rotcc" || evt == "cc"){
-			let testRot = (this.pieceRot+1) % pieceStructures[this.pieceType].length;
+			else if (evt == "rotcc" || evt == "cc"){
+				let testRot = (this.pieceRot+1) % pieceStructures[this.pieceType].length;
 		
-			if(this.canPieceMove(this.pieceX, this.pieceY, testRot)){
-				this.pieceRot = testRot;
+				if(this.canPieceMove(this.pieceX, this.pieceY, testRot)){
+					this.pieceRot = testRot;
+				}
 			}
-		}
 	
-		else if (evt == "hold"){
-			if(!this.holding){
-				this.holding = true;
-				if(this.hold_piece == ' '){
-					console.log(this.pieceType);
-					this.hold_piece = this.pieceType + 1;
-					this.pieceType = this.nextpieceType;
-					this.nextpieceType = this.sequence.pop();
+			else if (evt == "hold"){
+				if(!this.holding){
+					this.holding = true;
+					if(this.hold_piece == ' '){
+						console.log(this.pieceType);
+						this.hold_piece = this.pieceType + 1;
+						this.pieceType = this.nextpieceType;
+						this.nextpieceType = this.sequence.pop();
 					
-					if(this.sequence.length === 0){
-					this.newSeq();
+						if(this.sequence.length === 0){
+							this.newSeq();
+						}
 					}
-				}
-				else{
-					var temp = this.hold_piece - 1;
-					this.hold_piece = this.pieceType + 1;
-					this.pieceType = temp;
-				}
+					else{
+						var temp = this.hold_piece - 1;
+						this.hold_piece = this.pieceType + 1;
+						this.pieceType = temp;
+					}
 			
-				this.pieceX = 3;
-				this.pieceY = 0;
-				this.pieceRot = 0;
+					this.pieceX = 3;
+					this.pieceY = 0;
+					this.pieceRot = 0;
+				}
 			}
 		}
-		
 	}
 }
 
