@@ -22,9 +22,9 @@ function load_info(){
 			return console.error(err);
 		}
 		console.log('game is' + game);
-		
+		var new_game;
 		for(var i = 0; i < game.length; i++){
-			var new_game = new T(10,15,1);
+			new_game = new T(10,15,1);
 			new_game.inert = string_to_board(game[i].game_board);
 			new_game.sequence = game[i].game_seq;
 			new_game.pieceType = game[i].cur_piece;
@@ -42,11 +42,11 @@ function load_info(){
 						
 			
 			var new_serverobj = new S(
-			game[i].name, 
-			new_game,
-			game[i].channel, 
-			game[i].msg1, 
-			game[i].msg2
+				game[i].name, 
+				new_game,
+				game[i].channel, 
+				game[i].msg1, 
+				game[i].msg2
 			);
 			
 			new_serverobj.game_report = game[i];
@@ -62,8 +62,12 @@ function load_info(){
 	});
 }
 function start_interval(o){
+	o.game.clear_board();
+	o.game.draw();
+	setTimeout(function(){
+    update_loop(o);
+	}, o.game.time_length);
 	
-	update_loop(o);
 	
 }
 function print_test(x){
