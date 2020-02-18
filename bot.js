@@ -60,15 +60,21 @@ function load_info(){
 			})();
 					
 		}
+		
+		for(var i = 0; i < game_collection.length; i++){
+			let t = game_collection[i];
+			t.game.clear_board();
+			t.game.draw();
+			send_board_message(t);
+			
+		}
 		console.log('done!');
 	});
 }
 function start_interval(o){
 	const oo = o;
 	oo.game_interval = setTimeout(function(){update_loop(oo);},oo.game.time_length);
-	oo.game.clear_board();
-	oo.game.draw();
-	send_board_message(oo);
+
 }
 function print_test(x){
   
