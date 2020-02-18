@@ -55,7 +55,7 @@ function load_info(){
 				var ii = i;
 				var s1 = game_collection[ii];
 				s1.game_report = game[ii];
-				update_loop(s1);
+				start_interval(s1);
 				print_test(ii);
 			})();
 					
@@ -66,7 +66,7 @@ function load_info(){
 function start_interval(o){
 	o.game.clear_board();
 	o.game.draw();
-	update_loop(o);
+	o.game_interval = setTimeout(function(){update_loop(o);},o.game.time_length);
 }
 function print_test(x){
   
