@@ -55,7 +55,7 @@ function load_info(){
 				start_interval(game_collection[i]);
 				print_test(i);
 			
-			})
+			})();
 			
 		}
 		console.log('done!');
