@@ -182,10 +182,10 @@ function update_loop(tg){
 	}
 	
 }
-function save_info(tg){
+function save_info(tg1){
 	//console.log('printing board info' + tg.game.board);
 	//console.log('printing more board info' + tg.game.inert);
-	
+	let tg = tg1;
 	board_string='';
 	
 	for(i = 0; i < 15; i++){
