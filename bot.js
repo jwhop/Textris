@@ -62,8 +62,8 @@ function load_info(){
 		for(var i = 0; i < game_collection.length; i++){
 			let t = game_collection[i];
 			update_loop(t);
-			tg.game.clear_board();
-			tg.game.draw();
+			t.game.clear_board();
+			t.game.draw();
 			send_board_message(t);
 			
 		}
