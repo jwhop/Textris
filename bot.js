@@ -64,7 +64,7 @@ function load_info(){
 			update_loop(t);
 			tg.game.clear_board();
 			tg.game.draw();
-			send_board_message(tg);
+			send_board_message(t);
 			
 		}
 		console.log('done!');
