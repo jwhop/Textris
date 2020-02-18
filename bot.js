@@ -24,7 +24,7 @@ function load_info(){
 		console.log('game is' + game);
 		
 		for(var i = 0; i < game.length; i++){
-			var new_game = new T(10,15,1);
+			let new_game = new T(10,15,1);
 			new_game.inert = string_to_board(game[i].game_board);
 			new_game.sequence = game[i].game_seq;
 			new_game.pieceType = game[i].cur_piece;
@@ -100,7 +100,7 @@ function compare_scores(a,b){
 	return a.score - b.score;
 }
 
-function update_loop( tg){
+function update_loop(tg){
 	//console.log(tg.name);
 	//console.log('trying to access: ' + client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris'));
 	//const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
