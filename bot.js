@@ -63,7 +63,7 @@ function load_info(){
 }
 function start_interval(o){
 	
-	return setTimeout(setTimeout(function(){update_loop(o);},o.game.time_length));
+	return setTimeout(function(){update_loop(o);},o.game.time_length);
 	
 }
 
