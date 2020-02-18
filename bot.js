@@ -41,7 +41,7 @@ function load_info(){
 			new_game.last_moves = game[i].last_moves_holder;
 						
 			
-			var new_serverobj = new S(
+			let new_serverobj = new S(
 			game[i].name, 
 			new_game,
 			game[i].channel, 
@@ -52,7 +52,6 @@ function load_info(){
 			new_serverobj.game_report = game[i];
 			game_collection.push(new_serverobj);
 			new_serverobj.game_interval = start_interval(new_serverobj);
-			//update_loop(new_serverobj);
 		}			
 		console.log('done!');
 
