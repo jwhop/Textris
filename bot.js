@@ -52,6 +52,7 @@ function load_info(){
 			new_serverobj.game_report = game[i];
 			game_collection.push(new_serverobj);
 			start_interval(new_serverobj);
+			print_test(i);
 		}			
 		console.log('done!');
 
@@ -62,10 +63,16 @@ function load_info(){
 }
 function start_interval(o){
 	
-	o.game_interval = setTimeout(function(){update_loop(o);},o.game.time_length);
+	setTimeout(function(){update_loop(o);},o.game.time_length);
 	
 }
+function print_test(x){
+  
+  setTimeout(function(){
+    console.log(x);
+  }, 15000);
 
+}
 
 function string_to_board(s){
 	board = [ 
