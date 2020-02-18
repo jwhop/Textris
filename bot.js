@@ -22,28 +22,28 @@ function load_info(){
 			return console.error(err);
 		}
 		console.log('game is' + game);
-		var new_game;
+		var new_game_arr  = [];
 		for(var i = 0; i < game.length; i++){
-			new_game = new T(10,15,1);
-			new_game.inert = string_to_board(game[i].game_board);
-			new_game.sequence = game[i].game_seq;
-			new_game.pieceType = game[i].cur_piece;
-			new_game.nextpieceType = game[i].next_piece;
-			new_game.hold_piece = game[i].hold_piece;
-			new_game.pieceRot = game[i].piece_rot;
-			new_game.pieceX = game[i].piece_x;
-			new_game.pieceY = game[i].piece_y;
-			new_game.holding = game[i].is_holding;
-			new_game.score = game[i].score;
-			new_game.time_length = game[i].interval_length;
-			new_game.scoring = game[i].is_scoring;
-			new_game.scoring_rows = game[i].scoring_rows_holder;
-			new_game.last_moves = game[i].last_moves_holder;
+			new_game_arr[i] = new T(10,15,1);
+			new_game_arr[i].inert = string_to_board(game[i].game_board);
+			new_game_arr[i].sequence = game[i].game_seq;
+			new_game_arr[i].pieceType = game[i].cur_piece;
+			new_game_arr[i].nextpieceType = game[i].next_piece;
+			new_game_arr[i].hold_piece = game[i].hold_piece;
+			new_game_arr[i].pieceRot = game[i].piece_rot;
+			new_game_arr[i].pieceX = game[i].piece_x;
+			new_game_arr[i].pieceY = game[i].piece_y;
+			new_game_arr[i].holding = game[i].is_holding;
+			new_game_arr[i].score = game[i].score;
+			new_game_arr[i].time_length = game[i].interval_length;
+			new_game_arr[i].scoring = game[i].is_scoring;
+			new_game_arr[i].scoring_rows = game[i].scoring_rows_holder;
+			new_game_arr[i].last_moves = game[i].last_moves_holder;
 						
 			
 			var new_serverobj = new S(
 				game[i].name, 
-				new_game,
+				new_game_arr[i],
 				game[i].channel, 
 				game[i].msg1, 
 				game[i].msg2
@@ -64,6 +64,7 @@ function load_info(){
 function start_interval(o){
 	o.game.clear_board();
 	o.game.draw();
+	
 	setTimeout(function(){
     update_loop(o);
 	}, o.game.time_length);
