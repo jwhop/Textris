@@ -109,7 +109,8 @@ function compare_scores(a,b){
 	return a.score - b.score;
 }
 
-function update_loop(tg){
+function update_loop(tg1){
+	let tg = tg1;
 	console.log(tg.name);
 	//console.log('trying to access: ' + client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris'));
 	//const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
@@ -182,10 +183,10 @@ function update_loop(tg){
 	}
 	
 }
-function save_info(tg1){
+function save_info(tg){
 	//console.log('printing board info' + tg.game.board);
 	//console.log('printing more board info' + tg.game.inert);
-	let tg = tg1;
+
 	board_string='';
 	
 	for(i = 0; i < 15; i++){
