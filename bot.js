@@ -108,7 +108,7 @@ function compare_scores(a,b){
 }
 
 function update_loop(tg){
-	//console.log(tg.name);
+	console.log(tg.name);
 	//console.log('trying to access: ' + client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris'));
 	//const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
 	const channel2 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris');
