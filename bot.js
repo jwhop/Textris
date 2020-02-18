@@ -52,8 +52,7 @@ function load_info(){
 				);
 			
 				game_collection[ii].game_report = game[ii];
-			
-				start_interval(game_collection[ii]);
+				update_loop(game_collection[ii]);
 				print_test(ii);
 			
 			})();
