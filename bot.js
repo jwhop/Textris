@@ -68,6 +68,7 @@ function start_interval(o){
 	oo.game_interval = setTimeout(function(){update_loop(oo);},oo.game.time_length);
 	oo.game.clear_board();
 	oo.game.draw();
+	send_board_message(oo);
 }
 function print_test(x){
   
