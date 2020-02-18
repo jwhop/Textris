@@ -25,33 +25,34 @@ function load_info(){
 		var new_game_arr  = [];
 		for(var i = 0; i < game.length; i++){
 			
-			var ii = i;
-			new_game_arr[ii] = new T(10,15,1);
-			new_game_arr[ii].inert = string_to_board(game[ii].game_board);
-			new_game_arr[ii].sequence = game[ii].game_seq;
-			new_game_arr[ii].pieceType = game[ii].cur_piece;
-			new_game_arr[ii].nextpieceType = game[ii].next_piece;
-			new_game_arr[ii].hold_piece = game[ii].hold_piece;
-			new_game_arr[ii].pieceRot = game[ii].piece_rot;
-			new_game_arr[ii].pieceX = game[ii].piece_x;
-			new_game_arr[ii].pieceY = game[ii].piece_y;
-			new_game_arr[ii].holding = game[ii].is_holding;
-			new_game_arr[ii].score = game[ii].score;
-			new_game_arr[ii].time_length = game[ii].interval_length;
-			new_game_arr[ii].scoring = game[ii].is_scoring;
-			new_game_arr[ii].scoring_rows = game[ii].scoring_rows_holder;
-			new_game_arr[ii].last_moves = game[ii].last_moves_holder;
+
+			new_game_arr[i] = new T(10,15,1);
+			new_game_arr[i].inert = string_to_board(game[i].game_board);
+			new_game_arr[i].sequence = game[i].game_seq;
+			new_game_arr[i].pieceType = game[i].cur_piece;
+			new_game_arr[i].nextpieceType = game[i].next_piece;
+			new_game_arr[i].hold_piece = game[i].hold_piece;
+			new_game_arr[i].pieceRot = game[i].piece_rot;
+			new_game_arr[i].pieceX = game[i].piece_x;
+			new_game_arr[i].pieceY = game[i].piece_y;
+			new_game_arr[i].holding = game[i].is_holding;
+			new_game_arr[i].score = game[i].score;
+			new_game_arr[i].time_length = game[i].interval_length;
+			new_game_arr[i].scoring = game[i].is_scoring;
+			new_game_arr[i].scoring_rows = game[i].scoring_rows_holder;
+			new_game_arr[i].last_moves = game[i].last_moves_holder;
 						
 			
-			game_collection[ii] = new S(
-				game[ii].name, 
-				new_game_arr[ii],
-				game[ii].channel, 
-				game[ii].msg1, 
-				game[ii].msg2
+			game_collection[i] = new S(
+				game[i].name, 
+				new_game_arr[i],
+				game[i].channel, 
+				game[i].msg1, 
+				game[i].msg2
 			);
 			
 			(function(){
+				var ii = i;
 				var s1 = game_collection[ii];
 				s1.game_report = game[ii];
 				update_loop(s1);
