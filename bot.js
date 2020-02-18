@@ -52,8 +52,8 @@ function load_info(){
 			);
 			
 			(function(){
-				var ii = i;
-				var s1 = game_collection[ii];
+				const ii = i;
+				const s1 = game_collection[ii];
 				s1.game_report = game[ii];
 				start_interval(s1);
 				print_test(ii);
@@ -65,7 +65,7 @@ function load_info(){
 }
 function start_interval(o){
 
-	o.game_interval = setTimeout(function(){var oo = o; update_loop(oo);},o.game.time_length);
+	o.game_interval = setTimeout(function(){const oo = o; update_loop(oo);},o.game.time_length);
 	o.game.clear_board();
 	o.game.draw();
 }
@@ -111,7 +111,7 @@ function compare_scores(a,b){
 }
 
 function update_loop(tg1){
-	let tg = tg1;
+	const tg = tg1;
 	console.log(tg.name);
 	//console.log('trying to access: ' + client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris'));
 	//const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
