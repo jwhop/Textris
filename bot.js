@@ -51,7 +51,7 @@ function load_info(){
 			
 			new_serverobj.game_report = game[i];
 			game_collection.push(new_serverobj);
-			new_serverobj.game_interval = start_interval(new_serverobj);
+			start_interval(new_serverobj);
 		}			
 		console.log('done!');
 
@@ -62,7 +62,7 @@ function load_info(){
 }
 function start_interval(o){
 	
-	return setTimeout(function(){update_loop(o);},o.game.time_length);
+	o.game_interval = setTimeout(function(){update_loop(o);},o.game.time_length);
 	
 }
 
