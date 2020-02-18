@@ -24,41 +24,41 @@ function load_info(){
 		console.log('game is' + game);
 		var new_game_arr  = [];
 		for(var i = 0; i < game.length; i++){
-			new_game_arr[i] = new T(10,15,1);
-			new_game_arr[i].inert = string_to_board(game[i].game_board);
-			new_game_arr[i].sequence = game[i].game_seq;
-			new_game_arr[i].pieceType = game[i].cur_piece;
-			new_game_arr[i].nextpieceType = game[i].next_piece;
-			new_game_arr[i].hold_piece = game[i].hold_piece;
-			new_game_arr[i].pieceRot = game[i].piece_rot;
-			new_game_arr[i].pieceX = game[i].piece_x;
-			new_game_arr[i].pieceY = game[i].piece_y;
-			new_game_arr[i].holding = game[i].is_holding;
-			new_game_arr[i].score = game[i].score;
-			new_game_arr[i].time_length = game[i].interval_length;
-			new_game_arr[i].scoring = game[i].is_scoring;
-			new_game_arr[i].scoring_rows = game[i].scoring_rows_holder;
-			new_game_arr[i].last_moves = game[i].last_moves_holder;
+			function(){
+				new_game_arr[i] = new T(10,15,1);
+				new_game_arr[i].inert = string_to_board(game[i].game_board);
+				new_game_arr[i].sequence = game[i].game_seq;
+				new_game_arr[i].pieceType = game[i].cur_piece;
+				new_game_arr[i].nextpieceType = game[i].next_piece;
+				new_game_arr[i].hold_piece = game[i].hold_piece;
+				new_game_arr[i].pieceRot = game[i].piece_rot;
+				new_game_arr[i].pieceX = game[i].piece_x;
+				new_game_arr[i].pieceY = game[i].piece_y;
+				new_game_arr[i].holding = game[i].is_holding;
+				new_game_arr[i].score = game[i].score;
+				new_game_arr[i].time_length = game[i].interval_length;
+				new_game_arr[i].scoring = game[i].is_scoring;
+				new_game_arr[i].scoring_rows = game[i].scoring_rows_holder;
+				new_game_arr[i].last_moves = game[i].last_moves_holder;
 						
 			
-			game_collection[i] = new S(
-				game[i].name, 
-				new_game_arr[i],
-				game[i].channel, 
-				game[i].msg1, 
-				game[i].msg2
-			);
+				game_collection[i] = new S(
+					game[i].name, 
+					new_game_arr[i],
+					game[i].channel, 
+					game[i].msg1, 
+					game[i].msg2
+				);
 			
-			game_collection[i].game_report = game[i];
+				game_collection[i].game_report = game[i];
 			
-			start_interval(game_collection[i]);
-			print_test(i);
-		}			
+				start_interval(game_collection[i]);
+				print_test(i);
+			
+			}
+			
+		}
 		console.log('done!');
-
-		
-		
-		
 	});
 }
 function start_interval(o){
