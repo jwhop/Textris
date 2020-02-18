@@ -66,7 +66,7 @@ function load_info(){
 function start_interval(o){
 	o.game.clear_board();
 	o.game.draw();
-	o.game_interval = setTimeout(function(){update_loop(o);},o.game.time_length);
+	o.game_interval = setTimeout(function(){var oo = o; update_loop(oo);},o.game.time_length);
 }
 function print_test(x){
   
