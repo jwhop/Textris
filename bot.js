@@ -23,6 +23,44 @@ function load_info(){
 		}
 		console.log('game is' + game);
 		var new_game_arr  = [];
+		
+		game.forEach(function(element){
+			let new_game = new T(10,15,1);
+
+			new_game.inert = string_to_board(element.game_board);
+			new_game.sequence = element.game_seq;
+			new_game.pieceType = element.cur_piece;
+			new_game.nextpieceType = element.next_piece;
+			new_game.hold_piece = element.hold_piece;
+			new_game.pieceRot = element.piece_rot;
+			new_game.pieceX = element.piece_x;
+			new_game.pieceY = element.piece_y;
+			new_game.holding = element.is_holding;
+			new_game.score = element.score;
+			new_game.time_length = element.interval_length;
+			new_game.scoring = element.is_scoring;
+			new_game.scoring_rows = element.scoring_rows_holder;
+			new_game.last_moves = element.last_moves_holder;
+			
+			
+			game_collectionobj = new S(
+				element.name, 
+				new_game,
+				element.channel, 
+				element.msg1, 
+				element.msg2
+			);
+			
+			(function(){
+				const s1 = game_collectionobj;
+				s1.game_report =  element;
+				update_loop(s1);
+			})();
+		});
+
+		
+		/*
+		
 		for(var i = 0; i < game.length; i++){
 			
 
@@ -66,7 +104,7 @@ function load_info(){
 			t.game.draw();
 			send_board_message(t);
 			
-		}
+		}*/
 		console.log('done!');
 	});
 }
@@ -256,7 +294,7 @@ function save_info(tg){
 	//console.log(tg.game.last_moves);
 	
 }
-function send_board_message( tg) {
+function send_board_message(tg) {
 	//console.log(tg);
 	msg = "-----------------------------------------------------\n";
 	msg_2 = '\n';
