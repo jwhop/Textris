@@ -24,7 +24,7 @@ function load_info(){
 		console.log('game is' + game);
 		
 		for(var i = 0; i < game.length; i++){
-			let new_game = new T(10,15,1);
+			var new_game = new T(10,15,1);
 			new_game.inert = string_to_board(game[i].game_board);
 			new_game.sequence = game[i].game_seq;
 			new_game.pieceType = game[i].cur_piece;
@@ -41,7 +41,7 @@ function load_info(){
 			new_game.last_moves = game[i].last_moves_holder;
 						
 			
-			let new_serverobj = new S(
+			var new_serverobj = new S(
 			game[i].name, 
 			new_game,
 			game[i].channel, 
@@ -174,8 +174,8 @@ function update_loop(tg){
 	
 }
 function save_info(tg){
-	console.log('printing board info' + tg.game.board);
-	console.log('printing more board info' + tg.game.inert);
+	//console.log('printing board info' + tg.game.board);
+	//console.log('printing more board info' + tg.game.inert);
 	
 	board_string='';
 	
@@ -236,11 +236,11 @@ function save_info(tg){
 		.then(result => console.log(result))
 		.catch(err=> console.log(err));
 	}
-	console.log(tg.game.last_moves);
+	//console.log(tg.game.last_moves);
 	
 }
 function send_board_message( tg) {
-	console.log(tg);
+	//console.log(tg);
 	msg = "-----------------------------------------------------\n";
 	msg_2 = '\n';
 	for(i = 0; i < 15; i++){
@@ -401,7 +401,7 @@ client.on('message', message => {
 	  }
 	} else{
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
-		console.log("last moves are: " + tg.game.last_moves);
+		//console.log("last moves are: " + tg.game.last_moves);
 		if (message.content === '!start'){
 			message.reply("you already have a game running");
 		}else if (message.content === '!leaderboard'){
