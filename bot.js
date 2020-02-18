@@ -12,7 +12,7 @@ const client = new Discord.Client();
 client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
 mongoose.connect(process.env.MONGODB_URI);
 
-load_info();
+
 
 function load_info(){
 	
@@ -333,7 +333,8 @@ function find_game(currentValue, index, array){
 }
 
 client.on('ready', () => {
-    console.log("Ready :D")
+    console.log("Ready :D");
+	load_info();
 });
 
 client.on('message', message => {
