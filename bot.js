@@ -136,6 +136,7 @@ function update_loop(tg){
 		game_collection.splice(game_collection.findIndex(find_game, tg.name), 1);
 		return;
 	} else {
+		save_info(tg);
 		tg.game.score += score_change;
 		tg.game.clear_board();
 		tg.game.draw();
@@ -179,7 +180,7 @@ function update_loop(tg){
 			}
 		}
 
-		save_info(tg);
+		
 		tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
 		
 	}
