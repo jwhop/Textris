@@ -24,7 +24,7 @@ function load_info(){
 		console.log('game is' + game);
 		var new_game_arr  = [];
 		for(var i = 0; i < game.length; i++){
-			function(){
+			(function(){
 				new_game_arr[i] = new T(10,15,1);
 				new_game_arr[i].inert = string_to_board(game[i].game_board);
 				new_game_arr[i].sequence = game[i].game_seq;
@@ -55,7 +55,7 @@ function load_info(){
 				start_interval(game_collection[i]);
 				print_test(i);
 			
-			}
+			})
 			
 		}
 		console.log('done!');
