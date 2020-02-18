@@ -64,12 +64,7 @@ function load_info(){
 function start_interval(o){
 	o.game.clear_board();
 	o.game.draw();
-	
-	setTimeout(function(){
-    update_loop(o);
-	}, o.game.time_length);
-	
-	
+	update_loop(o);
 }
 function print_test(x){
   
@@ -136,7 +131,6 @@ function update_loop(tg){
 		game_collection.splice(game_collection.findIndex(find_game, tg.name), 1);
 		return;
 	} else {
-		save_info(tg);
 		tg.game.score += score_change;
 		tg.game.clear_board();
 		tg.game.draw();
@@ -180,7 +174,7 @@ function update_loop(tg){
 			}
 		}
 
-		
+		save_info(tg);
 		tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
 		
 	}
