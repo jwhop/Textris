@@ -41,7 +41,7 @@ function load_info(){
 			new_game_arr[i].last_moves = game[i].last_moves_holder;
 						
 			
-			var new_serverobj = new S(
+			game_collection[i] = new S(
 				game[i].name, 
 				new_game_arr[i],
 				game[i].channel, 
@@ -49,9 +49,9 @@ function load_info(){
 				game[i].msg2
 			);
 			
-			new_serverobj.game_report = game[i];
-			game_collection.push(new_serverobj);
-			start_interval(new_serverobj);
+			game_collection[i].game_report = game[i];
+			
+			start_interval(game_collection[i]);
 			print_test(i);
 		}			
 		console.log('done!');
