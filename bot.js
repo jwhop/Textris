@@ -64,10 +64,10 @@ function load_info(){
 	});
 }
 function start_interval(o){
-
-	o.game_interval = setTimeout(function(){const oo = o; update_loop(oo);},o.game.time_length);
-	o.game.clear_board();
-	o.game.draw();
+	const oo = o;
+	oo.game_interval = setTimeout(function(){update_loop(oo);},oo.game.time_length);
+	oo.game.clear_board();
+	oo.game.draw();
 }
 function print_test(x){
   
