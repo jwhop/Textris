@@ -55,17 +55,16 @@ function load_info(){
 				const ii = i;
 				const s1 = game_collection[ii];
 				s1.game_report = game[ii];
-				start_interval(s1);
-				print_test(ii);
 			})();
 					
 		}
 		
 		for(var i = 0; i < game_collection.length; i++){
 			let t = game_collection[i];
-			t.game.clear_board();
-			t.game.draw();
-			send_board_message(t);
+			update_loop(t);
+			tg.game.clear_board();
+			tg.game.draw();
+			send_board_message(tg);
 			
 		}
 		console.log('done!');
