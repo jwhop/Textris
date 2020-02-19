@@ -373,7 +373,7 @@ function send_board_message(tg) {
         m2.edit(msg_2);
     });
 	console.log("SENDING THIS MESSAGE");
-	console.log(tg);
+	console.log(msg);
 }
 
 function find_game(currentValue, index, array){
