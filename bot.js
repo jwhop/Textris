@@ -25,7 +25,7 @@ function load_info(){
 		var xval = 0;
 		game.forEach(function(element){
 			
-			let new_game_arr[xval] = new T(10,15,1);
+			new_game_arr[xval] = new T(10,15,1);
 			new_game_arr[xval].inert = string_to_board(element.game_board);
 			new_game_arr[xval].sequence = element.game_seq;
 			new_game_arr[xval].pieceType = element.cur_piece;
