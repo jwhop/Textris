@@ -21,39 +21,45 @@ function load_info(){
 		if(err){
 			return console.error(err);
 		}
+		console.log('game is' + game);
 		var new_game_arr  = [];
-		var xval = 0;
+		
 		game.forEach(function(element){
-			
-			new_game_arr[xval] = new T(10,15,1);
-			new_game_arr[xval].inert = string_to_board(element.game_board);
-			new_game_arr[xval].sequence = element.game_seq;
-			new_game_arr[xval].pieceType = element.cur_piece;
-			new_game_arr[xval].nextpieceType = element.next_piece;
-			new_game_arr[xval].hold_piece = element.hold_piece;
-			new_game_arr[xval].pieceRot = element.piece_rot;
-			new_game_arr[xval].pieceX = element.piece_x;
-			new_game_arr[xval].pieceY = element.piece_y;
-			new_game_arr[xval].holding = element.is_holding;
-			new_game_arr[xval].score = element.score;
-			new_game_arr[xval].time_length = element.interval_length;
-			new_game_arr[xval].scoring = element.is_scoring;
-			new_game_arr[xval].scoring_rows = element.scoring_rows_holder;
-			new_game_arr[xval].last_moves = element.last_moves_holder;
+			let new_game = new T(10,15,1);
+			new_game.inert = string_to_board(element.game_board);
+			new_game.sequence = element.game_seq;
+			new_game.pieceType = element.cur_piece;
+			new_game.nextpieceType = element.next_piece;
+			new_game.hold_piece = element.hold_piece;
+			new_game.pieceRot = element.piece_rot;
+			new_game.pieceX = element.piece_x;
+			new_game.pieceY = element.piece_y;
+			new_game.holding = element.is_holding;
+			new_game.score = element.score;
+			new_game.time_length = element.interval_length;
+			new_game.scoring = element.is_scoring;
+			new_game.scoring_rows = element.scoring_rows_holder;
+			new_game.last_moves = element.last_moves_holder;
 			
 			
 			let new_serverobj = new S(
 				element.name, 
-				new_game_arr[xval],
+				new_game,
 				element.channel, 
 				element.msg1, 
 				element.msg2
 			);
 			
-			new_serverobj.game_report = element;
-			game_collection.push(new_serverobj);
-			xval= xval+1;
-			//update_loop(new_serverobj);
+			//new_serverobj.game_report = element;
+			//game_collection.push(new_serverobj);
+
+			update_loop(new S(
+				element.name, 
+				new_game,
+				element.channel, 
+				element.msg1, 
+				element.msg2
+			));
 		});
 
 		
@@ -218,7 +224,7 @@ function update_loop(tg1){
 		}
 
 		save_info(tg);
-		tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
+		//tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
 		
 	}
 	
