@@ -94,7 +94,7 @@ function load_info(){
 			})();
 					
 		}
-		*/
+		
 		for(var i = 0; i < game_collection.length; i++){
 			let t = game_collection[i];
 			update_loop(t);
@@ -104,6 +104,7 @@ function load_info(){
 			
 		}
 		console.log('done!');
+		*/
 	});
 }
 function start_interval(o){
