@@ -40,7 +40,8 @@ function load_info(){
 			new_game.scoring = element.is_scoring;
 			new_game.scoring_rows = element.scoring_rows_holder;
 			new_game.last_moves = element.last_moves_holder;
-			
+			new_game.hold_ids = element.held_ids;
+			new_game.hold_names = element.held_names;
 			
 			let new_serverobj = new S(
 				element.name, 
@@ -61,7 +62,6 @@ function load_info(){
 		
 		for(var i = 0; i < game.length; i++){
 			
-
 			new_game_arr[i] = new T(10,15,1);
 			new_game_arr[i].inert = string_to_board(game[i].game_board);
 			new_game_arr[i].sequence = game[i].game_seq;
@@ -193,22 +193,28 @@ function update_loop(tg1){
 		tg.game.score += score_change;
 		tg.game.clear_board();
 		tg.game.draw();
-		if(tg.game.single){
-			console.log("SINGLE");
-			tg.game.infomsg = "SINGLE LINE CLEAR";
-			//channel1.send("SINGLE LINE CLEAR: Nice job!");
+		if(tg.game.hold_ids.length > 0){
+			
+			tg.game.infomsg = tg.game.hold_names[0] + " wants to hold! (1/2)";
 		}
-		if(tg.game.doub){
-			tg.game.infomsg = "DOUBLE LINE CLEAR";
-			//channel1.send("DOUBLE LINE CLEAR: Way to go!");
-		}
-		if(tg.game.triple){
-			tg.game.infomsg = "TRIPLE LINE CLEAR";
-			//channel1.send("TRIPLE LINE CLEAR: Awwww Yeah!");
-		}
-		if(tg.game.quadruple){
-			tg.game.infomsg = "TETRIS";
-			//channel1.send("BOOM: Tetris for Discord!");
+		else{
+			if(tg.game.single){
+				console.log("SINGLE");
+				tg.game.infomsg = "SINGLE LINE CLEAR";
+				//channel1.send("SINGLE LINE CLEAR: Nice job!");
+			}
+			if(tg.game.doub){
+				tg.game.infomsg = "DOUBLE LINE CLEAR";
+				//channel1.send("DOUBLE LINE CLEAR: Way to go!");
+			}
+			if(tg.game.triple){
+				tg.game.infomsg = "TRIPLE LINE CLEAR";
+				//channel1.send("TRIPLE LINE CLEAR: Awwww Yeah!");
+			}
+			if(tg.game.quadruple){
+				tg.game.infomsg = "TETRIS";
+				//channel1.send("BOOM: Tetris for Discord!");
+			}
 		}
 		send_board_message(tg);
 		
@@ -273,8 +279,9 @@ function save_info(tg){
 				interval_length : tg.game.time_length, 
 				is_scoring: tg.game.scoring, 
 				scoring_rows_holder: tg.game.scoring_rows,
-				last_moves_holder: tg.game.last_moves
-				
+				last_moves_holder: tg.game.last_moves,
+				held_ids: tg.game.hold_ids, 
+				held_names: tg.game.held_names
 				
 					
 		});
@@ -297,6 +304,8 @@ function save_info(tg){
 		tg.game_report.is_scoring = tg.game.scoring;
 		tg.game_report.scoring_rows_holder = tg.game.scoring_rows;
 		tg.game_report.last_moves_holder = tg.game.last_moves;
+		tg.game_report.held_ids = tg.game.hold_ids;
+		tg.game_report.held_names = tg.game.held_names;
 		
 		tg.game_report.save()
 		.then(result => console.log(result))
@@ -493,7 +502,7 @@ client.on('message', message => {
 		}else if (possible_commands.indexOf(message.content) > -1){
 			if (!tg.move){
 				tg.move = true;
-				tg.game.handleInput(message.content.substr(1));
+				tg.game.handleInput(message.content.substr(1), message.author.id, message.author.username);
 				tg.game.last_moves.push(String(message.author.username) + " typed in " + String(message.content) + " for the " + String(piece_colormap[tg.game.pieceType]) + " piece");
 				if(tg.game.last_moves.length > 10){
 					tg.game.last_moves.shift();
@@ -693,4 +702,3 @@ let pieceStructures = [
     ],
   ],
 ]
-

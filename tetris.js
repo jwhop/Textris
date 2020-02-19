@@ -184,6 +184,8 @@ module.exports = class TetrisGame{
 			this.holding = false;
 			this.time_length = 1000*60*15;
 			this.scoring = false;
+			this.hold_ids = [];
+			this.hold_names = [];
 			this.scoring_rows = [];
 			this.last_moves = [];
 			this.infomsg = "";
@@ -224,6 +226,8 @@ module.exports = class TetrisGame{
 		this.newSeq();
 		this.nextpieceType = this.sequence.pop();
 		this.hold_piece = ' ';
+		this.hold_ids = [];
+		this.hold_names = [];
 		this.last_moves = [];
 		this.newPiece();
 		this.infomsg = "";
@@ -330,6 +334,8 @@ module.exports = class TetrisGame{
 				this.holding = false;
 				this.scoring = false;
 				this.scoring_rows = [];
+				this.hold_ids = [];
+				this.hold_names = [];
 			}
 			else{
 				this.scoring = true;
@@ -463,7 +469,7 @@ module.exports = class TetrisGame{
 		this.board[y][x] = colormap[block];
 	}
 	
-	handleInput(evt){
+	handleInput(evt, id, username){
 		if(!this.scoring){
 			if (evt == "left" || evt == "l"){
 				let testX = this.pieceX - 1;
@@ -501,29 +507,41 @@ module.exports = class TetrisGame{
 	
 			else if (evt == "hold"){
 				if(!this.holding){
-					this.holding = true;
-					if(this.hold_piece == ' '){
-						console.log(this.pieceType);
-						this.hold_piece = this.pieceType + 1;
-						this.pieceType = this.nextpieceType;
-						this.nextpieceType = this.sequence.pop();
+					if(this.hold_ids.length == 1 && !this.hold_ids.includes(id){
+						this.holding = true;
+						this.hold_ids = [];
+						this.hold_names = [];
+						if(this.hold_piece == ' '){
+							console.log(this.pieceType);
+							this.hold_piece = this.pieceType + 1;
+							this.pieceType = this.nextpieceType;
+							this.nextpieceType = this.sequence.pop();
 					
-						if(this.sequence.length === 0){
-							this.newSeq();
+							if(this.sequence.length === 0){
+								this.newSeq();
+							}
 						}
+						else{
+							var temp = this.hold_piece - 1;
+							this.hold_piece = this.pieceType + 1;
+							this.pieceType = temp;
+						}
+			
+						this.pieceX = 3;
+						this.pieceY = 0;
+						this.pieceRot = 0;
+						this.hold_ids = [];
+						this.hold_names = [];
 					}
 					else{
-						var temp = this.hold_piece - 1;
-						this.hold_piece = this.pieceType + 1;
-						this.pieceType = temp;
+						this.hold_ids.push(id);
+						this.hold_names.push(username);
+						
 					}
-			
-					this.pieceX = 3;
-					this.pieceY = 0;
-					this.pieceRot = 0;
+					
+					
 				}
 			}
 		}
 	}
 }
-
