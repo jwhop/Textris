@@ -110,7 +110,7 @@ function load_info(){
 				t.game.draw();
 				send_board_message(t);
 				update_loop(t);
-				},1000);
+				},100);
 			})();
 
 			
