@@ -50,9 +50,9 @@ function load_info(){
 				element.msg2
 			);
 			
-			new_serverobj.game_report = game[i];
+			new_serverobj.game_report = element;
 			game_collection.push(new_serverobj);
-			update_loop(new_serverobj);
+
 			//update_loop(new_serverobj);
 		});
 
@@ -94,15 +94,12 @@ function load_info(){
 			})();
 					
 		}
-		
+		*/
 		for(var i = 0; i < game_collection.length; i++){
 			let t = game_collection[i];
 			update_loop(t);
-			t.game.clear_board();
-			t.game.draw();
-			send_board_message(t);
 			
-		}*/
+		}
 		console.log('done!');
 	});
 }
