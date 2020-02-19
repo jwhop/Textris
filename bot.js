@@ -52,7 +52,7 @@ function load_info(){
 			
 			new_serverobj.game_report = element;
 			game_collection.push(new_serverobj);
-			update_loop(new_serverobj);
+			//update_loop(new_serverobj);
 			//update_loop(new_serverobj);
 		});
 
@@ -94,17 +94,29 @@ function load_info(){
 			})();
 					
 		}
-		
+		*/
 		for(var i = 0; i < game_collection.length; i++){
+			
 			let t = game_collection[i];
 			update_loop(t);
+			
+			t.game.highlight = true;
 			t.game.clear_board();
 			t.game.draw();
 			send_board_message(t);
+			(function() {
+				setTimeout(function(){
+				t.game.highlight = false;
+				t.game.clear_board();
+				t.game.draw();
+				send_board_message(t);
+				},1000*10);
+			})();
+
 			
 		}
 		console.log('done!');
-		*/
+		
 	});
 }
 function start_interval(o){
