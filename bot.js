@@ -98,11 +98,20 @@ function load_info(){
 		for(var i = 0; i < game_collection.length; i++){
 			
 			let t = game_collection[i];
+
 			
+			t.game.highlight = true;
+			t.game.clear_board();
+			t.game.draw();
+			send_board_message(t);
 			(function() {
 				setTimeout(function(){
+				t.game.highlight = false;
+				t.game.clear_board();
+				t.game.draw();
+				send_board_message(t);
 				update_loop(t);
-				},t.game.time_length);
+				},1000*10);
 			})();
 
 			
