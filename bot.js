@@ -371,7 +371,8 @@ function send_board_message(tg) {
     .then(m2 => {
         m2.edit(msg_2);
     });
-	console.log("SENDING THIS MESSAGE" + tg);
+	console.log("SENDING THIS MESSAGE");
+	console.log(tg);
 }
 
 function find_game(currentValue, index, array){
