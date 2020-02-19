@@ -25,26 +25,26 @@ function load_info(){
 		var xval = 0;
 		game.forEach(function(element){
 			
-			let new_game[xval] = new T(10,15,1);
-			new_game[xval].inert = string_to_board(element.game_board);
-			new_game[xval].sequence = element.game_seq;
-			new_game[xval].pieceType = element.cur_piece;
-			new_game[xval].nextpieceType = element.next_piece;
-			new_game[xval].hold_piece = element.hold_piece;
-			new_game[xval].pieceRot = element.piece_rot;
-			new_game[xval].pieceX = element.piece_x;
-			new_game[xval].pieceY = element.piece_y;
-			new_game[xval].holding = element.is_holding;
-			new_game[xval].score = element.score;
-			new_game[xval].time_length = element.interval_length;
-			new_game[xval].scoring = element.is_scoring;
-			new_game[xval].scoring_rows = element.scoring_rows_holder;
-			new_game[xval].last_moves = element.last_moves_holder;
+			let new_game_arr[xval] = new T(10,15,1);
+			new_game_arr[xval].inert = string_to_board(element.game_board);
+			new_game_arr[xval].sequence = element.game_seq;
+			new_game_arr[xval].pieceType = element.cur_piece;
+			new_game_arr[xval].nextpieceType = element.next_piece;
+			new_game_arr[xval].hold_piece = element.hold_piece;
+			new_game_arr[xval].pieceRot = element.piece_rot;
+			new_game_arr[xval].pieceX = element.piece_x;
+			new_game_arr[xval].pieceY = element.piece_y;
+			new_game_arr[xval].holding = element.is_holding;
+			new_game_arr[xval].score = element.score;
+			new_game_arr[xval].time_length = element.interval_length;
+			new_game_arr[xval].scoring = element.is_scoring;
+			new_game_arr[xval].scoring_rows = element.scoring_rows_holder;
+			new_game_arr[xval].last_moves = element.last_moves_holder;
 			
 			
 			let new_serverobj = new S(
 				element.name, 
-				new_game[xval],
+				new_game_arr[xval],
 				element.channel, 
 				element.msg1, 
 				element.msg2
