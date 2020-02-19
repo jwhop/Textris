@@ -21,7 +21,7 @@ function load_info(){
 		if(err){
 			return console.error(err);
 		}
-		console.log('game is' + game);
+		//console.log('game is' + game);
 		var new_game_arr  = [];
 		
 		game.forEach(function(element){
@@ -50,16 +50,10 @@ function load_info(){
 				element.msg2
 			);
 			
-			//new_serverobj.game_report = element;
-			//game_collection.push(new_serverobj);
-
-			update_loop(new S(
-				element.name, 
-				new_game,
-				element.channel, 
-				element.msg1, 
-				element.msg2
-			));
+			new_serverobj.game_report = element;
+			game_collection.push(new_serverobj);
+			update_loop(new_serverobj);
+			//update_loop(new_serverobj);
 		});
 
 		
@@ -104,6 +98,9 @@ function load_info(){
 		for(var i = 0; i < game_collection.length; i++){
 			let t = game_collection[i];
 			update_loop(t);
+			t.game.clear_board();
+			t.game.draw();
+			send_board_message(t);
 			
 		}
 		console.log('done!');
@@ -296,7 +293,7 @@ function save_info(tg){
 	
 }
 function send_board_message(tg) {
-	//console.log(tg);
+
 	msg = "-----------------------------------------------------\n";
 	msg_2 = '\n';
 	for(i = 0; i < 15; i++){
@@ -374,7 +371,7 @@ function send_board_message(tg) {
     .then(m2 => {
         m2.edit(msg_2);
     });
-
+	console.log("SENDING THIS MESSAGE" + tg);
 }
 
 function find_game(currentValue, index, array){
