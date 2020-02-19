@@ -218,7 +218,7 @@ function update_loop(tg1){
 		}
 
 		save_info(tg);
-		/tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
+		tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
 		
 	}
 	
