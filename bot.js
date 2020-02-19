@@ -99,11 +99,6 @@ function load_info(){
 			
 			let t = game_collection[i];
 
-			
-			t.game.highlight = true;
-			t.game.clear_board();
-			t.game.draw();
-			send_board_message(t);
 			(function() {
 				setTimeout(function(){
 				t.game.highlight = false;
