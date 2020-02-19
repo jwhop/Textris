@@ -507,7 +507,7 @@ module.exports = class TetrisGame{
 	
 			else if (evt == "hold"){
 				if(!this.holding){
-					if(this.hold_ids.length == 1 && !this.hold_ids.includes(id){
+					if(this.hold_ids.length == 1 && !this.hold_ids.includes(id)){
 						this.holding = true;
 						this.hold_ids = [];
 						this.hold_names = [];
