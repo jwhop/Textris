@@ -536,7 +536,7 @@ module.exports = class TetrisGame{
 					else{
 						this.hold_ids.push(id);
 						this.hold_names.push(username);
-						
+						this.infomsg = this.hold_names[0] + " wants to hold! (1/2)";
 					}
 					
 					
