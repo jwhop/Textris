@@ -521,7 +521,7 @@ Thanks for playing!");
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
 		//console.log("last moves are: " + tg.game.last_moves);
 		if (message.content === '!start'){
-			message.reply("you already have a game running");
+			
 		}else if (message.content === '!leaderboard'){
 			sorted_scores = score_collection.sort();
 			sorted_scores.forEach(function(element) {
