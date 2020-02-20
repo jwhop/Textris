@@ -433,6 +433,39 @@ client.on('message', message => {
 				
 				}
 			}
+		}else if(message.content === '!info'){
+			message.channel.send("Welcome to TEXTRIS\
+===============\
+\
+Objective: don't let the pieces overflow the top of the board! The game never stops :eyes:\
+\
+Commands:\
+\
+- !left, !l | move piece left\
+- !right, !r | move piece right\
+- !rotc, !c, !rot | rotate piece clockwise\
+- !rotcc, !cc | rotate piece counterclockwise\
+- !hold, !h | hold current piece*\
+- !highlight  | briefly change display of current piece\
+- !recent | display 10 most recent commands / users\
+\
+*in order to hold a piece, two separate users must type in the hold command before the piece touches the ground\
+\
+Point values: \
+single line clear: 100 per line \
+double line clear: 200 per line\
+triple line clear: 300 per line\
+tetris: 400 per line\
+\
+level 2: 1.5x multiplier\
+level 3: 1.75x multiplier\
+level 4: 2.0x multplier\
+\
+Levels speed up at 5000, 10000, 20000 points \
+level 1: interval speed 15 minutes\
+level 2: interval speed 10 minutes\
+level 3: interval speed 7 minutes\
+level 4: interval speed 5 minutes");
 		}
 	   return;
 	} else{
