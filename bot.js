@@ -441,13 +441,13 @@ Objective: don't let the pieces overflow the top of the board! The game never st
 \n\
 Commands:\n\
 \n\
-- !left, !l | move piece left\n\
-- !right, !r | move piece right\n\
-- !rotc, !c, !rot | rotate piece clockwise\n\
-- !rotcc, !cc | rotate piece counterclockwise\n\
-- !hold, !h | hold current piece*\n\
-- !highlight  | briefly change display of current piece\n\
-- !recent | display 10 most recent commands / users\n\
+- `!left, !l` | move piece left\n\
+- `!right, !r` | move piece right\n\
+- `!rotc, !c, !rot` | rotate piece clockwise\n\
+- `!rotcc, !cc` | rotate piece counterclockwise\n\
+- `!hold, !h` | hold current piece*\n\
+- `!highlight`  | briefly change display of current piece\n\
+- `!recent` | display 10 most recent commands / users\n\
 \n\
 *in order to hold a piece, two separate users must type in the hold command before the piece touches the ground\n\
 \n\
