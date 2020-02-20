@@ -441,6 +441,7 @@ Objective: don't let the pieces overflow the top of the board! The game never st
 \n\
 Commands:\n\
 \n\
+- `!info` | display rules\n\
 - `!left, !l` | move piece left\n\
 - `!right, !r` | move piece right\n\
 - `!rotc, !c, !rot` | rotate piece clockwise\n\
