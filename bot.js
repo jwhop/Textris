@@ -441,6 +441,7 @@ Objective: don't let the pieces overflow the top of the board! The game never st
 \n\
 Commands:\n\
 \n\
+- `!start` | start game\n\
 - `!info` | display rules\n\
 - `!left, !l` | move piece left\n\
 - `!right, !r` | move piece right\n\
@@ -466,7 +467,11 @@ Levels speed up at 5000, 10000, 20000 points\n\
 level 1: interval speed 15 minutes\n\
 level 2: interval speed 10 minutes\n\
 level 3: interval speed 7 minutes\n\
-level 4: interval speed 5 minutes");
+level 4: interval speed 5 minutes\n\
+\n\
+contact: for bug reports, concerns, or questions, contact jwhopkins.dev@gmail.com or @jwhopkin on twitter. \n\
+\n\
+Thanks for playing!");
 		}
 	   return;
 	} else{
