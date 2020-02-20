@@ -382,7 +382,7 @@ function send_board_message(tg) {
 	}
 	
 	msg_2 += ('\n' + "Score: " + tg.game.score + '\n' + "Level: " + level + '\n' + "Message: " + tg.game.infomsg + '\n');
-	tg.game.infomsg = "";
+
 
 	channel2.fetchMessage(tg.msg1Id)
     .then(m => {

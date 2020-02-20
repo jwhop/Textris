@@ -336,6 +336,8 @@ module.exports = class TetrisGame{
 				this.scoring_rows = [];
 				this.hold_ids = [];
 				this.hold_names = [];
+				this.infomsg = "";
+
 			}
 			else{
 				this.scoring = true;
@@ -532,6 +534,7 @@ module.exports = class TetrisGame{
 						this.pieceRot = 0;
 						this.hold_ids = [];
 						this.hold_names = [];
+						this.infomsg = "";
 					}
 					else{
 						this.hold_ids.push(id);
