@@ -441,7 +441,9 @@ Objective: don't let the pieces overflow the top of the board! The game never st
 \n\
 Commands:\n\
 \n\
-- `!start` | start game [MUST BE IN CHANNEL TITLED `textris` ]\n\
+All commands (except for !info and !recent) are to be used in a channel titled `textris` \n\
+\n\
+- `!start` | start game [MUST BE IN `textris` CHANNEL]\n\
 - `!info` | display rules\n\
 - `!left, !l` | move piece left\n\
 - `!right, !r` | move piece right\n\
@@ -449,7 +451,7 @@ Commands:\n\
 - `!rotcc, !cc` | rotate piece counterclockwise\n\
 - `!hold, !h` | hold current piece*\n\
 - `!highlight`  | briefly change display of current piece\n\
-- `!recent` | display 10 most recent commands / users [to be used outside of `textris` channel]\n\
+- `!recent` | display 10 most recent commands / users\n\
 \n\
 *in order to hold a piece, two separate users must type in the hold command before the piece touches the ground\n\
 \n\
@@ -469,7 +471,7 @@ level 2: interval speed 10 minutes\n\
 level 3: interval speed 7 minutes\n\
 level 4: interval speed 5 minutes\n\
 \n\
-contact: for bug reports, concerns, or questions, contact jwhopkins.dev@gmail.com or @jwhopkin on twitter. \n\
+contact: for bug reports, concerns, or questions, contact jwhopkins.dev@gmail.com or dm @jwhopkin on twitter. \n\
 \n\
 Thanks for playing!");
 		}
