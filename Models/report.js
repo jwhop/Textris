@@ -23,7 +23,8 @@ const gameSchema = mongoose.Schema({
 	scoring_rows_holder: [Number], 
 	last_moves_holder: [String], 
 	held_ids: [String], 
-	held_names: [String]
+	held_names: [String], 
+	alt_emojis_holder: [String]
 	
 });
 

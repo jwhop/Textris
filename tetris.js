@@ -188,6 +188,18 @@ module.exports = class TetrisGame{
 			this.hold_names = [];
 			this.scoring_rows = [];
 			this.last_moves = [];
+			this.alt_emojis = {
+				'egg': 'egg', 
+				'blue_heart':'blue_heart', 
+				'yellow_heart':'yellow_heart',
+				'purple_heart':'purple_heart', 
+				'green_heart':'green_heart', 
+				'heart':'heart', 
+				'tangerine':'tangerine', 
+				'snowflake':'snowflake', 
+				'eyes':'eyes', 
+				'boom':'boom'
+			};
 			this.infomsg = "";
 			
 			for(var y=0; y<this.gridHgt; y++){

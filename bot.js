@@ -42,7 +42,16 @@ function load_info(){
 			new_game.last_moves = element.last_moves_holder;
 			new_game.hold_ids = element.held_ids;
 			new_game.hold_names = element.held_names;
-			
+			new_game.alt_emojis['egg'] = element.alt_emojis_holder[0];
+			new_game.alt_emojis['yellow_heart'] = element.alt_emojis_holder[1];
+			new_game.alt_emojis['blue_heart'] = element.alt_emojis_holder[2];
+			new_game.alt_emojis['green_heart'] = element.alt_emojis_holder[3];
+			new_game.alt_emojis['heart'] = element.alt_emojis_holder[4];
+			new_game.alt_emojis['snowflake'] = element.alt_emojis_holder[5];
+			new_game.alt_emojis['tangerine'] = element.alt_emojis_holder[6];
+			new_game.alt_emojis['purple_heart'] = element.alt_emojis_holder[7];
+			new_game.alt_emojis['eyes'] = element.alt_emojis_holder[8];
+			new_game.alt_emojis['boom'] = element.alt_emojis_holder[9];
 			let new_serverobj = new S(
 				element.name, 
 				new_game,
@@ -257,7 +266,18 @@ function save_info(tg){
 			board_string += tg.game.inert[i][j];
 		}
 	}
-	
+	let temp_emoji_holder = [];
+	temp_emoji_holder.push(tg.game.alt_emojis['egg']);
+	temp_emoji_holder.push(tg.game.alt_emojis['yellow_heart']);
+	temp_emoji_holder.push(tg.game.alt_emojis['blue_heart']);
+	temp_emoji_holder.push(tg.game.alt_emojis['green_heart']);
+	temp_emoji_holder.push(tg.game.alt_emojis['heart']);
+	temp_emoji_holder.push(tg.game.alt_emojis['snowflake']);
+	temp_emoji_holder.push(tg.game.alt_emojis['tangerine']);
+	temp_emoji_holder.push(tg.game.alt_emojis['purple_heart']);
+	temp_emoji_holder.push(tg.game.alt_emojis['eyes']);
+	temp_emoji_holder.push(tg.game.alt_emojis['boom']);
+
 	if(tg.game_report == null){
 		tg.game_report = new gameSchema({
 				_id: mongoose.Types.ObjectId(),
@@ -281,8 +301,8 @@ function save_info(tg){
 				scoring_rows_holder: tg.game.scoring_rows,
 				last_moves_holder: tg.game.last_moves,
 				held_ids: tg.game.hold_ids, 
-				held_names: tg.game.held_names
-				
+				held_names: tg.game.hold_names,
+				alt_emojis_holder: temp_emoji_holder
 					
 		});
 		
@@ -305,7 +325,8 @@ function save_info(tg){
 		tg.game_report.scoring_rows_holder = tg.game.scoring_rows;
 		tg.game_report.last_moves_holder = tg.game.last_moves;
 		tg.game_report.held_ids = tg.game.hold_ids;
-		tg.game_report.held_names = tg.game.held_names;
+		tg.game_report.held_names = tg.game.hold_names;
+		tg.game_report.alt_emojis_holder = temp_emoji_holder;
 		
 		tg.game_report.save()
 		.then(result => console.log(result))
@@ -323,7 +344,14 @@ function send_board_message(tg) {
 		msg += ("[[" + '\t' + '\t');
 		
 		for (j = 0; j < 10; j++){
-			msg += tg.game.board[i][j];
+			let e = tg.game.board[i][j];
+			if(tg.game.alt_emojis[e.substr(1, e.length - 2)]  != undefined){
+				msg += ':' + tg.game.alt_emojis[e.substr(1, e.length - 2)] + ':';
+			}
+			else{
+				msg += e;
+			}
+
 		}
 		
 		msg += ('\t' + '\t' + "]]" + '\n');
@@ -475,8 +503,65 @@ contact: for bug reports, concerns, or questions, contact jwhopkins.dev@gmail.co
 \n\
 Thanks for playing!");
 		}
-	   return;
-	} else{
+		else if(message.member.roles.find(r => r.name === "textris mod")){
+			let words = message.content.split(" ");
+if (words[0] == '!replace'){
+
+				var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
+				if(typeof tg !== 'undefined'){
+					words[1] = words[1].toLowerCase();
+					console.log('first word is' + words[1]);
+					if(words.length == 3){
+
+						switch(words[1]){
+							case 'blank':
+								tg.game.alt_emojis['egg'] = words[2];
+								break;
+							case 'o':
+								tg.game.alt_emojis['yellow_heart'] = words[2];
+								break;
+							case 'i': 
+								tg.game.alt_emojis['blue_heart'] = words[2];
+								break;
+							case 's':
+								tg.game.alt_emojis['green_heart'] = words[2];
+								break;
+							case 'z':
+								tg.game.alt_emojis['heart'] = words[2];
+								break;
+							case 'j':
+								tg.game.alt_emojis['snowflake'] = words[2];
+								break;
+							case 'l': 
+								tg.game.alt_emojis['tangerine'] = words[2];
+								break;
+							case 't':
+								tg.game.alt_emojis['purple_heart'] = words[2];
+								break;
+							case 'highlight':
+								tg.game.alt_emojis['eyes'] = words[2];
+								break;
+							case 'clear':
+								tg.game.alt_emojis['boom'] = words[2];
+								break;
+						}
+						
+					
+
+						console.log('replaced word is');
+						console.log(tg.game.alt_emojis['egg']);
+						tg.game.clear_board();
+						tg.game.draw();
+						send_board_message(tg);
+												   
+					}
+				}
+			}
+	   
+		}
+		return;
+	}
+	else{
 	 
 	if (
 		typeof game_collection.find(server => server.name === message.guild.id) ===
@@ -521,7 +606,7 @@ Thanks for playing!");
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
 		//console.log("last moves are: " + tg.game.last_moves);
 		if (message.content === '!start'){
-			
+
 		}else if (message.content === '!leaderboard'){
 			sorted_scores = score_collection.sort();
 			sorted_scores.forEach(function(element) {
