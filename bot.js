@@ -348,7 +348,7 @@ function send_board_message(tg) {
 			if(tg.game.alt_emojis[e.substr(1, e.length - 2)]  != undefined){
 				const ayy = client.guilds.get(tg.name).emojis.find(emoji => emoji.name == tg.game.alt_emojis[e.substr(1, e.length - 2)]);
 				if(ayy != null){
-					msg += `\${ayy}`;
+					msg += `$\{ayy}`;
 				}
 				else{
 					msg += ':' + tg.game.alt_emojis[e.substr(1, e.length - 2)] + ':' ;
