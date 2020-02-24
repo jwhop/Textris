@@ -491,23 +491,22 @@ All commands (except for !TextrisInfo, !recent, !replace, and !threshold) are to
 - `!right, !r` | move piece right\n\
 - `!rotc, !c, !rot` | rotate piece clockwise\n\
 - `!rotcc, !cc` | rotate piece counterclockwise\n\
-- `!hold, !h` | hold current piece*\n\
+- `!hold, !h` | hold current piece\n\
 - `!highlight`  | briefly change display of current piece\n\
 - `!recent` | display 10 most recent commands / users\n\
 \n\
 The following commands are specifically for users with the `textris mod` role: \
-\t	- `threshold x` | change the number of users necessary for holding a piece (replace x with an integer)\
+\t	- `threshold x` | change the number of users necessary for holding a piece (default 2, replace x with an integer)\
 \t	- `replace x y` | change a game emoji. \
 \t \t -options for x are [i,o,s,z,l,j,t,blank,clear(displayed when lines are cleared),highlight, and preview(the blank emojis in the hold piece/next piece previews)]\
 \t \t -options for y are any (non-custom) emoji, WITHOUT the colons surrounding it. Example commands might include \"replace blank hotdog\", \"replace i taco\" etc.\
-`WARNING:` there is a possibility of the gameboard exceeding the limit of characters allowed in one message. Proceed with caution when using emojis with many characters\
+`WARNING:` there is a possibility of the gameboard exceeding max character limit. Proceed with caution when using emojis with many characters\
 \n\
-*in order to hold a piece, two separate users must type in the hold command before the piece touches the ground\n\
 \n\
 Point values: \n\
-single line clear: 100 per line\n\
-double line clear: 200 per line\n\
-triple line clear: 300 per line\n\
+single: 100 per line\n\
+double: 200 per line\n\
+triple: 300 per line\n\
 tetris: 400 per line\n\
 \n\
 level 2: 1.5x multiplier\n\
@@ -516,9 +515,9 @@ level 4: 2.0x multplier\n\
 \n\
 Levels speed up at 5000, 10000, 20000 points\n\
 level 1: interval speed 15 minutes\n\
-level 2: interval speed 10 minutes\n\
-level 3: interval speed 7 minutes\n\
-level 4: interval speed 5 minutes\n\
+level 2: 10 minutes\n\
+level 3: 7 minutes\n\
+level 4: 5 minutes\n\
 \n\
 contact: for bug reports, concerns, or questions, contact jwhopkins.dev@gmail.com or dm @jwhopkin on twitter. \n\
 \n\
