@@ -551,7 +551,7 @@ module.exports = class TetrisGame{
 						this.hold_names = [];
 						this.infomsg = "";
 					}
-					else{
+					else if (!this.hold_ids.includes(id)){
 						this.hold_ids.push(id);
 						this.hold_names.push(username);
 						this.infomsg = this.hold_names[this.hold_names.length - 1] + " wants to hold! (" + this.hold_ids.length+"/" + this.hold_threshold + ")";
