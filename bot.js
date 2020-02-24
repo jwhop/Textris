@@ -52,6 +52,7 @@ function load_info(){
 			new_game.alt_emojis['purple_heart'] = element.alt_emojis_holder[7];
 			new_game.alt_emojis['eyes'] = element.alt_emojis_holder[8];
 			new_game.alt_emojis['boom'] = element.alt_emojis_holder[9];
+			new_game.alt_emojis['black_circle'] = element.alt_emojis_holder[10];
 			let new_serverobj = new S(
 				element.name, 
 				new_game,
@@ -204,7 +205,7 @@ function update_loop(tg1){
 		tg.game.draw();
 		if(tg.game.hold_ids.length > 0){
 			
-			tg.game.infomsg = tg.game.hold_names[0] + " wants to hold! (1/2)";
+			//tg.game.infomsg = tg.game.hold_names[0] + " wants to hold! (1/2)";
 		}
 		else{
 			if(tg.game.single){
@@ -277,7 +278,7 @@ function save_info(tg){
 	temp_emoji_holder.push(tg.game.alt_emojis['purple_heart']);
 	temp_emoji_holder.push(tg.game.alt_emojis['eyes']);
 	temp_emoji_holder.push(tg.game.alt_emojis['boom']);
-
+	temp_emoji_holder.push(tg.game.alt_emojis['black_circle']);
 	if(tg.game_report == null){
 		tg.game_report = new gameSchema({
 				_id: mongoose.Types.ObjectId(),
@@ -346,13 +347,8 @@ function send_board_message(tg) {
 		for (j = 0; j < 10; j++){
 			let e = tg.game.board[i][j];
 			if(tg.game.alt_emojis[e.substr(1, e.length - 2)]  != undefined){
-				const ayy = client.guilds.get(tg.name).emojis.find(emoji => emoji.name == tg.game.alt_emojis[e.substr(1, e.length - 2)]);
-				if(ayy != null){
-					msg += ayy;
-				}
-				else{
-					msg += ':' + tg.game.alt_emojis[e.substr(1, e.length - 2)] + ':' ;
-				}
+				msg += ':' + tg.game.alt_emojis[e.substr(1, e.length - 2)] + ':' ;
+				
 			}
 			else{
 				msg += e;
@@ -374,9 +370,9 @@ function send_board_message(tg) {
 			next_char = colormap[pieceStructures[tg.game.getnextPiece()][0][i][j]];
 			
 			if (next_char == ":egg:"){
-				msg_2 += ":black_circle:";
+				msg_2 += ':' + tg.game.alt_emojis['black_circle'] + ':';
 			} else{ 
-				msg_2 +=next_char;
+				msg_2 += ':'+ tg.game.alt_emojis[next_char.substr(1, next_char.length -2)] + ':';
 			}
 		}
 			
@@ -386,16 +382,16 @@ function send_board_message(tg) {
 		for(l = 0; l < 4; l++){
 			held_piece = tg.game.get_hold_piece();
 			if(held_piece == ' '){
-				msg_2 += ":black_circle:";
+				msg_2 += ':' + tg.game.alt_emojis['black_circle'] + ':';
 				continue;
 			}
 			
 			next_char = colormap[pieceStructures[held_piece - 1][0][i][l]];
 			
 			if (next_char == ":egg:"){
-				msg_2 += ":black_circle:";
+				msg_2 += ':' + tg.game.alt_emojis['black_circle'] + ':';
 			} else{ 
-				msg_2 +=next_char;
+				msg_2 += ':'+ tg.game.alt_emojis[next_char.substr(1, next_char.length -2)] + ':';
 			}
 		}
 		msg_2 += '\n';
@@ -417,11 +413,18 @@ function send_board_message(tg) {
 	
 	msg_2 += ('\n' + "Score: " + tg.game.score + '\n' + "Level: " + level + '\n' + "Message: " + tg.game.infomsg + '\n');
 
-
-	channel2.fetchMessage(tg.msg1Id)
-    .then(m => {
-        m.edit(msg);
-    });
+	if(msg.length <=2000){
+		channel2.fetchMessage(tg.msg1Id)
+		.then(m => {
+			m.edit(msg);
+		});
+	}
+	else{
+		channel2.fetchMessage(tg.msg1Id)
+		.then(m => {
+			m.edit("YOUR BOARD IS OVER THE CHARACTER LIMIT. PLEASE REPLACE EMOJIS TO DISPLAY BOARD");
+		});
+	}
 	
 	channel2.fetchMessage(tg.msg2Id)
     .then(m2 => {
@@ -467,7 +470,8 @@ client.on('message', message => {
 				
 				}
 			}
-		}else if(message.content === '!info'){
+		}
+		else if(message.content === '!TextrisInfo'){
 			message.channel.send("Welcome to TEXTRIS\n\
 ===============\n\
 \n\
@@ -475,10 +479,10 @@ Objective: don't let the pieces overflow the top of the board! The game never st
 \n\
 Commands:\n\
 \n\
-All commands (except for !info and !recent) are to be used in a channel titled `textris` \n\
+All commands (except for !TextrisInfo, !recent, !replace, and !threshold) are to be used in a channel titled `textris` \n\
 \n\
 - `!start` | start game [MUST BE IN `textris` CHANNEL]\n\
-- `!info` | display rules\n\
+- `!TextrisInfo` | display rules\n\
 - `!left, !l` | move piece left\n\
 - `!right, !r` | move piece right\n\
 - `!rotc, !c, !rot` | rotate piece clockwise\n\
@@ -486,6 +490,13 @@ All commands (except for !info and !recent) are to be used in a channel titled `
 - `!hold, !h` | hold current piece*\n\
 - `!highlight`  | briefly change display of current piece\n\
 - `!recent` | display 10 most recent commands / users\n\
+\n\
+The following commands are specifically for users with the `textris mod` role: \
+\t	- `threshold x` | change the number of users necessary for holding a piece (replace x with an integer)\
+\t	- `replace x y` | change a game emoji. \
+\t \t -options for x are [i,o,s,z,l,j,t,blank,clear(displayed when lines are cleared),highlight, and preview(the blank emojis in the hold piece/next piece previews)]\
+\t \t -options for y are any (non-custom) emoji, WITHOUT the colons surrounding it. Example commands might include \"replace blank hotdog\", \"replace i taco\" etc.\
+`WARNING:` there is a possibility of the gameboard exceeding the limit of characters allowed in one message. Proceed with caution when using emojis with many characters\
 \n\
 *in order to hold a piece, two separate users must type in the hold command before the piece touches the ground\n\
 \n\
@@ -511,7 +522,7 @@ Thanks for playing!");
 		}
 		else if(message.member.roles.find(r => r.name === "textris mod")){
 			let words = message.content.split(" ");
-if (words[0] == '!replace'){
+			if (words[0] == '!replace'){
 
 				var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
 				if(typeof tg !== 'undefined'){
@@ -550,6 +561,8 @@ if (words[0] == '!replace'){
 							case 'clear':
 								tg.game.alt_emojis['boom'] = words[2];
 								break;
+								tg.game.alt_emojis['black_circle'] = words[2];
+								break;
 						}
 						
 					
@@ -563,8 +576,17 @@ if (words[0] == '!replace'){
 					}
 				}
 			}
+			else if(words[0] == '!threshold'){
+				var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
+				if(typeof tg !== 'undefined'){
+					if(words[1] !== undefined){
+						tg.game.hold_threshold = parseInt(words[1], 10); 
+					}
+				}
+			}
 	   
 		}
+
 		return;
 	}
 	else{
@@ -575,7 +597,9 @@ if (words[0] == '!replace'){
 		){
 	  
 	  if (message.content !== '!start'){
-		  message.reply("currently no game found on server. type '!start' to start a game.");
+		  message.reply("currently no game found on server. type '!start' to start a game.")
+				.then(sent => sent.delete(10000))
+				.catch(console.error);		  
 	  } else{ //start game 
 		new_game = new T(10,15,1);
 		
@@ -612,13 +636,15 @@ if (words[0] == '!replace'){
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
 		//console.log("last moves are: " + tg.game.last_moves);
 		if (message.content === '!start'){
-
+			message.reply("You already have a game running.")
+				.then(sent => sent.delete(10000))
+				.catch(console.error);																   
 		}else if (message.content === '!leaderboard'){
-			sorted_scores = score_collection.sort();
-			sorted_scores.forEach(function(element) {
-				const channel = message.guild.channels.find(ch => ch.name === 'textris info');
-				channel.send(element.name + " " + element.score);
-			});
+			//sorted_scores = score_collection.sort();
+			//sorted_scores.forEach(function(element) {
+				//const channel = message.guild.channels.find(ch => ch.name === 'textris info');
+				//channel.send(element.name + " " + element.score);
+			//});
 		}else if (message.content === '!highlight'){
 			tg.game.highlight = true;
 			tg.game.clear_board();

@@ -186,6 +186,7 @@ module.exports = class TetrisGame{
 			this.scoring = false;
 			this.hold_ids = [];
 			this.hold_names = [];
+			this.hold_threshold = 2;
 			this.scoring_rows = [];
 			this.last_moves = [];
 			this.alt_emojis = {
@@ -198,7 +199,8 @@ module.exports = class TetrisGame{
 				'tangerine':'tangerine', 
 				'snowflake':'snowflake', 
 				'eyes':'eyes', 
-				'boom':'boom'
+				'boom':'boom', 
+				'black_circle': 'black_circle'
 			};
 			this.infomsg = "";
 			
@@ -240,6 +242,7 @@ module.exports = class TetrisGame{
 		this.hold_piece = ' ';
 		this.hold_ids = [];
 		this.hold_names = [];
+		this.hold_threshold = 2;
 		this.last_moves = [];
 		this.newPiece();
 		this.infomsg = "";
@@ -521,7 +524,7 @@ module.exports = class TetrisGame{
 	
 			else if (evt == "hold"){
 				if(!this.holding){
-					if(this.hold_ids.length == 1 && !this.hold_ids.includes(id)){
+					if(this.hold_ids.length == this.hold_threshold - 1 && !this.hold_ids.includes(id)){
 						this.holding = true;
 						this.hold_ids = [];
 						this.hold_names = [];
@@ -551,7 +554,7 @@ module.exports = class TetrisGame{
 					else{
 						this.hold_ids.push(id);
 						this.hold_names.push(username);
-						this.infomsg = this.hold_names[0] + " wants to hold! (1/2)";
+						this.infomsg = this.hold_names[0] + " wants to hold! (1/" + this.hold_threshold + ")";
 					}
 					
 					
