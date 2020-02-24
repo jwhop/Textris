@@ -463,11 +463,12 @@ client.on('message', message => {
 			if(message.channel.name != 'textris'){
 				var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
 				if(typeof tg !== 'undefined'){
-					
+					let recent_msg = "";
 					tg.game.last_moves.forEach(function(element) {
-						message.channel.send(element);
+						recent_msg+=element + '\n';
+						
 					});
-				
+					message.channel.send(recent_msg);
 				}
 			}
 		}
