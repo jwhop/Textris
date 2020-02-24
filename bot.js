@@ -53,6 +53,7 @@ function load_info(){
 			new_game.alt_emojis['eyes'] = element.alt_emojis_holder[8];
 			new_game.alt_emojis['boom'] = element.alt_emojis_holder[9];
 			new_game.alt_emojis['black_circle'] = element.alt_emojis_holder[10];
+			new_game.hold_threshold = element.hold_threshold_num;
 			let new_serverobj = new S(
 				element.name, 
 				new_game,
@@ -303,7 +304,8 @@ function save_info(tg){
 				last_moves_holder: tg.game.last_moves,
 				held_ids: tg.game.hold_ids, 
 				held_names: tg.game.hold_names,
-				alt_emojis_holder: temp_emoji_holder
+				alt_emojis_holder: temp_emoji_holder,
+				hold_threshold_num: tg.hold_threshold
 					
 		});
 		
@@ -328,6 +330,7 @@ function save_info(tg){
 		tg.game_report.held_ids = tg.game.hold_ids;
 		tg.game_report.held_names = tg.game.hold_names;
 		tg.game_report.alt_emojis_holder = temp_emoji_holder;
+		tg.game_report.hold_threshold_num = tg.game.hold_threshold;
 		
 		tg.game_report.save()
 		.then(result => console.log(result))

@@ -24,7 +24,8 @@ const gameSchema = mongoose.Schema({
 	last_moves_holder: [String], 
 	held_ids: [String], 
 	held_names: [String], 
-	alt_emojis_holder: [String]
+	alt_emojis_holder: [String], 
+	hold_threshold_num: Number
 	
 });
 
