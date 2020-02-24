@@ -564,6 +564,7 @@ Thanks for playing!");
 							case 'clear':
 								tg.game.alt_emojis['boom'] = words[2];
 								break;
+                                                        case 'preview':
 								tg.game.alt_emojis['black_circle'] = words[2];
 								break;
 						}
