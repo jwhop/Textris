@@ -522,7 +522,7 @@ module.exports = class TetrisGame{
 				}
 			}
 	
-			else if (evt == "hold"){
+			else if (evt == "hold" || evt == "h"){
 				if(!this.holding){
 					if(this.hold_ids.length == this.hold_threshold - 1 && !this.hold_ids.includes(id)){
 						this.holding = true;
@@ -554,7 +554,7 @@ module.exports = class TetrisGame{
 					else{
 						this.hold_ids.push(id);
 						this.hold_names.push(username);
-						this.infomsg = this.hold_names[0] + " wants to hold! (" + this.hold_ids.length+"/" + this.hold_threshold + ")";
+						this.infomsg = this.hold_names[this.hold_names.length - 1] + " wants to hold! (" + this.hold_ids.length+"/" + this.hold_threshold + ")";
 					}
 					
 					
