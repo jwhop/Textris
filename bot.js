@@ -496,10 +496,10 @@ All commands (except for !TextrisInfo, !recent, !replace, and !threshold) are to
 - `!recent` | display 10 most recent commands / users\n\
 \n\
 The following commands are specifically for users with the `textris mod` role: \n\
-\t	- `threshold x` | change the number of users necessary for holding a piece (default 2, replace x with an integer)\n\
-\t	- `replace x y` | change a game emoji. \n\
+\t	- `!threshold x` | change the number of users necessary for holding a piece (default 2, replace x with an integer)\n\
+\t	- `!replace x y` | change a game emoji. \n\
 \t \t -options for x are [i,o,s,z,l,j,t,blank,clear(displayed when lines are cleared),highlight, and preview(the blank emojis in the hold piece/next piece previews)]\n\
-\t \t -options for y are any (non-custom) emoji, WITHOUT the colons surrounding it. Example commands might include \"replace blank hotdog\", \"replace i taco\" etc.\n\
+\t \t -options for y are any (non-custom) emoji, WITHOUT the colons surrounding it. Example commands might include \"!replace blank hotdog\", \"!replace i taco\" etc.\n\
 `WARNING:` there is a possibility of the gameboard exceeding max character limit. Proceed with caution when using emojis with many characters\n\
 \n\
 \n\
