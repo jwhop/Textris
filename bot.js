@@ -106,26 +106,34 @@ function load_info(){
 					
 		}
 		*/
-		for(var i = 0; i < game_collection.length; i++){
+	setTimeout(function(){
+			for(var i = 0; i < game_collection.length; i++){
 			
-			let t = game_collection[i];
+				let t = game_collection[i];
 
-			t.game.highlight = true;
-			t.game.clear_board();
-			t.game.draw();
-			send_board_message(t);
-			(function() {
-				setTimeout(function(){
-				t.game.highlight = false;
+				t.game.highlight = true;
+						
+				 
+						 
+				
+						  
+							 
 				t.game.clear_board();
 				t.game.draw();
 				send_board_message(t);
-				update_loop(t);
-				},100);
-			})();
+				(function() {
+					setTimeout(function(){
+					t.game.highlight = false;
+					t.game.clear_board();
+					t.game.draw();
+					send_board_message(t);
+					update_loop(t);
+					},1000);
+				})();
 
-			
-		}
+   
+			}
+		}, 3000);
 		console.log('done!');
 		
 	});
@@ -416,23 +424,37 @@ function send_board_message(tg) {
 	
 	msg_2 += ('\n' + "Score: " + tg.game.score + '\n' + "Level: " + level + '\n' + "Message: " + tg.game.infomsg + '\n');
 
-	if(msg.length <=2000){
-		channel2.fetchMessage(tg.msg1Id)
-		.then(m => {
-			m.edit(msg);
-		});
+	try{
+		if(msg.length <=2000){
+			channel2.fetchMessage(tg.msg1Id)
+			.then(m => {
+				m.edit(msg);
+			});
+		}
+	
+		else{
+			channel2.fetchMessage(tg.msg1Id)
+			.then(m => {
+				m.edit("YOUR BOARD IS OVER THE CHARACTER LIMIT. PLEASE REPLACE EMOJIS TO DISPLAY BOARD");
+			});
+		}
 	}
-	else{
-		channel2.fetchMessage(tg.msg1Id)
-		.then(m => {
-			m.edit("YOUR BOARD IS OVER THE CHARACTER LIMIT. PLEASE REPLACE EMOJIS TO DISPLAY BOARD");
-		});
+	catch(error){
+		console.log(error);
+			  
+																							
+	 
 	}
 	
-	channel2.fetchMessage(tg.msg2Id)
-    .then(m2 => {
-        m2.edit(msg_2);
-    });
+	try{
+		channel2.fetchMessage(tg.msg2Id)
+		.then(m2 => {
+			m2.edit(msg_2);
+		});
+	}
+	catch(error){
+		console.log(error);
+	}
 	console.log("SENDING THIS MESSAGE");
 	console.log(msg);
 }
