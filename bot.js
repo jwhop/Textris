@@ -665,7 +665,7 @@ Thanks for playing!");
 		message.channel.send("Starting").then(sent=>{
 			tg.msg1Id = sent.id;
 			//console.log(sent.id);
-		}.catch(error){
+		}).catch(error){
 			console.log(error);
 		});
 		
@@ -673,7 +673,7 @@ Thanks for playing!");
 			tg.msg2Id = sent2.id;
 			//console.log(sent2.id);
 			update_loop(tg);
-		}.catch(error){
+		}).catch(error){
 			console.log(error);
 		});
 		
