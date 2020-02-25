@@ -204,7 +204,7 @@ function update_loop(tg1){
 
 		//channel1.send('type !start to play again');
 		//console.log('sent!');
-		if(channel2 != ""){
+		if(channel2 != "" && channel2 != null){
 		channel2.send('type !start to play again');
 		}
 		
@@ -436,21 +436,25 @@ function send_board_message(tg) {
 
 	try{
 		if(msg.length <=2000){
-			channel2.fetchMessage(tg.msg1Id)
-			.then(m => {
-				m.edit(msg);
-			}).catch(function(e) {
-				console.log(e);
-			});
+			if(channel2 !- null){
+				channel2.fetchMessage(tg.msg1Id)
+				.then(m => {
+					m.edit(msg);
+				}).catch(function(e) {
+					console.log(e);
+				});
+			}
 		}
 	
 		else{
+			if(channel2 != null){
 			channel2.fetchMessage(tg.msg1Id)
 			.then(m => {
 				m.edit("YOUR BOARD IS OVER THE CHARACTER LIMIT. PLEASE REPLACE EMOJIS TO DISPLAY BOARD");
 			}).catch(function(e) {
 				console.log(e);
 			});
+			}
 		}
 	}
 	catch(error){
@@ -461,12 +465,14 @@ function send_board_message(tg) {
 	}
 	
 	try{
+		if(channel2 != null){
 		channel2.fetchMessage(tg.msg2Id)
 		.then(m2 => {
 			m2.edit(msg_2);
 		}).catch(function(e) {
 				console.log(e);
 		});
+		}
 	}
 	catch(error){
 		console.log(error);
@@ -659,12 +665,16 @@ Thanks for playing!");
 		message.channel.send("Starting").then(sent=>{
 			tg.msg1Id = sent.id;
 			//console.log(sent.id);
+		}.catch(error){
+			console.log(error);
 		});
 		
 		message.channel.send("Good Luck!").then(sent2=>{
 			tg.msg2Id = sent2.id;
 			//console.log(sent2.id);
 			update_loop(tg);
+		}.catch(error){
+			console.log(error);
 		});
 		
 		
