@@ -454,6 +454,8 @@ function send_board_message(tg) {
 		channel2.fetchMessage(tg.msg2Id)
 		.then(m2 => {
 			m2.edit(msg_2);
+		}).catch(function(e) {
+				console.log(e);
 		});
 	}
 	catch(error){
