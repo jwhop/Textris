@@ -436,7 +436,7 @@ function send_board_message(tg) {
 
 	try{
 		if(msg.length <=2000){
-			if(channel2 !- null){
+			if(channel2 != null){
 				channel2.fetchMessage(tg.msg1Id)
 				.then(m => {
 					m.edit(msg);
