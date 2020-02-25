@@ -426,28 +426,21 @@ function send_board_message(tg) {
 
 	try{
 		if(msg.length <=2000){
-			try{
 			channel2.fetchMessage(tg.msg1Id)
 			.then(m => {
 				m.edit(msg);
-			});}
-			catch(error){
-				console.log(error);
-				console.log("caught error 1");
-			}
+			}).catch(function(e) {
+				console.log(e);
+			});
 		}
 	
 		else{
-			try{
-				channel2.fetchMessage(tg.msg1Id)
-				.then(m => {
-					m.edit("YOUR BOARD IS OVER THE CHARACTER LIMIT. PLEASE REPLACE EMOJIS TO DISPLAY BOARD");
-				});
-			}
-			catch(error){
-				console.log(error);
-				console.log("caught error 2");
-			}
+			channel2.fetchMessage(tg.msg1Id)
+			.then(m => {
+				m.edit("YOUR BOARD IS OVER THE CHARACTER LIMIT. PLEASE REPLACE EMOJIS TO DISPLAY BOARD");
+			}).catch(function(e) {
+				console.log(e);
+			});
 		}
 	}
 	catch(error){
