@@ -189,7 +189,12 @@ function update_loop(tg1){
 	console.log(tg.name);
 	//console.log('trying to access: ' + client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris'));
 	//const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
-	const channel2 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris');
+	
+	var server2 = client.guilds.get(tg.name)
+	var channel2 = "";
+	if(server2 !== undefined)
+		var channel2 = server2.channels.find(ch=>ch.name === 'textris');
+	//const channel2 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris');
 	//console.log(channel1);
 	//tg.name.channels.find(ch => ch.name === 'general');
 	//const channel2 = tg.name.channels.find(ch => ch.name === 'textris');
@@ -199,7 +204,9 @@ function update_loop(tg1){
 
 		//channel1.send('type !start to play again');
 		//console.log('sent!');
+		if(channel2 != ""){
 		channel2.send('type !start to play again');
+		}
 		
 		gameSchema.deleteOne({ _id: tg.game_report._id }, function (err) {
 			if (err) return handleError(err);
@@ -410,7 +417,7 @@ function send_board_message(tg) {
 	}
 	var server2 = client.guilds.get(tg.name)
 	var channel2 = "";
-	if(server2 !== undefined)
+	if(server2 != undefined)
 		var channel2 = server2.channels.find(ch=>ch.name === 'textris');
 	
 	let level = "1 (15 minutes)";
