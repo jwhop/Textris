@@ -408,7 +408,10 @@ function send_board_message(tg) {
 		msg_2 += '\n';
 				
 	}
-	var channel2 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris');
+	var server2 = client.guilds.get(tg.name)
+	var channel2 = "";
+	if(server2 !== undefined)
+		var channel2 = server2.channels.find(ch=>ch.name === 'textris');
 	
 	let level = "1 (15 minutes)";
 	
