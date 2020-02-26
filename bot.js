@@ -567,7 +567,7 @@ contact: for bug reports, concerns, or questions, contact jwhopkins.dev@gmail.co
 \n\
 Thanks for playing!");
 		}
-		else if(message.member.roles.find(r => r.name === "textris mod")){
+		else if(message.member != null && message.member.roles.find(r => r.name === "textris mod")){
 			let words = message.content.split(" ");
 			if (words[0] == '!replace'){
 
