@@ -8,6 +8,8 @@ const gameSchema = require("./Models/report.js");
 const T = require("./tetris.js");
 const S = require("./server_obj.js");
 const client = new Discord.Client();
+const DBL = require("dblapi.js");
+const dbl = new DBL(process.env.TOPGG_TOKEN, client);
 
 client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
 mongoose.connect(process.env.MONGODB_URI);
