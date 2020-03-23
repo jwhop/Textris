@@ -15,9 +15,10 @@ const apiKeys =
 {
 	"bots.ondiscord.xyz":process.env.BOTS_ONDISCORD_XYZ_TOKEN
 };
-blapi.handle(client, apiKeys, 60);
+
 client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
 mongoose.connect(process.env.MONGODB_URI);
+blapi.handle(client, apiKeys, 60);
 
 
 
