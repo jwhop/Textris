@@ -10,7 +10,12 @@ const S = require("./server_obj.js");
 const client = new Discord.Client();
 const DBL = require("dblapi.js");
 const dbl = new DBL(process.env.TOPGG_TOKEN, client);
-
+const blapi = require('blapi');
+const apiKeys = 
+{
+	"bots.ondiscord.xyz":BOTS_ONDISCORD_XYZ_TOKEN
+}
+blapi.handle(client, apiKeys, 60);
 client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
 mongoose.connect(process.env.MONGODB_URI);
 
