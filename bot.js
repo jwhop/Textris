@@ -91,7 +91,7 @@ function load_info(){
 				element.msg2
 			);
 			let server = client.guilds.get(element.name);
-			if(typeof server !== undefined){
+			if(server !== undefined){
 				new_serverobj.servername = server.name;
 			}
 			new_serverobj.game_report = element;
