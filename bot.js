@@ -99,6 +99,7 @@ function load_info(){
 			}
 			
 			new_serverobj.game_report = element;
+			console.log(scoreSchema.find({_id:element.score_id}));
 			let score_entry = scoreSchema.find({_id:element.score_id});
 			score_entry.length > 0 ? new_serverobj.score_report = score_entry[0]: new_serverobj.score_report = null;
 			
@@ -109,7 +110,7 @@ function load_info(){
 			//update_loop(new_serverobj);
 		});
 	});
-	
+	/*
 	setTimeout(function(){
 			for(var i = 0; i < game_collection.length; i++){
 			
@@ -133,7 +134,7 @@ function load_info(){
 			}
 		}, 3000);
 		console.log('done!');
-	
+	*/
 }
 function start_interval(o){
 	const oo = o;
