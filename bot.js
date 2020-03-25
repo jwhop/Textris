@@ -582,7 +582,7 @@ client.on('ready', () => {
 client.on('message', message => {
 	console.log('received message');
   if(
-	!message.author.bot &&
+	!(message.author == client.user) &&
 	message.channel.name === 'textris' &&
 	!message.content.startsWith('!')
 	){
@@ -616,6 +616,7 @@ client.on('message', message => {
 						
 					});
 					tg.game.publicScore = false;
+					tg.score_report = null;
 				}
 		}else if (message.content === '!optinscore'){
 			var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
