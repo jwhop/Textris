@@ -28,7 +28,7 @@ function load_scores(){
 	var score_collection = [];
 	
 	scoreSchema.find(function(err, score){
-		
+	console.log(score);
 		if(err){
 			return console.error(err);
 		}
