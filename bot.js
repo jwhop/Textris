@@ -626,10 +626,10 @@ client.on('message', message => {
 		else if (message.content === '!leaderboard'){
 			let scoreMsgID = '';
 			message.channel.send("getting scoreboard...").then(sent=>{
-			scoreMsgID = sent.id;
-			//console.log(sent.id);
+				scoreMsgID = sent.id;
+				console.log('sent id is' + sent.id);
 			}).catch(function(error){
-			console.log(error);
+				console.log(error);
 			});
 		
 			console.log("aaa");
@@ -659,6 +659,7 @@ client.on('message', message => {
 				var server2 = client.guilds.get(tg.name)
 				var channel2 = "";
 				if(server2 != undefined){
+					console.log("ready to post score");
 					var channel2 = server2.channels.find(ch=>ch.name === 'textris');
 					try{
 						if(channel2 != null){
