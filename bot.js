@@ -84,14 +84,13 @@ function load_info(){
 			new_game.sleep_duration = element.sleep_duration_time;	
 			new_game.publicScore = element.public_score_marker;			
 			let new_serverobj = new S(
-				element.server_name,
 				element.name, 
 				new_game,
 				element.channel, 
 				element.msg1, 
 				element.msg2
 			);
-			
+			new_serverobj.servername = message.guild.name;
 			new_serverobj.game_report = element;
 			game_collection.push(new_serverobj);
 			//update_loop(new_serverobj);
