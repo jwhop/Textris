@@ -573,7 +573,7 @@ function is_game_sleeping(start_hr, duration){
 
 client.on('ready', () => {
     console.log("Ready :D");
-	client.user.setPresence({ status: 'online', game: { name: 'under maintenance!' } })
+	client.user.setPresence({ status: 'online', game: { name: 'New Update 3/25/20!' } })
 	.then(console.log)
 	.catch(console.error); 
 	load_info();
@@ -625,9 +625,9 @@ client.on('message', message => {
 		}
 		else if (message.content === '!leaderboard'){
 			let scoreMsgID = '';
-			message.channel.send("getting scoreboard...").then(sent=>{
-				scoreMsgID = sent.id;
-				console.log('sent id is' + sent.id);
+			message.channel.send("getting leaderboard...").then(sentscore=>{
+				scoreMsgID = sentscore.id;
+				console.log('sent id is' + scoreMsgID);
 			}).catch(function(error){
 				console.log(error);
 			});
@@ -660,7 +660,7 @@ client.on('message', message => {
 				var channel2 = "";
 				if(server2 != undefined){
 					console.log("ready to post score");
-					var channel2 = server2.channels.find(ch=>ch.name === 'textris');
+					var channel2 = message.channel;
 					try{
 						if(channel2 != null){
 						channel2.fetchMessage(scoreMsgID)
