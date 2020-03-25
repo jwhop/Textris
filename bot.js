@@ -33,8 +33,8 @@ function load_scores(){
 			return console.error(err);
 		}
 		score.forEach(function(element){
-			console.log('pushing!' + element.isPlaying);
-			score_collection.push({name: element.name, score:element.score, isPlaying: element.isPlaying});	
+			console.log('pushing!' + element.is_playing);
+			score_collection.push({name: element.name, score:element.score, isPlaying: element.is_playing});	
 		});
 		
 	});
@@ -300,7 +300,7 @@ function save_info(tg){
 				_id: mongoose.Types.ObjectId(),
 				name: "", 
 				score: tg.game.score, 
-				isPlaying: b
+				is_playing: tg.game.alive
 		});
 		let server = client.guilds.get(tg.name);
 			
@@ -314,7 +314,7 @@ function save_info(tg){
 	}
 	else if(tg.game.publicScore==true){
 		tg.score_report.score = tg.game.score;
-		tg.score_report.isPlaying = b;
+		tg.score_report.is_playing = tg.game.alive;
 		tg.score_report.save()
 		.then(result => console.log(result))
 		.catch(err=> console.log(err));

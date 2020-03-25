@@ -171,6 +171,7 @@ let pieceStructures = [
 
 module.exports = class TetrisGame{
 	constructor(gW,gH,tS){
+			this.alive = true;
 			this.gridWdt = gW;  
 			this.gridHgt = gH;
 			this.tileSz = tS;
