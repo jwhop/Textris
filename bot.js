@@ -367,11 +367,16 @@ function save_info(tg){
 	if(tg.score_report == null  && tg.game.publicScore==true){
 		tg.score_report = new scoreSchema({
 				_id: mongoose.Types.ObjectId(),
-				name: client.guilds.get(tg.name).name, 
+				name: "", 
 				score: tg.game.score, 
 				isPlaying: true
 		});
-		
+		let server = client.guilds.get(tg.name);
+			
+			if(server !== undefined){
+				console.log(server.name);
+				tg.score_report.name = client.guilds.get(tg.name).name;
+		}
 		tg.score_report.save()
 		.then(result => console.log(result))
 		.catch(err=> console.log(err));
