@@ -90,7 +90,7 @@ function load_info(){
 				element.msg1, 
 				element.msg2
 			);
-			new_serverobj.servername = message.guild.name;
+			new_serverobj.servername = client.guilds.get(element.name).name;
 			new_serverobj.game_report = element;
 			game_collection.push(new_serverobj);
 			//update_loop(new_serverobj);
