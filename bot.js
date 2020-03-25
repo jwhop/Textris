@@ -294,13 +294,13 @@ function update_loop(tg1){
 function save_info(tg){
 	//console.log('printing board info' + tg.game.board);
 	//console.log('printing more board info' + tg.game.inert);
-	
+	let b = true;
 	if((tg.score_report == undefined || tg.score_report == null)  && tg.game.publicScore==true){
 		tg.score_report = new scoreSchema({
 				_id: mongoose.Types.ObjectId(),
 				name: "", 
 				score: tg.game.score, 
-				isPlaying: true
+				isPlaying: b
 		});
 		let server = client.guilds.get(tg.name);
 			
@@ -314,7 +314,7 @@ function save_info(tg){
 	}
 	else if(tg.game.publicScore==true){
 		tg.score_report.score = tg.game.score;
-		
+		tg.score_report.isPlaying = b;
 		tg.score_report.save()
 		.then(result => console.log(result))
 		.catch(err=> console.log(err));
@@ -635,7 +635,7 @@ client.on('message', message => {
 				sorted_scores.forEach(function(element) {
 					string_score = "";
 					
-					for(i = 7; i < String(element.score).length; i++){
+					for(i = 7; i > String(element.score).length; i++){
 						string_score += '0';
 					}
 					string_score +=String(element.score);
