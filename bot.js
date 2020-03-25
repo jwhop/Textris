@@ -638,9 +638,10 @@ client.on('message', message => {
 					scoremsg += '*';
 				}
 				scoremsg += '\n';
+				
+				});
 				scoremsg += '```';
 				message.channel.send(scoremsg);
-				});
 			},1000*10);
 			
 		}else if(message.content.toLowerCase() === '!TextrisInfo'.toLowerCase()){
