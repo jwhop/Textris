@@ -99,7 +99,12 @@ function load_info(){
 			}
 			
 			new_serverobj.game_report = element;
-			console.log(scoreSchema.find({_id:element.score_id}));
+			scoreSchema.find({_id:element.score_id}, function (err, score1){
+				if(err){
+				return console.error(err);
+				}
+				console.log(score1);
+			});
 			let score_entry = scoreSchema.find({_id:element.score_id});
 			score_entry.length > 0 ? new_serverobj.score_report = score_entry[0]: new_serverobj.score_report = null;
 			
@@ -613,7 +618,8 @@ client.on('message', message => {
 			console.log("aaa");
 			let sorted_scores = load_scores();
 			sorted_scores = sorted_scores.sort((a, b) => (a.score > b.score) ? 1 : -1);
-			sorted_scores.splice(0,25);
+			console.log(sorted_scores);
+			//sorted_scores.splice(0,25);
 			let scoremsg = '```HIGH SCORES \nall games marked with \'*\' are still active\n\n';
 			sorted_scores.forEach(function(element) {
 				scoremsg += (element.score + '\t' + element.name);
@@ -643,6 +649,8 @@ Commands with ** are to be used outside of the textris channel \n\
 - **!textrisinfo | display rules\n\
 - **!highlight  | briefly change display of current piece\n\
 - **!recent | display 10 most recent commands / users\n\
+- **!leaderboard | display high scoreSchema\n\
+- **!optoutscore / !optinscore | opt out of leaderboard (opted in by default) \n\
 \n\
 commands for users with the \"textris mod\" role: \n\
 - **!threshold x | change the number of users necessary for holding a piece (default 2, replace x with an integer)\n\
