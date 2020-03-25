@@ -631,13 +631,19 @@ client.on('message', message => {
 			//sorted_scores.splice(0,25);
 			let scoremsg = '```HIGH SCORES \nall games marked with \'*\' are still active\n\n';
 			setTimeout(function(){
-				
+				sorted_scores = sorted_scores.sort((a, b) => (a.score > b.score) ? 1 : -1);
 				sorted_scores.forEach(function(element) {
-				scoremsg += (element.score + '\t' + element.name);
-				if(element.isPlaying){
-					scoremsg += '*';
-				}
-				scoremsg += '\n';
+					string_score = "";
+					
+					for(int i = 7; i < String(element.score).length; i++){
+						string_score += '0';
+					}
+					string_score +=String(element.score);
+					scoremsg += (string_score + '\t' + '|' + '\t'+ element.name);
+					if(element.isPlaying){
+						scoremsg += '*';
+					}
+					scoremsg += '\n';
 				
 				});
 				scoremsg += '```';
