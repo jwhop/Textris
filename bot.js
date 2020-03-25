@@ -624,8 +624,17 @@ client.on('message', message => {
 				}
 		}
 		else if (message.content === '!leaderboard'){
+			let scoreMsgID = '';
+			message.channel.send("getting scoreboard...").then(sent=>{
+			scoreMsgID = sent.id;
+			//console.log(sent.id);
+			}).catch(function(error){
+			console.log(error);
+			});
+		
 			console.log("aaa");
 			let sorted_scores = load_scores();
+			
 			//sorted_scores = sorted_scores.sort((a, b) => (a.score > b.score) ? 1 : -1);
 			//console.log(sorted_scores);
 			//sorted_scores.splice(0,25);
@@ -647,8 +656,27 @@ client.on('message', message => {
 				
 				});
 				scoremsg += '```';
-				message.channel.send(scoremsg);
-			},1000*10);
+				var server2 = client.guilds.get(tg.name)
+				var channel2 = "";
+				if(server2 != undefined){
+					var channel2 = server2.channels.find(ch=>ch.name === 'textris');
+					try{
+						if(channel2 != null){
+						channel2.fetchMessage(scoreMsgID)
+							.then(m3 => {
+								m3.edit(scoremsg);
+							}).catch(function(e) {
+								console.log(e);
+							});
+						}
+					}
+					catch(error){
+						console.log(error);
+					}
+				}
+				
+				//message.channel.send(scoremsg);
+			},1000*5);
 			
 		}else if(message.content.toLowerCase() === '!TextrisInfo'.toLowerCase()){
 			message.channel.send("```Welcome to TEXTRIS\n\
