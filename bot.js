@@ -351,7 +351,14 @@ function save_info(tg){
 		tg.game_report.sleep_hour_time = tg.game.sleep_hour;
 		tg.game_report.sleep_duration_time = tg.game.sleep_duration;
 		tg.game_report.public_score_marker = tg.game.publicScore;
-		tg.game_report.server_name = client.guilds.get(tg.name).name;
+		
+		if(client.guilds.getlet server = client.guilds.get(tg.name);
+			
+			if(server !== undefined){
+				console.log(server.name);
+				tg.game_report.server_name = client.guilds.get(tg.name).name;
+			}
+		
 		tg.game_report.save()
 		.then(result => console.log(result))
 		.catch(err=> console.log(err));
