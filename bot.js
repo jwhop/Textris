@@ -635,7 +635,7 @@ client.on('message', message => {
 				sorted_scores.forEach(function(element) {
 					string_score = "";
 					
-					for(i = 7; i > String(element.score).length; i++){
+					for(i = 7; i > String(element.score).length; i--){
 						string_score += '0';
 					}
 					string_score +=String(element.score);
