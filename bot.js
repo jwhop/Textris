@@ -90,8 +90,9 @@ function load_info(){
 				element.msg1, 
 				element.msg2
 			);
-			if(typeof client.guilds.get(element.name) !== undefined){
-				new_serverobj.servername = client.guilds.get(element.name).name;
+			let server = client.guilds.get(element.name);
+			if(typeof server !== undefined){
+				new_serverobj.servername = server.name;
 			}
 			new_serverobj.game_report = element;
 			game_collection.push(new_serverobj);
