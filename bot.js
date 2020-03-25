@@ -33,6 +33,7 @@ function load_scores(){
 			return console.error(err);
 		}
 		score.forEach(function(element){
+			console.log('pushing!');
 			score_collection.push({name: element.name, score:element.score, isPlaying: element.isPlaying});	
 		});
 		
