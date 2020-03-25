@@ -119,7 +119,7 @@ function load_info(){
 			//update_loop(new_serverobj);
 		});
 	});
-	/*
+	
 	setTimeout(function(){
 			for(var i = 0; i < game_collection.length; i++){
 			
@@ -143,7 +143,7 @@ function load_info(){
 			}
 		}, 3000);
 		console.log('done!');
-	*/
+	
 }
 function start_interval(o){
 	const oo = o;
@@ -293,7 +293,7 @@ function save_info(tg){
 	//console.log('printing board info' + tg.game.board);
 	//console.log('printing more board info' + tg.game.inert);
 	
-	if(tg.score_report == null  && tg.game.publicScore==true){
+	if((tg.score_report == undefined || tg.score_report == null)  && tg.game.publicScore==true){
 		tg.score_report = new scoreSchema({
 				_id: mongoose.Types.ObjectId(),
 				name: "", 
