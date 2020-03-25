@@ -99,7 +99,10 @@ function load_info(){
 			}
 			
 			new_serverobj.game_report = element;
-			new_serverobj.score_report = scoreSchema.find({_id:element.score_id});
+			let score_entry = scoreSchema.find({_id:element.score_id});
+			score_entry.length > 0 ? new_serverobj.score_report = score_entry[0]: new_serverobj.score_report = null;
+			
+			
 			console.log('SCORE_REPORT IS' + new_serverobj.score_report);
 			game_collection.push(new_serverobj);
 			//update_loop(new_serverobj);
