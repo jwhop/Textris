@@ -104,10 +104,8 @@ function load_info(){
 				return console.error(err);
 				}
 				console.log(score1);
+				score1.length > 0 ? new_serverobj.score_report = score1[0]: new_serverobj.score_report = null;
 			});
-			let score_entry = scoreSchema.find({_id:element.score_id});
-			score_entry.length > 0 ? new_serverobj.score_report = score_entry[0]: new_serverobj.score_report = null;
-			
 			
 			console.log('SCORE_REPORT IS' + new_serverobj.score_report);
 			game_collection.push(new_serverobj);
