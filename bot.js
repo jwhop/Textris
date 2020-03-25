@@ -37,7 +37,7 @@ function load_scores(){
 		});
 		
 	});
-	
+	console.log('score collection is:' + score_collection);
 	return score_collection;
 }
 function load_info(){
@@ -82,7 +82,8 @@ function load_info(){
 			new_game.hold_threshold = element.hold_threshold_num;
 			new_game.sleep_hour = element.sleep_hour_time;
 			new_game.sleep_duration = element.sleep_duration_time;	
-			new_game.publicScore = element.public_score_marker;			
+			new_game.publicScore = element.public_score_marker;
+			
 			let new_serverobj = new S(
 				element.name, 
 				new_game,
@@ -96,12 +97,16 @@ function load_info(){
 				console.log(server.name);
 				new_serverobj.servername = server.name;
 			}
+			
 			new_serverobj.game_report = element;
+			new_serverobj.score_report = scoreSchema.find({_id:element.score_id});
+			console.log('SCORE_REPORT IS' + new_serverobj.score_report);
 			game_collection.push(new_serverobj);
 			//update_loop(new_serverobj);
 			//update_loop(new_serverobj);
 		});
 	});
+	
 	setTimeout(function(){
 			for(var i = 0; i < game_collection.length; i++){
 			
@@ -125,7 +130,7 @@ function load_info(){
 			}
 		}, 3000);
 		console.log('done!');
-		
+	
 }
 function start_interval(o){
 	const oo = o;
@@ -274,7 +279,32 @@ function update_loop(tg1){
 function save_info(tg){
 	//console.log('printing board info' + tg.game.board);
 	//console.log('printing more board info' + tg.game.inert);
-
+	
+	if(tg.score_report == null  && tg.game.publicScore==true){
+		tg.score_report = new scoreSchema({
+				_id: mongoose.Types.ObjectId(),
+				name: "", 
+				score: tg.game.score, 
+				isPlaying: true
+		});
+		let server = client.guilds.get(tg.name);
+			
+			if(server !== undefined){
+				console.log(server.name);
+				tg.score_report.name = client.guilds.get(tg.name).name;
+		}
+		tg.score_report.save()
+		.then(result => console.log(result))
+		.catch(err=> console.log(err));
+	}
+	else if(tg.game.publicScore==true){
+		tg.score_report.score = tg.game.score;
+		
+		tg.score_report.save()
+		.then(result => console.log(result))
+		.catch(err=> console.log(err));
+	}
+	
 	board_string='';
 	
 	for(i = 0; i < 15; i++){
@@ -324,7 +354,8 @@ function save_info(tg){
 				sleep_hour_time:tg.game.sleep_hour,
 				sleep_duration_time:tg.game.sleep_duration,
 				public_score_marker:tg.game.publicScore,
-				server_name:tg.serverName	
+				server_name:tg.serverName, 
+				score_id:tg.score_report._id
 		});
 		
 		tg.game_report.save()
@@ -352,6 +383,7 @@ function save_info(tg){
 		tg.game_report.sleep_hour_time = tg.game.sleep_hour;
 		tg.game_report.sleep_duration_time = tg.game.sleep_duration;
 		tg.game_report.public_score_marker = tg.game.publicScore;
+		tg.game_report.score_id = tg.score_report._id;
 		
 		let server = client.guilds.get(tg.name);
 			
@@ -364,30 +396,7 @@ function save_info(tg){
 		.then(result => console.log(result))
 		.catch(err=> console.log(err));
 	}
-	if(tg.score_report == null  && tg.game.publicScore==true){
-		tg.score_report = new scoreSchema({
-				_id: mongoose.Types.ObjectId(),
-				name: "", 
-				score: tg.game.score, 
-				isPlaying: true
-		});
-		let server = client.guilds.get(tg.name);
-			
-			if(server !== undefined){
-				console.log(server.name);
-				tg.score_report.name = client.guilds.get(tg.name).name;
-		}
-		tg.score_report.save()
-		.then(result => console.log(result))
-		.catch(err=> console.log(err));
-	}
-	else if(tg.game.publicScore==true){
-		tg.score_report.score = tg.game.score;
-		
-		tg.score_report.save()
-		.then(result => console.log(result))
-		.catch(err=> console.log(err));
-	}
+	
 }
 function send_board_message(tg) {
 
@@ -599,7 +608,7 @@ client.on('message', message => {
 		else if (message.content === '!leaderboard'){
 			console.log("aaa");
 			let sorted_scores = load_scores();
-			sorted_scores = sorted_scores.sort();
+			sorted_scores = sorted_scores.sort((a, b) => (a.score > b.score) ? 1 : -1);
 			sorted_scores.splice(0,25);
 			let scoremsg = '```HIGH SCORES \nall games marked with \'*\' are still active\n\n';
 			sorted_scores.forEach(function(element) {

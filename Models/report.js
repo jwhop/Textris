@@ -28,7 +28,8 @@ const gameSchema = mongoose.Schema({
 	sleep_hour_time: Number,
 	sleep_duration_time: Number,
 	public_score_marker: Boolean, 
-	server_name: String
+	server_name: String, 
+	score_id: mongoose.Schema.Types.ObjectId
 	
 });
 
