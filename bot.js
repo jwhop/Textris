@@ -464,6 +464,7 @@ function send_board_message(tg) {
 	msg_2 += ('\n' + "Score: " + tg.game.score + '\n' + "Level: " + level + '\n' + "Message: " + tg.game.infomsg + '\n');
 	if(tg.game.sleep_duration > 0){
 		msg_2 += ('Sleep Interval: ' + String(tg.game.sleep_hour) + ':00-' + String( (parseInt(tg.game.sleep_hour) + parseInt(tg.game.sleep_duration)) % 24) + ':00 UTC'); 
+	}
 	try{
 		if(msg.length <=2000){
 			if(channel2 != null){
