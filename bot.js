@@ -656,7 +656,7 @@ client.on('message', message => {
 				
 				});
 				scoremsg += '```';
-				var server2 = client.guilds.get(tg.name)
+				var server2 = message.guild;
 				var channel2 = "";
 				if(server2 != undefined){
 					console.log("ready to post score");
