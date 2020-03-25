@@ -626,17 +626,19 @@ client.on('message', message => {
 		else if (message.content === '!leaderboard'){
 			console.log("aaa");
 			let sorted_scores = load_scores();
-			sorted_scores = sorted_scores.sort((a, b) => (a.score > b.score) ? 1 : -1);
-			console.log(sorted_scores);
+			//sorted_scores = sorted_scores.sort((a, b) => (a.score > b.score) ? 1 : -1);
+			//console.log(sorted_scores);
 			//sorted_scores.splice(0,25);
-			let scoremsg = '```HIGH SCORES \nall games marked with \'*\' are still active\n\n';
-			sorted_scores.forEach(function(element) {
+			setTimeout(function(){
+				let scoremsg = '```HIGH SCORES \nall games marked with \'*\' are still active\n\n';
+				sorted_scores.forEach(function(element) {
 				scoremsg += (element.score + '\t' + element.name);
 				if(element.isPlaying){
 					scoremsg += '*';
 				}
 				scoremsg += '\n';
-			});
+				});
+			},1000*10);
 			scoremsg += '```';
 			message.channel.send(scoremsg);
 		}else if(message.content.toLowerCase() === '!TextrisInfo'.toLowerCase()){
