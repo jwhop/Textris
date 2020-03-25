@@ -1,10 +1,12 @@
 var game_collection = [];
 var score_collection = [];
 var game_counter = 1;
-var possible_commands = ["channelhere","!recent", "!highlight", "!left", "!right", "!rot", "!l", "!r", "!rotc", "!rotcc", "!cc", "!c", "!hold", "!h"];
+var possible_commands = ["leaderboard","channelhere","!recent", "!highlight", "!left", "!right", "!rot", "!l", "!r", "!rotc", "!rotcc", "!cc", "!c", "!hold", "!h"];
 const Discord = require('discord.js');
 const mongoose = require('mongoose');
 const gameSchema = require("./Models/report.js");
+const scoreSchema = require("./Models/score.js");
+									 
 const T = require("./tetris.js");
 const S = require("./server_obj.js");
 const client = new Discord.Client();
@@ -22,6 +24,22 @@ blapi.handle(client, apiKeys, 60);
 
 
 
+function load_scores(){
+	var score_collection = [];
+	
+	scoreSchema.find(function(err, score){
+		
+		if(err){
+			return console.error(err);
+		}
+		score.forEach(function(element){
+			score_collection.push({name: element.name, score:element.score, isPlaying: element.isPlaying});	
+		});
+		
+	});
+	
+	return score_collection;
+}
 function load_info(){
 	
 	gameSchema.find(function(err, game){
@@ -62,7 +80,11 @@ function load_info(){
 			new_game.alt_emojis['boom'] = element.alt_emojis_holder[9];
 			new_game.alt_emojis['black_circle'] = element.alt_emojis_holder[10];
 			new_game.hold_threshold = element.hold_threshold_num;
+			new_game.sleep_hour = element.sleep_hour_time;
+			new_game.sleep_duration = element.sleep_duration_time;	
+			new_game.publicScore = element.public_score_marker;			
 			let new_serverobj = new S(
+				element.server_name,
 				element.name, 
 				new_game,
 				element.channel, 
@@ -75,57 +97,13 @@ function load_info(){
 			//update_loop(new_serverobj);
 			//update_loop(new_serverobj);
 		});
-
-		
-		/*
-		
-		for(var i = 0; i < game.length; i++){
-			
-			new_game_arr[i] = new T(10,15,1);
-			new_game_arr[i].inert = string_to_board(game[i].game_board);
-			new_game_arr[i].sequence = game[i].game_seq;
-			new_game_arr[i].pieceType = game[i].cur_piece;
-			new_game_arr[i].nextpieceType = game[i].next_piece;
-			new_game_arr[i].hold_piece = game[i].hold_piece;
-			new_game_arr[i].pieceRot = game[i].piece_rot;
-			new_game_arr[i].pieceX = game[i].piece_x;
-			new_game_arr[i].pieceY = game[i].piece_y;
-			new_game_arr[i].holding = game[i].is_holding;
-			new_game_arr[i].score = game[i].score;
-			new_game_arr[i].time_length = game[i].interval_length;
-			new_game_arr[i].scoring = game[i].is_scoring;
-			new_game_arr[i].scoring_rows = game[i].scoring_rows_holder;
-			new_game_arr[i].last_moves = game[i].last_moves_holder;
-						
-			
-			game_collection[i] = new S(
-				game[i].name, 
-				new_game_arr[i],
-				game[i].channel, 
-				game[i].msg1, 
-				game[i].msg2
-			);
-			
-			(function(){
-				const ii = i;
-				const s1 = game_collection[ii];
-				s1.game_report = game[ii];
-			})();
-					
-		}
-		*/
+	});
 	setTimeout(function(){
 			for(var i = 0; i < game_collection.length; i++){
 			
 				let t = game_collection[i];
 
-				t.game.highlight = true;
-						
-				 
-						 
-				
-						  
-							 
+				t.game.highlight = true;		 
 				t.game.clear_board();
 				t.game.draw();
 				send_board_message(t);
@@ -144,7 +122,6 @@ function load_info(){
 		}, 3000);
 		console.log('done!');
 		
-	});
 }
 function start_interval(o){
 	const oo = o;
@@ -194,90 +171,101 @@ function compare_scores(a,b){
 
 function update_loop(tg1){
 	const tg = tg1;
-	console.log(tg.name);
-	//console.log('trying to access: ' + client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris'));
-	//const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
-	
-	var server2 = client.guilds.get(tg.name)
-	var channel2 = "";
-	if(server2 !== undefined)
-		var channel2 = server2.channels.find(ch=>ch.name === 'textris');
-	//const channel2 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris');
-	//console.log(channel1);
-	//tg.name.channels.find(ch => ch.name === 'general');
-	//const channel2 = tg.name.channels.find(ch => ch.name === 'textris');
-
-	score_change = tg.game.update();
-	if (score_change < 0){
-
-		//channel1.send('type !start to play again');
-		//console.log('sent!');
-		if(channel2 != "" && channel2 != null){
-		channel2.send('type !start to play again');
-		}
-		
-		gameSchema.deleteOne({ _id: tg.game_report._id }, function (err) {
-			if (err) return handleError(err);
-			// deleted at most one tank document
-		});
-		
-		game_collection.splice(game_collection.findIndex(find_game, tg.name), 1);
-		return;
-	} else {
-		tg.game.score += score_change;
-		tg.game.clear_board();
-		tg.game.draw();
-		if(tg.game.hold_ids.length > 0){
-			
-			//tg.game.infomsg = tg.game.hold_names[0] + " wants to hold! (1/2)";
-		}
-		else{
-			if(tg.game.single){
-				console.log("SINGLE");
-				tg.game.infomsg = "SINGLE LINE CLEAR";
-				//channel1.send("SINGLE LINE CLEAR: Nice job!");
-			}
-			if(tg.game.doub){
-				tg.game.infomsg = "DOUBLE LINE CLEAR";
-				//channel1.send("DOUBLE LINE CLEAR: Way to go!");
-			}
-			if(tg.game.triple){
-				tg.game.infomsg = "TRIPLE LINE CLEAR";
-				//channel1.send("TRIPLE LINE CLEAR: Awwww Yeah!");
-			}
-			if(tg.game.quadruple){
-				tg.game.infomsg = "TETRIS";
-				//channel1.send("BOOM: Tetris for Discord!");
-			}
-		}
+	if(is_game_sleeping(tg.game.sleep_hour, tg.game.sleep_duration)){
 		send_board_message(tg);
 		
-		
-		
-		if(score_change> 0){
-			if(tg.game.score >= 20000){
-				//console.log('3!');
-				//channel1.send("Entering the final level. Interval speed now 5 minutes");
-				tg.game.time_length = 1000*60*5;
-			
-			}
-			else if(tg.game.score >= 10000 && tg.game.time_length == 600000){
-				//console.log('2!');
-				//channel1.send("Entering Level 3. Interval speed now 7 minutes");
-				tg.game.time_length = 1000*60*7;
-			}
-			else if(tg.game.score >= 5000 && tg.game.time_length == 900000){
-				//console.log('1!');
-				//channel1.send("Entering Level 2. Interval speed now 10 minutes");
-				tg.game.time_length = 1000*60*10;
-			}
-		}
-
 		save_info(tg);
+  
 		tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
+	}		
+	else{
+		console.log(tg.name);
+		//console.log('trying to access: ' + client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris'));
+		//const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
 		
+		var server2 = client.guilds.get(tg.name)
+		var channel2 = "";
+		if(server2 !== undefined)
+			var channel2 = server2.channels.find(ch=>ch.name === 'textris');
+		//const channel2 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris');
+		//console.log(channel1);
+		//tg.name.channels.find(ch => ch.name === 'general');
+		//const channel2 = tg.name.channels.find(ch => ch.name === 'textris');
+
+		score_change = tg.game.update();
+		if (score_change < 0){
+
+			//channel1.send('type !start to play again');
+			//console.log('sent!');
+			if(channel2 != "" && channel2 != null){
+			channel2.send('type !start to play again');
+			}
+			tg.score_report.isPlaying = false;
+			tg.score_report.save()
+			.then(result => console.log(result))
+			.catch(err=> console.log(err));
+			gameSchema.deleteOne({ _id: tg.game_report._id }, function (err) {
+				if (err) return handleError(err);
+				// deleted at most one tank document
+			});
+			
+			game_collection.splice(game_collection.findIndex(find_game, tg.name), 1);
+			return;
+		} else {
+			tg.game.score += score_change;
+			tg.game.clear_board();
+			tg.game.draw();
+			if(tg.game.hold_ids.length > 0){
+				
+				//tg.game.infomsg = tg.game.hold_names[0] + " wants to hold! (1/2)";
+			}
+			else{
+				if(tg.game.single){
+					console.log("SINGLE");
+					tg.game.infomsg = "SINGLE LINE CLEAR";
+					//channel1.send("SINGLE LINE CLEAR: Nice job!");
+				}
+				if(tg.game.doub){
+					tg.game.infomsg = "DOUBLE LINE CLEAR";
+					//channel1.send("DOUBLE LINE CLEAR: Way to go!");
+				}
+				if(tg.game.triple){
+					tg.game.infomsg = "TRIPLE LINE CLEAR";
+					//channel1.send("TRIPLE LINE CLEAR: Awwww Yeah!");
+				}
+				if(tg.game.quadruple){
+					tg.game.infomsg = "TETRIS";
+					//channel1.send("BOOM: Tetris for Discord!");
+				}
+			}
+			send_board_message(tg);
+			
+			
+			
+			if(score_change> 0){
+				if(tg.game.score >= 20000){
+					//console.log('3!');
+					//channel1.send("Entering the final level. Interval speed now 5 minutes");
+					tg.game.time_length = 1000*60*5;
+				
+				}
+				else if(tg.game.score >= 10000 && tg.game.time_length == 600000){
+					//console.log('2!');
+					//channel1.send("Entering Level 3. Interval speed now 7 minutes");
+					tg.game.time_length = 1000*60*7;
+				}
+				else if(tg.game.score >= 5000 && tg.game.time_length == 900000){
+					//console.log('1!');
+					//channel1.send("Entering Level 2. Interval speed now 10 minutes");
+					tg.game.time_length = 1000*60*10;
+				}
+			}
+
+			save_info(tg);
+			tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
+			
+		}
 	}
-	
 }
 function save_info(tg){
 	//console.log('printing board info' + tg.game.board);
@@ -328,8 +316,11 @@ function save_info(tg){
 				held_ids: tg.game.hold_ids, 
 				held_names: tg.game.hold_names,
 				alt_emojis_holder: temp_emoji_holder,
-				hold_threshold_num: tg.hold_threshold
-					
+				hold_threshold_num: tg.hold_threshold,
+				sleep_hour_time:tg.game.sleep_hour,
+				sleep_duration_time:tg.game.sleep_duration,
+				public_score_marker:tg.game.publicScore,
+				server_name:tg.serverName	
 		});
 		
 		tg.game_report.save()
@@ -354,13 +345,33 @@ function save_info(tg){
 		tg.game_report.held_names = tg.game.hold_names;
 		tg.game_report.alt_emojis_holder = temp_emoji_holder;
 		tg.game_report.hold_threshold_num = tg.game.hold_threshold;
-		
+		tg.game_report.sleep_hour_time = tg.game.sleep_hour;
+		tg.game_report.sleep_duration_time = tg.game.sleep_duration;
+		tg.game_report.public_score_marker = tg.game.publicScore;
+		tg.game_report.server_name = client.guilds.get(tg.name).name;
 		tg.game_report.save()
 		.then(result => console.log(result))
 		.catch(err=> console.log(err));
 	}
-	//console.log(tg.game.last_moves);
-	
+	if(tg.score_report == null  && tg.game.publicScore==true){
+		tg.score_report = new scoreSchema({
+				_id: mongoose.Types.ObjectId(),
+				name: client.guilds.get(tg.name).name, 
+				score: tg.game.score, 
+				isPlaying: true
+		});
+		
+		tg.score_report.save()
+		.then(result => console.log(result))
+		.catch(err=> console.log(err));
+	}
+	else if(tg.game.publicScore==true){
+		tg.score_report.score = tg.game.score;
+		
+		tg.score_report.save()
+		.then(result => console.log(result))
+		.catch(err=> console.log(err));
+	}
 }
 function send_board_message(tg) {
 
@@ -373,7 +384,12 @@ function send_board_message(tg) {
 		for (j = 0; j < 10; j++){
 			let e = tg.game.board[i][j];
 			if(tg.game.alt_emojis[e.substr(1, e.length - 2)]  != undefined){
-				msg += ':' + tg.game.alt_emojis[e.substr(1, e.length - 2)] + ':' ;
+				if(is_game_sleeping(tg.game.sleep_hour, tg.game.sleep_duration) && e == ":egg:"){
+					msg += ':zzz:';
+				}
+				else{
+					msg += ':' + tg.game.alt_emojis[e.substr(1, e.length - 2)] + ':' ;
+				}
 				
 			}
 			else{
@@ -439,9 +455,15 @@ function send_board_message(tg) {
 	else if(tg.game.score >= 5000){
 		level = "2 (10 minutes)";
 	}
-	
+	if(!tg.game.infomsg.includes("Textris is asleep until") && is_game_sleeping(tg.game.sleep_hour, tg.game.sleep_duration)){
+			if(tg.game.infomsg.length != 0){
+				tg.game.infomsg += ', ';
+			}
+			tg.game.infomsg += "Textris is asleep until " + ((parseInt(tg.game.sleep_hour, 10) + parseInt(tg.game.sleep_duration, 10)) % 24) + ":00 UTC";
+	}
 	msg_2 += ('\n' + "Score: " + tg.game.score + '\n' + "Level: " + level + '\n' + "Message: " + tg.game.infomsg + '\n');
-
+	if(tg.game.sleep_duration > 0){
+		msg_2 += ('Sleep Interval: ' + String(tg.game.sleep_hour) + ':00-' + String( (parseInt(tg.game.sleep_hour) + parseInt(tg.game.sleep_duration)) % 24) + ':00 UTC'); 
 	try{
 		if(msg.length <=2000){
 			if(channel2 != null){
@@ -492,14 +514,29 @@ function send_board_message(tg) {
 function find_game(currentValue, index, array){
 	return currentValue.name === String(this);
 }
+function is_game_sleeping(start_hr, duration){
+	let d = new Date();
+	if(((start_hr <= d.getUTCHours() && ((parseInt(start_hr, 10) + parseInt(duration, 10)) % 24) < d.getUTCHours() && (parseInt(start_hr, 10) + parseInt(duration, 10)) > 24) || 
+		(start_hr >= d.getUTCHours() && ((parseInt(start_hr, 10) + parseInt(duration, 10)) % 24) > d.getUTCHours() && (parseInt(start_hr, 10) + parseInt(duration, 10)) > 24) ||
+		(start_hr <= d.getUTCHours() && ((parseInt(start_hr, 10) + parseInt(duration, 10)) % 24) > d.getUTCHours() && (parseInt(start_hr, 10) + parseInt(duration, 10)) < 24) || 
+		(start_hr >= d.getUTCHours() && ((parseInt(start_hr, 10) + parseInt(duration, 10)) % 24) < d.getUTCHours() && (parseInt(start_hr, 10) + parseInt(duration, 10)) < 24) &&
+		tg.game.sleep_duration > 0
+	)){
+		return true;
+	}
+	return false;
+}							 
 
 client.on('ready', () => {
     console.log("Ready :D");
+	client.user.setPresence({ status: 'online', game: { name: 'under maintenance!' } })
+	.then(console.log)
+	.catch(console.error); 
 	load_info();
 });
 
 client.on('message', message => {
-	console.log('yeet');
+	console.log('received message');
   if(
 	!message.author.bot &&
 	message.channel.name === 'textris' &&
@@ -527,53 +564,72 @@ client.on('message', message => {
 				}
 			}
 		}
-		else if(message.content === '!TextrisInfo'){
-			message.channel.send("Welcome to TEXTRIS\n\
+		else if (message.content === '!optoutscore'){
+			var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
+				if(typeof tg !== 'undefined'){
+					scoreSchema.deleteOne({ _id: tg.score_report._id }, function (err) {
+					if (err) return handleError(err);
+						
+					});
+					tg.game.publicScore = false;
+				}
+		}else if (message.content === '!optinscore'){
+			var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
+				if(typeof tg !== 'undefined'){
+					tg.game.publicScore = true;
+				}
+		}
+		else if (message.content === '!leaderboard'){
+			console.log("aaa");
+			let sorted_scores = load_scores();
+			sorted_scores = sorted_scores.sort();
+			sorted_scores.splice(0,25);
+			let scoremsg = '```HIGH SCORES \nall games marked with \'*\' are still active\n\n';
+			sorted_scores.forEach(function(element) {
+				scoremsg += (element.score + '\t' + element.name);
+				if(element.isPlaying){
+					scoremsg += '*';
+				}
+				scoremsg += '\n';
+			});
+			scoremsg += '```';
+			message.channel.send(scoremsg);
+		}else if(message.content.toLowerCase() === '!TextrisInfo'.toLowerCase()){
+			message.channel.send("```Welcome to TEXTRIS\n\
 ===============\n\
 \n\
-Objective: don't let the pieces overflow the top of the board! The game never stops :eyes:\n\
+Objective: don't let the pieces overflow the top of the board\n\
 \n\
 Commands:\n\
 \n\
-All commands (except for !TextrisInfo, !recent, !replace, and !threshold) are to be used in a channel titled `textris` \n\
+Commands with ** are to be used outside of the textris channel \n\
 \n\
-- `!start` | start game [MUST BE IN `textris` CHANNEL]\n\
-- `!TextrisInfo` | display rules\n\
-- `!left, !l` | move piece left\n\
-- `!right, !r` | move piece right\n\
-- `!rotc, !c, !rot` | rotate piece clockwise\n\
-- `!rotcc, !cc` | rotate piece counterclockwise\n\
-- `!hold, !h` | hold current piece\n\
-- `!highlight`  | briefly change display of current piece\n\
-- `!recent` | display 10 most recent commands / users\n\
+- !start | start game [MUST BE IN \"textris CHANNEL\"]\n\
+- !left, !l | move piece left\n\
+- !right, !r | move piece right\n\
+- !rotc, !c, !rot | rotate piece clockwise\n\
+- !rotcc, !cc | rotate piece counterclockwise\n\
+- !hold, !h | hold current piece\n\
+- **!textrisinfo | display rules\n\
+- **!highlight  | briefly change display of current piece\n\
+- **!recent | display 10 most recent commands / users\n\
 \n\
-The following commands are specifically for users with the `textris mod` role: \n\
-\t	- `!threshold x` | change the number of users necessary for holding a piece (default 2, replace x with an integer)\n\
-\t	- `!replace x y` | change a game emoji. \n\
-\t \t -options for x are [i,o,s,z,l,j,t,blank,clear(displayed when lines are cleared),highlight, and preview(the blank emojis in the hold piece/next piece previews)]\n\
-\t \t -options for y are any (non-custom) emoji, WITHOUT the colons surrounding it. Example commands might include \"!replace blank hotdog\", \"!replace i taco\" etc.\n\
-`WARNING:` there is a possibility of the gameboard exceeding max character limit. Proceed with caution when using emojis with many characters\n\
+commands for users with the \"textris mod\" role: \n\
+- **!threshold x | change the number of users necessary for holding a piece (default 2, replace x with an integer)\n\
+- **!replace x y | change a game emoji. \n\
+\t-options for x are [i, o, s, z, l, j, t, blank, clear(displayed when lines are cleared), highlight, and preview]\n\
+\t-options for y are any (non-custom) emoji, WITHOUT the colons surrounding it. Ex. \"!replace blank hotdog\", \"!replace i taco\" \n\
+\t-WARNING: emojis with many letters may exceed max character limit. Proceed with caution!\n\
+- **!sleep x y | enable the game to be paused for up to 5 hours per day.\n\
+\t-options for x are 0-23. Time zone is UTC. \n\
+\t-options for y are 0-5. This is the amount of hours your game will be paused for. set to 0 by default.\n\
 \n\
 \n\
-Point values: \n\
-single: 100 per line\n\
-double: 200 per line\n\
-triple: 300 per line\n\
-tetris: 400 per line\n\
+for information about piece rotation and point scoring, see our wiki: https://github.com/jwhop/Textris/wiki \n\
 \n\
-level 2: 1.5x multiplier\n\
-level 3: 1.75x multiplier\n\
-level 4: 2.0x multplier\n\
+contact: for bug reports, concerns, or questions, contact jwhopkins.dev@gmail.com or dm @jwhopkin on twitter. Join our textris server: jwhop.itch.io/textris \n\
 \n\
-Levels speed up at 5000, 10000, 20000 points\n\
-level 1: interval speed 15 minutes\n\
-level 2: 10 minutes\n\
-level 3: 7 minutes\n\
-level 4: 5 minutes\n\
-\n\
-contact: for bug reports, concerns, or questions, contact jwhopkins.dev@gmail.com or dm @jwhopkin on twitter. \n\
-\n\
-Thanks for playing!");
+Thanks for playing!```");
 		}
 		else if(message.member != null && message.member.roles.find(r => r.name === "textris mod")){
 			let words = message.content.split(" ");
@@ -640,6 +696,20 @@ Thanks for playing!");
 					}
 				}
 			}
+			else if (words[0] == '!sleep'){
+				var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
+				
+				if(typeof tg !== 'undefined'){
+					if(words.length == 3){
+						if(parseInt(words[1], 10) <= 23 && parseInt(words[1], 10) >= 0 && parseInt(words[2], 10) <= 6 && parseInt(words[2], 10) >= 0){
+							tg.game.sleep_hour = words[1];
+							tg.game.sleep_duration = words[2];
+							send_board_message(tg);
+						}
+					}
+				}
+				
+			}
 	   
 		}
 
@@ -668,8 +738,7 @@ Thanks for playing!");
 		game_collection.push(new_serverobj);
 		
 		var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
-		//console.log(tg);
-		
+		tg.servername = message.guild.name;
 		message.channel.send("Starting").then(sent=>{
 			tg.msg1Id = sent.id;
 			//console.log(sent.id);
@@ -687,7 +756,7 @@ Thanks for playing!");
 		
 		
 		//score_collection.push({name: message.guild, score: tg.game.score, id: game_counter});
-		game_counter++;
+		//game_counter++;
 		
 		//tg.game_interval = setTimeout(function(){update_loop(tg,game_msg, game_details, message);},10000);
 		//interval = setInterval (function () {update_loop(tg, game_msg, game_details, message);}, 10000); 
@@ -699,12 +768,6 @@ Thanks for playing!");
 			message.reply("You already have a game running.")
 				.then(sent => sent.delete(10000))
 				.catch(console.error);																   
-		}else if (message.content === '!leaderboard'){
-			//sorted_scores = score_collection.sort();
-			//sorted_scores.forEach(function(element) {
-				//const channel = message.guild.channels.find(ch => ch.name === 'textris info');
-				//channel.send(element.name + " " + element.score);
-			//});
 		}else if (message.content === '!highlight'){
 			tg.game.highlight = true;
 			tg.game.clear_board();
@@ -718,18 +781,34 @@ Thanks for playing!");
 				},1000*10);
 
 		}else if (possible_commands.indexOf(message.content) > -1){
-			if (!tg.move){
-				tg.move = true;
-				tg.game.handleInput(message.content.substr(1), message.author.id, message.author.username);
-				tg.game.last_moves.push(String(message.author.username) + " typed in " + String(message.content) + " for the " + String(piece_colormap[tg.game.pieceType]) + " piece");
-				if(tg.game.last_moves.length > 10){
-					tg.game.last_moves.shift();
+			if(!is_game_sleeping(tg.game.sleep_hour, tg.game.sleep_duration)){
+				if (!tg.move){
+					tg.move = true;
+					tg.game.handleInput(message.content.substr(1), message.author.id, message.author.username);
+					tg.game.last_moves.push(String(message.author.username) + " typed in " + String(message.content) + " for the " + String(piece_colormap[tg.game.pieceType]) + " piece");
+					if(tg.game.last_moves.length > 10){
+						tg.game.last_moves.shift();
+					}
+					tg.game.clear_board();
+					tg.game.draw();
+					send_board_message(tg);
+					tg.move = false;
 				}
-				tg.game.clear_board();
-				tg.game.draw();
-				send_board_message(tg);
-				tg.move = false;
 			}
+			else{
+				
+				if(!tg.game.infomsg.includes("Textris is asleep until")){
+					if(tg.game.infomsg.length != 0){
+						tg.game.infomsg += ', ';
+					}
+					tg.game.infomsg += "Textris is asleep until " + ((parseInt(tg.game.sleep_hour, 10) + parseInt(tg.game.sleep_duration, 10)) % 24) + ":00 UTC :sleeping:";
+				}
+				message.reply("Textris is asleep until " + ((parseInt(tg.game.sleep_hour, 10) + parseInt(tg.game.sleep_duration, 10)) % 24) + ":00 UTC")
+				.then(sent => sent.delete(10000))
+				.catch(console.error);		  
+				send_board_message(tg);
+			}
+			
 		}
 	}
 	

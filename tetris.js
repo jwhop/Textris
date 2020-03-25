@@ -187,6 +187,9 @@ module.exports = class TetrisGame{
 			this.hold_ids = [];
 			this.hold_names = [];
 			this.hold_threshold = 2;
+			this.sleep_hour = 0;
+			this.sleep_duration = 0;
+			this.publicScore = true;
 			this.scoring_rows = [];
 			this.last_moves = [];
 			this.alt_emojis = {
@@ -246,7 +249,9 @@ module.exports = class TetrisGame{
 		this.last_moves = [];
 		this.newPiece();
 		this.infomsg = "";
-
+		this.sleep_hour = 0;
+		this.sleep_duration = 0;	  
+		this.publicScore = true;
 
 	}
 	
@@ -415,7 +420,7 @@ module.exports = class TetrisGame{
 	shiftBoardDownFrom(row){
 		
 		// scans from bottom (row) to 2nd-to-top row (1)
-		for(var y=row; y>1; y--){
+		for(var y=row; y>0; y--){
 			for(var x=0; x<this.gridWdt; x++){
 				this.inert[y][x] = this.inert[y-1][x];
 			} // row y-1 is copied down onto row y

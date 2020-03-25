@@ -24,8 +24,11 @@ const gameSchema = mongoose.Schema({
 	last_moves_holder: [String], 
 	held_ids: [String], 
 	held_names: [String], 
-	alt_emojis_holder: [String], 
-	hold_threshold_num: Number
+	alt_emojis_holder: [String],
+	sleep_hour_time: Number,
+	sleep_duration_time: Number,
+	public_score_marker: Boolean, 
+	server_name: String
 	
 });
 
