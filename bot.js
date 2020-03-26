@@ -52,6 +52,7 @@ function load_info(){
 		var new_game_arr  = [];
 		
 		game.forEach(function(element){
+			console.log(element.hold_threshold_num);
 			let new_game = new T(10,15,1);
 			new_game.inert = string_to_board(element.game_board);
 			new_game.sequence = element.game_seq;
@@ -224,10 +225,9 @@ function update_loop(tg1){
 			if(channel2 != "" && channel2 != null){
 			channel2.send('type !start to play again');
 			}
-			tg.score_report.isPlaying = false;
-			tg.score_report.save()
-			.then(result => console.log(result))
-			.catch(err=> console.log(err));
+			tg.game.alive = false;
+			save_info();
+			
 			gameSchema.deleteOne({ _id: tg.game_report._id }, function (err) {
 				if (err) return handleError(err);
 				// deleted at most one tank document
@@ -365,7 +365,7 @@ function save_info(tg){
 				held_ids: tg.game.hold_ids, 
 				held_names: tg.game.hold_names,
 				alt_emojis_holder: temp_emoji_holder,
-				hold_threshold_num: tg.hold_threshold,
+				hold_threshold_num: tg.game.hold_threshold,
 				sleep_hour_time:tg.game.sleep_hour,
 				sleep_duration_time:tg.game.sleep_duration,
 				public_score_marker:tg.game.publicScore,
