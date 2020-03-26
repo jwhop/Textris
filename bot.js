@@ -226,7 +226,7 @@ function update_loop(tg1){
 			channel2.send('type !start to play again');
 			}
 			tg.game.alive = false;
-			save_score();
+			save_info(tg);
 			
 			
 			setTimeout(function(){
