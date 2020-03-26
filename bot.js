@@ -226,15 +226,21 @@ function update_loop(tg1){
 			channel2.send('type !start to play again');
 			}
 			tg.game.alive = false;
-			save_info();
+			save_score();
 			
-			gameSchema.deleteOne({ _id: tg.game_report._id }, function (err) {
+			
+			setTimeout(function(){
+				gameSchema.deleteOne({ _id: tg.game_report._id }, function (err) {
 				if (err) return handleError(err);
-				// deleted at most one tank document
-			});
+					// deleted at most one tank document
+				});
 			
-			game_collection.splice(game_collection.findIndex(find_game, tg.name), 1);
-			return;
+				game_collection.splice(game_collection.findIndex(find_game, tg.name), 1);
+				return;
+				
+			},1000*5);
+				
+			
 		} else {
 			tg.game.score += score_change;
 			tg.game.clear_board();
