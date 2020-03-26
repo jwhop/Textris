@@ -52,7 +52,7 @@ function load_info(){
 		var new_game_arr  = [];
 		
 		game.forEach(function(element){
-			console.log(element.hold_threshold_num);
+			console.log('THE HOLD THRESHOLD NUM IS' +  element.hold_threshold_num);
 			let new_game = new T(10,15,1);
 			new_game.inert = string_to_board(element.game_board);
 			new_game.sequence = element.game_seq;
