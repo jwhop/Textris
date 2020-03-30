@@ -34,7 +34,9 @@ function load_scores(){
 		}
 		score.forEach(function(element){
 			console.log('pushing!' + element.is_playing);
-			score_collection.push({name: element.name, score:element.score, isPlaying: element.is_playing});	
+			if(element.score > 0){
+				score_collection.push({name: element.name, score:element.score, isPlaying: element.is_playing});
+			}			
 		});
 		
 	});
@@ -644,7 +646,7 @@ client.on('message', message => {
 			
 			//sorted_scores = sorted_scores.sort((a, b) => (a.score > b.score) ? 1 : -1);
 			//console.log(sorted_scores);
-			//sorted_scores.splice(0,25);
+			sorted_scores.splice(0,10);
 			let scoremsg = '```HIGH SCORES \nall games marked with \'*\' are still active\n\n';
 			setTimeout(function(){
 				sorted_scores = sorted_scores.sort((a, b) => (a.score < b.score) ? 1 : -1);
