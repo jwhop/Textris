@@ -20,7 +20,6 @@ const apiKeys =
 
 client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
 mongoose.connect(process.env.MONGODB_URI);
-blapi.handle(client, apiKeys, 60);
 
 
 
@@ -28,19 +27,19 @@ function load_scores(){
 	var score_collection = [];
 	
 	scoreSchema.find(function(err, score){
-	console.log(score);
+	
 		if(err){
 			return console.error(err);
 		}
 		score.forEach(function(element){
-			console.log('pushing!' + element.is_playing);
+			
 			if(element.score > 0){
 				score_collection.push({name: element.name, score:element.score, isPlaying: element.is_playing});
 			}			
 		});
 		
 	});
-	console.log('score collection is:' + score_collection);
+	
 	return score_collection;
 }
 function load_info(){
@@ -54,7 +53,7 @@ function load_info(){
 		var new_game_arr  = [];
 		
 		game.forEach(function(element){
-			console.log('THE HOLD THRESHOLD NUM IS' +  element.hold_threshold_num);
+			
 			let new_game = new T(10,15,1);
 			new_game.inert = string_to_board(element.game_board);
 			new_game.sequence = element.game_seq;
@@ -107,17 +106,17 @@ function load_info(){
 				if(err){
 				return console.error(err);
 				}
-				console.log(score1);
+				
 				if(score1.length > 0){
-					console.log("found the score log!");
+					
 					new_serverobj.score_report = score1[0];
 				}else{
-					console.log("didnt find the score log:(");
+					
 					new_serverobj.score_report = null;
 				}
 			});
 			
-			console.log('SCORE_REPORT IS' + new_serverobj.score_report);
+			
 			game_collection.push(new_serverobj);
 			//update_loop(new_serverobj);
 			//update_loop(new_serverobj);
@@ -206,7 +205,7 @@ function update_loop(tg1){
 		tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
 	}		
 	else{
-		console.log(tg.name);
+		
 		//console.log('trying to access: ' + client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris'));
 		//const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
 		
@@ -300,7 +299,7 @@ function update_loop(tg1){
 	}
 }
 function save_info(tg){
-	//console.log('printing board info' + tg.game.board);
+	console.log('saving');
 	//console.log('printing more board info' + tg.game.inert);
 	let b = true;
 	if((tg.score_report == undefined || tg.score_report == null)  && tg.game.publicScore==true){
@@ -518,7 +517,7 @@ function send_board_message(tg) {
 	}
 	try{
 		if(msg.length <=2000){
-			if(channel2 != null){
+			if(channel2 != null && channel2 !== ""){
 				channel2.fetchMessage(tg.msg1Id)
 				.then(m => {
 					m.edit(msg);
@@ -529,7 +528,7 @@ function send_board_message(tg) {
 		}
 	
 		else{
-			if(channel2 != null){
+			if(channel2 != null && channel2 !== ""){
 			channel2.fetchMessage(tg.msg1Id)
 			.then(m => {
 				m.edit("YOUR BOARD IS OVER THE CHARACTER LIMIT. PLEASE REPLACE EMOJIS TO DISPLAY BOARD");
@@ -559,8 +558,7 @@ function send_board_message(tg) {
 	catch(error){
 		console.log(error);
 	}
-	console.log("SENDING THIS MESSAGE");
-	console.log(msg);
+	
 }
 
 function find_game(currentValue, index, array){
@@ -585,10 +583,16 @@ client.on('ready', () => {
 	.then(console.log)
 	.catch(console.error); 
 	load_info();
+	blapi.handle(client, apiKeys, 60);
+
+});
+
+client.on('error', error => {
+    console.error('The WebSocket encountered an error:', error);
 });
 
 client.on('message', message => {
-	console.log('received message');
+	
   if(
 	!(message.author == client.user) &&
 	message.channel.name === 'textris' &&
@@ -636,12 +640,10 @@ client.on('message', message => {
 			let scoreMsgID = '';
 			message.channel.send("getting leaderboard...").then(sentscore=>{
 				scoreMsgID = sentscore.id;
-				console.log('sent id is' + scoreMsgID);
 			}).catch(function(error){
 				console.log(error);
 			});
 		
-			console.log("aaa");
 			let sorted_scores = load_scores();
 			
 			//sorted_scores = sorted_scores.sort((a, b) => (a.score > b.score) ? 1 : -1);
@@ -734,7 +736,7 @@ Thanks for playing!```");
 				var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
 				if(typeof tg !== 'undefined'){
 					words[1] = words[1].toLowerCase();
-					console.log('first word is' + words[1]);
+					
 					if(words.length == 3){
 
 						switch(words[1]){
@@ -775,7 +777,7 @@ Thanks for playing!```");
 						
 					
 
-						console.log('replaced word is');
+						
 						console.log(tg.game.alt_emojis['egg']);
 						tg.game.clear_board();
 						tg.game.draw();
