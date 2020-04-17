@@ -229,7 +229,7 @@ function update_loop(tg1){
 	if(is_game_sleeping(tg.game.sleep_hour, tg.game.sleep_duration)){
 		send_board_message(tg);
 		
-		save_info(tg);
+		await save_info(tg);
   
 		tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
 	}		
@@ -321,7 +321,7 @@ function update_loop(tg1){
 				}
 			}
 
-			save_info(tg);
+			await save_info(tg);
 			tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
 			
 		}
