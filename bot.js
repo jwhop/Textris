@@ -229,7 +229,7 @@ function update_loop(tg1){
 	if(is_game_sleeping(tg.game.sleep_hour, tg.game.sleep_duration)){
 		send_board_message(tg);
 		
-		await save_info(tg);
+		save_info(tg);
   
 		tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
 	}		
@@ -321,7 +321,7 @@ function update_loop(tg1){
 				}
 			}
 
-			await save_info(tg);
+			save_info(tg);
 			tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
 			
 		}
@@ -410,7 +410,7 @@ async function save_info(tg){
 				score_id:tg.score_report._id
 		});
 		
-		tg.game_report.save()
+		await tg.game_report.save()
 		.then(result => console.log(result))
 		.catch(err=> console.log(err));
 	} else {
@@ -444,7 +444,7 @@ async function save_info(tg){
 				tg.game_report.server_name = client.guilds.get(tg.name).name;
 			}
 		console.log('ON LINE: tg.game_report.save()');
-		tg.game_report.save()
+		await tg.game_report.save()
 		.then(result => console.log('result is: ' + result))
 		.catch(err=> console.log(err));
 	}
