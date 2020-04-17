@@ -327,7 +327,7 @@ function update_loop(tg1){
 		}
 	}
 }
-function save_info(tg){
+async function save_info(tg){
 	console.log('saving');
 	//console.log('printing more board info' + tg.game.inert);
 	let b = true;
@@ -377,6 +377,7 @@ function save_info(tg){
 	temp_emoji_holder.push(tg.game.alt_emojis['boom']);
 	temp_emoji_holder.push(tg.game.alt_emojis['black_circle']);
 	if(tg.game_report == null){
+		console.log('creating new game report because its null');
 		tg.game_report = new gameSchema({
 				_id: mongoose.Types.ObjectId(),
 				name: tg.name, 
@@ -413,6 +414,7 @@ function save_info(tg){
 		.then(result => console.log(result))
 		.catch(err=> console.log(err));
 	} else {
+		console.log('found game report, now assigning objects');
 		tg.game_report.game_board = board_string;
 		tg.game_report.game_seq = tg.game.sequence;
 		tg.game_report.cur_piece = tg.game.pieceType;
@@ -434,17 +436,16 @@ function save_info(tg){
 		tg.game_report.sleep_hour_time = tg.game.sleep_hour;
 		tg.game_report.sleep_duration_time = tg.game.sleep_duration;
 		tg.game_report.public_score_marker = tg.game.publicScore;
-		tg.game_report.score_id = tg.score_report._id;
 		
 		let server = client.guilds.get(tg.name);
-			
+
 			if(server !== undefined){
-				console.log(server.name);
+				console.log('couldnt find name' + server.name);
 				tg.game_report.server_name = client.guilds.get(tg.name).name;
 			}
-		
+		console.log('ON LINE: tg.game_report.save()');
 		tg.game_report.save()
-		.then(result => console.log(result))
+		.then(result => console.log('result is: ' + result))
 		.catch(err=> console.log(err));
 	}
 	
