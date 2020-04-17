@@ -194,7 +194,36 @@ function string_to_board(s){
 function compare_scores(a,b){
 	return a.score - b.score;
 }
-
+function save_score(tg){
+	
+	console.log('saving');
+	//console.log('printing more board info' + tg.game.inert);
+	let b = true;
+	if((tg.score_report == undefined || tg.score_report == null)  && tg.game.publicScore==true){
+		tg.score_report = new scoreSchema({
+				_id: mongoose.Types.ObjectId(),
+				name: "", 
+				score: tg.game.score, 
+				is_playing: tg.game.alive
+		});
+		let server = client.guilds.get(tg.name);
+			
+			if(server !== undefined){
+				console.log(server.name);
+				tg.score_report.name = client.guilds.get(tg.name).name;
+		}
+		tg.score_report.save()
+		.then(result => console.log(result))
+		.catch(err=> console.log(err));
+	}
+	else if(tg.game.publicScore==true){
+		tg.score_report.score = tg.game.score;
+		tg.score_report.is_playing = tg.game.alive;
+		tg.score_report.save()
+		.then(result => console.log(result))
+		.catch(err=> console.log(err));
+	}
+}
 function update_loop(tg1){
 	const tg = tg1;
 	if(is_game_sleeping(tg.game.sleep_hour, tg.game.sleep_duration)){
@@ -227,13 +256,13 @@ function update_loop(tg1){
 			channel2.send('type !start to play again');
 			}
 			tg.game.alive = false;
-			save_info(tg);
+			save_score(tg);
 			
 			
 			setTimeout(function(){
+				console.log('game lost. looking for entry to delete..');
 				gameSchema.deleteOne({ _id: tg.game_report._id }, function (err) {
 				if (err) return handleError(err);
-					// deleted at most one tank document
 				});
 			
 				game_collection.splice(game_collection.findIndex(find_game, tg.name), 1);
@@ -486,6 +515,7 @@ function send_board_message(tg) {
 		msg_2 += '\n';
 				
 	}
+	console.log("tg name is: " + tg.name);
 	var server2 = client.guilds.get(tg.name)
 	var channel2 = "";
 	if(server2 != undefined)
@@ -546,7 +576,7 @@ function send_board_message(tg) {
 	}
 	
 	try{
-		if(channel2 != null){
+		if(channel2 != null && channel2 !== ""){
 		channel2.fetchMessage(tg.msg2Id)
 		.then(m2 => {
 			m2.edit(msg_2);
