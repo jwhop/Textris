@@ -609,12 +609,18 @@ function is_game_sleeping(start_hr, duration){
 }							 
 
 client.on('ready', () => {
+	
     console.log("Ready :D");
 	client.user.setPresence({ status: 'online', game: { name: 'New Update 3/25/20!' } })
 	.then(console.log)
 	.catch(console.error); 
-	load_info();
-	blapi.handle(client, apiKeys, 60);
+	
+	if(game_collection.length > 0)
+	{
+		load_info();
+		blapi.handle(client, apiKeys, 60);
+	}
+
 
 });
 
