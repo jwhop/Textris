@@ -615,7 +615,7 @@ client.on('ready', () => {
 	.then(console.log)
 	.catch(console.error); 
 	
-	if(game_collection.length > 0)
+	if(game_collection.length == 0)
 	{
 		load_info();
 		blapi.handle(client, apiKeys, 60);
@@ -660,7 +660,7 @@ client.on('message', message => {
 		else if (message.content === '!optoutscore'){
 			var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
 				if(typeof tg !== 'undefined'){
-					scoreSchema.deleteOne({ _id: tg.score_report._id }, function (err) {
+					//scoreSchema.deleteOne({ _id: tg.score_report._id }, function (err) {
 					if (err) return handleError(err);
 						
 					});
