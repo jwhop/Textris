@@ -661,9 +661,9 @@ client.on('message', message => {
 			var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
 				if(typeof tg !== 'undefined'){
 					//scoreSchema.deleteOne({ _id: tg.score_report._id }, function (err) {
-					if (err) return handleError(err);
+					///if (err) return handleError(err);
 						
-					});
+					///});
 					tg.game.publicScore = false;
 					tg.score_report = null;
 				}
