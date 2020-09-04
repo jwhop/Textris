@@ -459,19 +459,23 @@ function send_board_message(tg) {
 		msg += ("[[" + '\t' + '\t');
 		
 		for (j = 0; j < 10; j++){
-			let e = tg.game.board[i][j];
-			if(tg.game.alt_emojis[e.substr(1, e.length - 2)]  != undefined){
-				if(is_game_sleeping(tg.game.sleep_hour, tg.game.sleep_duration) && e == ":egg:"){
-					msg += ':zzz:';
+			if(tg.game.board !== undefined){
+				let e = tg.game.board[i][j];
+				if(tg.game.alt_emojis[e.substr(1, e.length - 2)]  != undefined){
+					if(is_game_sleeping(tg.game.sleep_hour, tg.game.sleep_duration) && e == ":egg:"){
+						msg += ':zzz:';
+					}
+					else{
+						msg += ':' + tg.game.alt_emojis[e.substr(1, e.length - 2)] + ':' ;
+					}
+				
 				}
 				else{
-					msg += ':' + tg.game.alt_emojis[e.substr(1, e.length - 2)] + ':' ;
+					msg += e;
 				}
-				
+			
 			}
-			else{
-				msg += e;
-			}
+			
 
 		}
 		
