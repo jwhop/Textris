@@ -840,7 +840,7 @@ Thanks for playing!```");
 				
 				if(typeof tg !== 'undefined'){
 					if(words.length == 3){
-						if(parseInt(words[1], 10) <= 23 && parseInt(words[1], 10) >= 0 && parseInt(words[2], 10) <= 6 && parseInt(words[2], 10) >= 0){
+						if(parseInt(words[1], 10) <= 23 && parseInt(words[1], 10) >= 0 && parseInt(words[2], 10) <= 9 && parseInt(words[2], 10) >= 0){
 							tg.game.sleep_hour = words[1];
 							tg.game.sleep_duration = words[2];
 							send_board_message(tg);
