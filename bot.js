@@ -19,7 +19,7 @@ const apiKeys =
 };
 
 client.login(process.env.BOT_TOKEN); // Replace XXXXX with your bot token
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.DATABASE_TOKEN);
 
 
 
