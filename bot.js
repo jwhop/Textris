@@ -258,6 +258,7 @@ function update_loop(tg1){
 				} catch(error) {
 					console.log(error);
 				}
+			}
 			tg.game.alive = false;
 			save_score(tg);
 			
