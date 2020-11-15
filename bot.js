@@ -253,11 +253,11 @@ function update_loop(tg1){
 			//channel1.send('type !start to play again');
 			//console.log('sent!');
 			if(channel2 != "" && channel2 != null){
-			channel2.send('type !start to play again')
-			.catch(function(e) {
-					console.log(e);
-			});
-			
+				try{
+					channel2.send('type !start to play again');
+				} catch(error) {
+					console.log(error);
+				}
 			tg.game.alive = false;
 			save_score(tg);
 			
