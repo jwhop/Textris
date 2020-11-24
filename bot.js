@@ -706,7 +706,7 @@ Thanks for playing!```");
 			}
 			
 		}
-		
+		console.log('message member' + message.member);
 		if(message.member != null && message.member.roles.find(r => r.name === "textris mod")){
 			if (message.content === '!optoutscore'){
 				var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
@@ -907,7 +907,7 @@ Thanks for playing!```");
 		}
 		//commands that have to be inside gameplay channel
 		else{
-			 console.log('3');
+			 //console.log('3');
 			if (
 				typeof game_collection.find(server => server.name === message.guild.id) ===
 				'undefined'
