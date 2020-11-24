@@ -657,7 +657,7 @@ client.on('message', message => {
 		message.delete(100);
 	}
 	if(!message.author.bot){
-		console.log('1');
+		//console.log('1');
 		//commands that can be anywhere
 		if(message.content.toLowerCase() === '!TextrisInfo'.toLowerCase()){
 			let textrisinfomsg = ("```Welcome to TEXTRIS\n\
