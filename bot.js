@@ -1024,7 +1024,7 @@ Thanks for playing!```");
 					
 				}
 			}
-			message.delete(1000);
+			message.delete(100);
 		}
 			
 	}
