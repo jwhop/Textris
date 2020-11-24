@@ -14,5 +14,8 @@
     "mongoose": "^5.10.15",
     "request": "^2.88.2",
     "websocket": "^1.0.32"
+  }, 
+  "engines":{
+  "node":12.18.3
   }
 }
