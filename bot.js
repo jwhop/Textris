@@ -675,19 +675,19 @@ Commands with ** are to be used outside of the textris channel \n\
 - !rotc, !c, !rot | rotate piece clockwise\n\
 - !rotcc, !cc | rotate piece counterclockwise\n\
 - !hold, !h | hold current piece\n\
-- **!textrisinfo | display rules\n\
-- **!highlight  | briefly change display of current piece\n\
+- !textrisinfo | display rules\n\
+- !highlight  | briefly change display of current piece\n\
 - **!recent | display 10 most recent commands / users\n\
 - **!leaderboard | display high scoreSchema\n\
-- **!optoutscore / !optinscore | opt out of leaderboard (opted in by default) \n\
 \n\
 commands for users with the \"textris mod\" role: \n\
-- **!threshold x | change the number of users necessary for holding a piece (default 2, replace x with an integer)\n\
-- **!replace x y | change a game emoji. \n\
+- !optoutscore / !optinscore | opt out of leaderboard (opted in by default) \n\
+- !threshold x | change the number of users necessary for holding a piece (default 2, replace x with an integer)\n\
+- !replace x y | change a game emoji. \n\
 \t-options for x are [i, o, s, z, l, j, t, blank, clear(displayed when lines are cleared), highlight, and preview]\n\
 \t-options for y are any (non-custom) emoji, WITHOUT the colons surrounding it. Ex. \"!replace blank hotdog\", \"!replace i taco\" \n\
 \t-WARNING: emojis with many letters may exceed max character limit. Proceed with caution!\n\
-- **!sleep x y | enable the game to be paused for up to 5 hours per day.\n\
+- !sleep x y | enable the game to be paused for up to 5 hours per day.\n\
 \t-options for x are 0-23. Time zone is UTC. \n\
 \t-options for y are 0-5. This is the amount of hours your game will be paused for. set to 0 by default.\n\
 \n\
@@ -698,7 +698,9 @@ contact: for bug reports, concerns, or questions, contact jwhopkins.dev@gmail.co
 \n\
 Thanks for playing!```");
 			
-			if(message.channel.name === 'textris' || message.channel.id === process.env.CUSTOM_CHANNEL){
+			if((message.channel.name === 'textris' || message.channel.id === process.env.CUSTOM_CHANNEL) && 
+				(typeof game_collection.find(server => server.name === message.guild.id) !==
+				'undefined')){
 				message.author.send(textrisinfomsg);
 			}
 			else{
@@ -811,8 +813,9 @@ Thanks for playing!```");
 				if(typeof tg !== 'undefined'){
 					if(words[1] !== undefined && parseInt(words[1],10) > 1){
 						tg.game.time_length = 1000*60*parseInt(words[1], 10); 
+						tg.game_interval = setTimeout(function(){update_loop(tg);},tg.game.time_length);
 						tg.game.custom_interval = true;
-						update_loop(tg);
+						//update_loop(tg);
 						console.log("updated time");
 						if(message.channel.id = tg.channel){
 							message.channel.send("interval changed to: " + words[1] + " minutes")
