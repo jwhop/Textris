@@ -648,7 +648,12 @@ client.on('error', error => {
 });
 
 client.on('message', message => {
-	
+
+	if(message.author.id === process.env.DEV_ID && 
+		!message.content.startsWith('!')
+		){
+		return;
+	}
   if(
 	!(message.author == client.user) &&
 	(message.channel.name === 'textris' || message.channel.id === process.env.CUSTOM_CHANNEL) &&
