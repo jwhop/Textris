@@ -184,6 +184,7 @@ module.exports = class TetrisGame{
 			this.quadruple = false;
 			this.holding = false;
 			this.time_length = 1000*60*15;
+			this.custom_interval = false;
 			this.scoring = false;
 			this.hold_ids = [];
 			this.hold_names = [];
@@ -253,6 +254,7 @@ module.exports = class TetrisGame{
 		this.sleep_hour = 0;
 		this.sleep_duration = 0;	  
 		this.publicScore = true;
+		this.custom_interval = false;
 
 	}
 	
@@ -390,18 +392,18 @@ module.exports = class TetrisGame{
 			scoreChange = 1600;
 		}
 	
-		if(this.time_length == 1000*60*5){
+		if(this.time_length <= 1000*60*5){
 			return scoreChange*2.0;
 		}
 	
-		else if(this.time_length == 1000*60*7){
+		else if(this.time_length <= 1000*60*7){
 		return scoreChange*1.75;
 		}
 	
-		else if (this.time_length == 1000*60*10){
+		else if (this.time_length <= 1000*60*10){
 			return scoreChange * 1.5;
 		}
-	
+		
 		else{
 		 return scoreChange;
 		}
