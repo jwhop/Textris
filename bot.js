@@ -926,7 +926,7 @@ Thanks for playing!```");
 							.then(sent => sent.delete(10000))
 							.catch(console.error);		  
 				} 
-				else{ //start game 
+				else if (message.content === '!start'){ //start game 
 					new_game = new T(10,15,1);
 					
 					new_serverobj = new S(

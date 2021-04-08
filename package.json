@@ -7,15 +7,15 @@
     "start": "node bot.js"
   },
   "dependencies": {
-    "@hapi/hawk": "^7.0.10",
+    "@hapi/hawk": "^7.1.2",
     "blapi": "^1.4.0",
     "dblapi.js": "^2.4.1",
     "discord.js": "^11.6.4",
-    "mongoose": "^5.10.15",
+    "mongoose": "^5.12.3",
     "request": "^2.88.2",
     "websocket": "^1.0.32"
-  }, 
-  "engines":{
-  "node":"12.18.3"
+  },
+  "engines": {
+    "node": "12.18.3"
   }
 }
