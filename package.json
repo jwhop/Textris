@@ -13,7 +13,7 @@
     "discord.js": "12.5.3",
     "mongoose": "^5.12.3",
     "request": "^2.88.2",
-    "websocket": "^1.0.32"
+    "websocket": "^1.0.33"
   },
   "engines": {
     "node": "12.18.3"
