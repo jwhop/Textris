@@ -242,7 +242,7 @@ function update_loop(tg1){
 		var server2 = client.guilds.cache.get(tg.name)
 		var channel2 = "";
 		if(server2 !== undefined)
-			var channel2 = server2.channels.cache.(ch=>ch.id === tg.channel);
+			var channel2 = server2.channels.cache.find(ch=>ch.id === tg.channel);
 		//const channel2 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris');
 		//console.log(channel1);
 		//tg.name.channels.find(ch => ch.name === 'general');
