@@ -95,7 +95,7 @@ function load_info(){
 				element.msg1, 
 				element.msg2
 			);
-			let server = client.guilds.get(element.name);
+			let server = client.guilds.cache.get(element.name);
 			
 			if(server !== undefined){
 				console.log(server.name);
@@ -207,11 +207,11 @@ function save_score(tg){
 				score: tg.game.score, 
 				is_playing: tg.game.alive
 		});
-		let server = client.guilds.get(tg.name);
+		let server = client.guilds.cache.get(tg.name);
 			
 			if(server !== undefined){
 				console.log(server.name);
-				tg.score_report.name = client.guilds.get(tg.name).name;
+				tg.score_report.name = client.guilds.cache.get(tg.name).name;
 		}
 		tg.score_report.save()
 		.then(result => console.log(result))
@@ -239,10 +239,10 @@ function update_loop(tg1){
 		//console.log('trying to access: ' + client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris'));
 		//const channel1 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris info');
 		
-		var server2 = client.guilds.get(tg.name)
+		var server2 = client.guilds.cache.get(tg.name)
 		var channel2 = "";
 		if(server2 !== undefined)
-			var channel2 = server2.channels.find(ch=>ch.id === tg.channel);
+			var channel2 = server2.channels.cache.(ch=>ch.id === tg.channel);
 		//const channel2 = client.guilds.get(tg.name).channels.find(ch=>ch.name === 'textris');
 		//console.log(channel1);
 		//tg.name.channels.find(ch => ch.name === 'general');
@@ -343,11 +343,11 @@ async function save_info(tg){
 				score: tg.game.score, 
 				is_playing: tg.game.alive
 		});
-		let server = client.guilds.get(tg.name);
+		let server = client.guilds.cache.get(tg.name);
 			
 			if(server !== undefined){
 				console.log(server.name);
-				tg.score_report.name = client.guilds.get(tg.name).name;
+				tg.score_report.name = client.guilds.cache.get(tg.name).name;
 		}
 		tg.score_report.save()
 		.then(result => console.log(result))
@@ -444,11 +444,11 @@ async function save_info(tg){
 		tg.game_report.sleep_duration_time = tg.game.sleep_duration;
 		tg.game_report.public_score_marker = tg.game.publicScore;
 		
-		let server = client.guilds.get(tg.name);
+		let server = client.guilds.cache.get(tg.name);
 
 			if(server !== undefined){
 				console.log('couldnt find name' + server.name);
-				tg.game_report.server_name = client.guilds.get(tg.name).name;
+				tg.game_report.server_name = client.guilds.cache.get(tg.name).name;
 			}
 		console.log('ON LINE: tg.game_report.save()');
 		await tg.game_report.save()
@@ -528,10 +528,10 @@ function send_board_message(tg) {
 				
 	}
 	console.log("tg name is: " + tg.name);
-	var server2 = client.guilds.get(tg.name)
+	var server2 = client.guilds.cache.get(tg.name)
 	var channel2 = "";
 	if(server2 != undefined)
-		var channel2 = server2.channels.find(ch=>ch.id === tg.channel);
+		var channel2 = server2.channels.cache.find(ch=>ch.id === tg.channel);
 	
 	let level = ""
 	
@@ -568,7 +568,7 @@ function send_board_message(tg) {
 	try{
 		if(msg.length <=2000){
 			if(channel2 != null && channel2 !== ""){
-				channel2.fetchMessage(tg.msg1Id)
+				channel2.messages.fetch(tg.msg1Id)
 				.then(m => {
 					m.edit(msg);
 				}).catch(function(e) {
@@ -579,7 +579,7 @@ function send_board_message(tg) {
 	
 		else{
 			if(channel2 != null && channel2 !== ""){
-			channel2.fetchMessage(tg.msg1Id)
+			channel2.messages.fetch(tg.msg1Id)
 			.then(m => {
 				m.edit("YOUR BOARD IS OVER THE CHARACTER LIMIT. PLEASE REPLACE EMOJIS TO DISPLAY BOARD");
 			}).catch(function(e) {
@@ -597,7 +597,7 @@ function send_board_message(tg) {
 	
 	try{
 		if(channel2 != null && channel2 !== ""){
-		channel2.fetchMessage(tg.msg2Id)
+		channel2.messages.fetch(tg.msg2Id)
 		.then(m2 => {
 			m2.edit(msg_2);
 		}).catch(function(e) {
@@ -714,7 +714,7 @@ Thanks for playing!```");
 			
 		}
 		//console.log('message member' + message.member);
-		if(message.member != null && message.member.roles.find(r => r.name === "textris mod")){
+		if(message.member != null && message.member.roles.cache.find(r => r.name === "textris mod")){
 			if (message.content === '!optoutscore'){
 				var tg = game_collection[game_collection.findIndex(find_game, message.guild.id)];
 				if(typeof tg !== 'undefined'){
@@ -894,7 +894,7 @@ Thanks for playing!```");
 						var channel2 = message.channel;
 						try{
 							if(channel2 != null){
-							channel2.fetchMessage(scoreMsgID)
+							channel2.messages.fetch(scoreMsgID)
 								.then(m3 => {
 									m3.edit(scoremsg);
 								}).catch(function(e) {
@@ -970,7 +970,7 @@ Thanks for playing!```");
 						.then(sent => sent.delete(10000))
 						.catch(console.error);																   
 				}
-				else if (message.content === '!end' && (message.member != null && message.member.roles.find(r => r.name === "textris mod"))){
+				else if (message.content === '!end' && (message.member != null && message.member.roles.cache.find(r => r.name === "textris mod"))){
 					
 					tg.game.alive = false;
 					save_score(tg);
