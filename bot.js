@@ -659,7 +659,7 @@ client.on('message', message => {
 	(message.channel.name === 'textris' || message.channel.id === process.env.CUSTOM_CHANNEL) &&
 	!message.content.startsWith('!')
 	){
-		message.delete(100);
+		message.delete({ timeout: 100 });
 	}
 	if(!message.author.bot){
 		//console.log('1');
@@ -824,7 +824,7 @@ Thanks for playing!```");
 						console.log("updated time");
 						if(message.channel.id = tg.channel){
 							message.channel.send("interval changed to: " + words[1] + " minutes")
-							.then(sent => sent.delete(10000))
+							.then(sent => sent.delete({ timeout: 10000 }))
 							.catch(console.error);	
 						}
 						else{
@@ -923,7 +923,7 @@ Thanks for playing!```");
 			
 				if (message.content !== '!start'){
 					message.reply("currently no game found on server. type '!start' to start a game.")
-							.then(sent => sent.delete(10000))
+							.then(sent => sent.delete({ timeout: 10000 }))
 							.catch(console.error);		  
 				} 
 				else if (message.content === '!start'){ //start game 
@@ -967,7 +967,7 @@ Thanks for playing!```");
 				//console.log("last moves are: " + tg.game.last_moves);
 				if (message.content === '!start'){
 					message.reply("You already have a game running.")
-						.then(sent => sent.delete(10000))
+						.then(sent => sent.delete({ timeout: 10000 }))
 						.catch(console.error);																   
 				}
 				else if (message.content === '!end' && (message.member != null && message.member.roles.cache.find(r => r.name === "textris mod"))){
@@ -1025,14 +1025,14 @@ Thanks for playing!```");
 							tg.game.infomsg += "Textris is asleep until " + ((parseInt(tg.game.sleep_hour, 10) + parseInt(tg.game.sleep_duration, 10)) % 24) + ":00 UTC :sleeping:";
 						}
 						message.reply("Textris is asleep until " + ((parseInt(tg.game.sleep_hour, 10) + parseInt(tg.game.sleep_duration, 10)) % 24) + ":00 UTC")
-						.then(sent => sent.delete(10000))
+						.then(sent => sent.delete({ timeout: 10000 }))
 						.catch(console.error);		  
 						send_board_message(tg);
 					}
 					
 				}
 			}
-			message.delete(100);
+			message.delete({ timeout: 100});
 		}
 			
 	}
