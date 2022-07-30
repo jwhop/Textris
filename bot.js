@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 const { Client, IntentsBitField } = require('discord.js');
 
 const myIntents = new IntentsBitField();
-myIntents.add(IntentsBitField.Flags.GuildMessages, IntentsBitField.Flags.GuildMembers);
+//myIntents.add(IntentsBitField.Flags.GuildMessages, IntentsBitField.Flags.GuildMembers);
 
 const mongoose = require('mongoose');
 const gameSchema = require("./Models/report.js");
