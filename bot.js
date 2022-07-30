@@ -9,8 +9,9 @@ const scoreSchema = require("./Models/score.js");
 									 
 const T = require("./tetris.js");
 const S = require("./server_obj.js");
-const allIntents = new Intents(32767);
-const client = new Discord.Client({ allIntents });
+const client = new Discord.Client({
+	intents: [Discord.Intents.FLAGS.GUILDS,Discord.Intents.FLAGS.GUILD_MEMBERS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.DIRECT_MESSAGES]
+});
 const DBL = require("dblapi.js");
 const dbl = new DBL(process.env.TOPGG_TOKEN, client);
 const blapi = require('blapi');
