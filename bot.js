@@ -3,6 +3,11 @@ var score_collection = [];
 var game_counter = 1;
 var possible_commands = ["leaderboard","channelhere","!recent", "!highlight", "!left", "!right", "!rot", "!l", "!r", "!rotc", "!rotcc", "!cc", "!c", "!hold", "!h"];
 const Discord = require('discord.js');
+const { Client, IntentsBitField } = require('discord.js');
+
+const myIntents = new IntentsBitField();
+myIntents.add(IntentsBitField.Flags.GuildMessages, IntentsBitField.Flags.GuildMembers);
+
 const mongoose = require('mongoose');
 const gameSchema = require("./Models/report.js");
 const scoreSchema = require("./Models/score.js");
@@ -10,7 +15,7 @@ const scoreSchema = require("./Models/score.js");
 const T = require("./tetris.js");
 const S = require("./server_obj.js");
 const client = new Discord.Client({
-	intents: ["GUILDS", "GUILD_MESSAGES"]
+	intents: myIntents
 });
 const DBL = require("dblapi.js");
 const dbl = new DBL(process.env.TOPGG_TOKEN, client);
