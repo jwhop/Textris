@@ -637,9 +637,7 @@ function is_game_sleeping(start_hr, duration){
 client.on('ready', () => {
 	
     console.log("Ready :D");
-	client.user.setPresence({ status: 'online', game: { name: 'type textrisInfo to get started!' } })
-	.then(console.log)
-	.catch(console.error); 
+	client.user.setPresence({ status: 'online', game: { name: 'type textrisInfo to get started!' } });
 	
 	if(game_collection.length == 0)
 	{
